@@ -220,6 +220,10 @@ function render() {
                         <button class="btn btn-o btn-sm" data-upload="${key}">+ 添加图片</button>
                     </div>
                 </div>
+                <div class="sec-meta" style="padding:0 4px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                    <input class="meta-desc" data-key="${key}" value="${(m.desc||'').replace(/"/g,'&quot;')}" placeholder="描述（一句话介绍）" style="flex:1;min-width:200px;padding:5px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:.78rem;outline:none">
+                    <input class="meta-tags" data-key="${key}" value="${(m.tags||[]).join(', ')}" placeholder="标签（逗号分隔）" style="flex:1;min-width:180px;padding:5px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:.78rem;outline:none">
+                </div>
             `;
 
             const grid = document.createElement('div');
@@ -274,6 +278,18 @@ document.getElementById('app').addEventListener('focusout', e => {
         if (!v) { e.target.textContent = meta[key]?.title || key; return; }
         if (!meta[key]) meta[key] = { title: key, desc: '', tags: [], category: 'stylized' };
         meta[key].title = v;
+    }
+    // 描述编辑
+    if (e.target.classList.contains('meta-desc')) {
+        const key = e.target.dataset.key;
+        if (!meta[key]) meta[key] = { title: key, desc: '', tags: [], category: 'stylized' };
+        meta[key].desc = e.target.value.trim();
+    }
+    // 标签编辑
+    if (e.target.classList.contains('meta-tags')) {
+        const key = e.target.dataset.key;
+        if (!meta[key]) meta[key] = { title: key, desc: '', tags: [], category: 'stylized' };
+        meta[key].tags = e.target.value.split(',').map(t => t.trim()).filter(t => t);
     }
 });
 document.getElementById('app').addEventListener('keydown', e => {
