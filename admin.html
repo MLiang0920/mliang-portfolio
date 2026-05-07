@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>后台管理 - 作品集</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0b;--bg2:#111113;--bg3:#1a1a1d;--border:rgba(255,255,255,.08);--text:#f5f5f7;--text2:#a1a1aa;--text3:#71717a;--accent:#3b82f6;--success:#22c55e;--danger:#ef4444;--r:10px}
+body{font-family:Inter,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:24px;user-select:none}
+
+/* Header */
+.hdr{max-width:1400px;margin:0 auto 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.hdr h1{font-size:1.4rem}
+.hdr p{color:var(--text2);font-size:.85rem;margin-top:2px}
+.hdr-actions{display:flex;gap:10px;align-items:center}
+
+/* Buttons */
+.btn{padding:9px 18px;border:none;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:#2563eb}
+.btn-o{background:transparent;border:1px solid var(--border);color:var(--text2)}.btn-o:hover{border-color:var(--text3);color:var(--text)}
+.btn-sm{padding:5px 12px;font-size:.78rem}
+.btn-d{color:var(--danger);background:none;border:none;font-size:.72rem;cursor:pointer;opacity:.6}.btn-d:hover{opacity:1}
+
+/* Toast */
+.toast{position:fixed;top:20px;right:20px;padding:12px 22px;background:var(--success);color:#fff;border-radius:8px;font-size:.9rem;font-weight:500;z-index:9999;opacity:0;transform:translateY(-16px);transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* Tab 切换栏 */
+.tab-bar{max-width:1400px;margin:0 auto 24px;display:flex;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:5px}
+.tab-btn{flex:1;padding:10px 18px;border:none;border-radius:7px;font-size:.9rem;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.tab-btn.active{background:var(--accent);color:#fff}
+.tab-btn .tab-badge{font-size:.7rem;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.15)}
+.tab-btn.active .tab-badge{background:rgba(255,255,255,.25)}
+
+/* 分组区域 */
+.group-zone{max-width:1400px;margin:0 auto 40px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.group-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:var(--bg3);border-bottom:1px solid var(--border)}
+.group-hdr h2{font-size:1.1rem;font-weight:600;display:flex;align-items:center;gap:8px}
+.group-hdr .group-badge{font-size:.7rem;padding:3px 8px;background:rgba(255,255,255,.06);border-radius:4px;color:var(--text3)}
+.group-hdr-actions{display:flex;gap:8px;align-items:center}
+.group-body{padding:20px 24px}
+.group-empty{padding:40px 20px;text-align:center;color:var(--text3);font-size:.9rem}
+
+/* Section */
+.sec{margin:0 0 24px;border-radius:10px;padding:8px;border:2px solid transparent;transition:border-color .15s,background .15s}
+.sec-drag-over{border-color:var(--accent);background:rgba(59,130,246,.04)}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sec-left{display:flex;align-items:center;gap:8px}
+.sec-title{font-size:1.05rem;font-weight:600;color:var(--text2);cursor:text;padding:2px 6px;border-radius:4px;border:1px solid transparent}
+.sec-title:hover{border-color:var(--border)}
+.sec-title:focus{outline:none;border-color:var(--accent);background:var(--bg3);color:var(--text)}
+.sec-count{font-size:.75rem;color:var(--text3)}
+.sec-right{display:flex;gap:6px;align-items:center}
+.mv{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--text3);transition:.15s}
+.mv:hover{color:var(--text);border-color:var(--text3)}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+
+/* Card */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.card-img{aspect-ratio:3/4;overflow:hidden;cursor:grab;position:relative}
+.card-img:active{cursor:grabbing}
+.card-img img{width:100%;height:100%;object-fit:cover;pointer-events:none;transition:none}
+.card-ft{padding:6px 10px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border)}
+.card-name{font-size:.68rem;color:var(--text3);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px}
+
+/* Add card */
+.add-card{background:var(--bg2);border:2px dashed var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;aspect-ratio:3/4;transition:.15s;flex-direction:column;gap:6px;color:var(--text3);font-size:.8rem}
+.add-card:hover{border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,.03)}
+.add-card.drag-over{border-color:var(--accent);background:rgba(59,130,246,.08);color:var(--accent);transform:scale(1.02)}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9998;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s}
+.modal-bg.show{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;width:400px;max-width:90vw}
+.modal h2{font-size:1.1rem;margin-bottom:18px}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:.8rem;color:var(--text2);margin-bottom:5px}
+.fg input,.fg select{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:.88rem;outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--accent)}
+.fg small{font-size:.7rem;color:var(--text3);margin-top:3px;display:block}
+.modal-ft{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+
+/* Lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.25s}
+.lb.show{opacity:1;pointer-events:all}
+.lb img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px}
+.lb-x{position:absolute;top:20px;right:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:#fff;font-size:1.4rem;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div><h1>作品集管理后台</h1><p>拖动调图片位置 / 管理目录和图片</p></div>
+  <div class="hdr-actions">
+    <a href="projects.html" target="_blank" class="btn btn-o">预览展示页</a>
+    <button class="btn btn-p" id="saveBtn" onclick="save()">保存</button>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<div class="toast" id="toast"></div>
+
+<!-- New project modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <h2>新建作品目录</h2>
+    <p id="m_group_label" style="font-size:.8rem;color:var(--accent);margin-bottom:14px"></p>
+    <div class="fg"><label>目录名称</label><input id="m_title" placeholder="例如：赛博朋克角色"></div>
+    <div class="fg"><label>目录 Key（可选，用于文件夹）</label><input id="m_key" placeholder="留空则自动用名称"><small>英文或中文均可</small></div>
+    <div class="fg"><label>简介</label><input id="m_desc" placeholder="一句话描述"></div>
+    <div class="fg"><label>标签（逗号分隔）</label><input id="m_tags" placeholder="风格1, 风格2"></div>
+    <div class="fg"><label>分类</label><select id="m_cat"><option value="stylized">风格化</option><option value="realistic">写实</option><option value="eastern">东方风格</option></select></div>
+    <div class="modal-ft">
+      <button class="btn btn-o" onclick="closeModal()">取消</button>
+      <button class="btn btn-p" onclick="createProject()">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb"><button class="lb-x" onclick="closeLb()">&times;</button><img id="lbImg"></div>
+
+<!-- Hidden input -->
+<input type="file" id="fi" multiple accept="image/*" style="display:none">
+
+<script>
+// ===== STATE =====
+let config = {};
+let meta = {};
+let groups = [];
+let uploadTarget = '';
+let activeTab = 0;
+
+// ===== INIT =====
+async function init() {
+    try {
+        const r = await fetch('image-config.json?' + Date.now());
+        const data = await r.json();
+        if (data.__meta) {
+            if (data.__meta.__groups) { groups = data.__meta.__groups; delete data.__meta.__groups; }
+            meta = data.__meta; delete data.__meta;
+        }
+        config = data;
+    } catch(e) { config = {}; meta = {}; }
+    if (!groups.length) {
+        groups = [{ id:'models', title:'模型目录', keys: Object.keys(config).filter(k=>Array.isArray(config[k])) }];
+    }
+    render();
+}
+
+// ===== RENDER (optimized) =====
+function render() {
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+
+    // Tab 栏
+    const tabBar = document.createElement('div');
+    tabBar.className = 'tab-bar';
+    groups.forEach((grp, gi) => {
+        const totalImgs = grp.keys.reduce((s,k) => s + (Array.isArray(config[k]) ? config[k].length : 0), 0);
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn' + (gi === activeTab ? ' active' : '');
+        btn.innerHTML = `${grp.title} <span class="tab-badge">${totalImgs}张</span>`;
+        btn.onclick = () => { activeTab = gi; render(); };
+        tabBar.appendChild(btn);
+    });
+    app.appendChild(tabBar);
+
+    // 只渲染当前 tab 的分组
+    const grp = groups[activeTab];
+    if (!grp) return;
+
+    const zone = document.createElement('div');
+    zone.className = 'group-zone';
+    zone.style.display = 'block';
+
+    const totalImgs = grp.keys.reduce((s,k) => s + (Array.isArray(config[k]) ? config[k].length : 0), 0);
+    const dirCount = grp.keys.filter(k => Array.isArray(config[k])).length;
+
+    zone.innerHTML = `
+        <div class="group-hdr">
+            <h2>${grp.title} <span class="group-badge">${dirCount} 个目录 / ${totalImgs} 张图片</span></h2>
+            <div class="group-hdr-actions">
+                <button class="btn btn-o btn-sm" onclick="openModal('${grp.id}')">+ 新建目录</button>
+            </div>
+        </div>
+    `;
+
+    const body = document.createElement('div');
+    body.className = 'group-body';
+
+    const validKeys = grp.keys.filter(k => Array.isArray(config[k]));
+
+    if (validKeys.length === 0) {
+        body.innerHTML = '<div class="group-empty"><p>暂无目录，点击上方「+ 新建目录」创建</p></div>';
+    } else {
+        const frag = document.createDocumentFragment();
+        validKeys.forEach(key => {
+            const images = config[key];
+            const m = meta[key] || { title: key, desc: '', tags: [], category: 'stylized' };
+
+            const sec = document.createElement('div');
+            sec.className = 'sec';
+            sec.dataset.key = key;
+
+            sec.innerHTML = `
+                <div class="sec-hdr">
+                    <div class="sec-left">
+                        <div class="mv" data-grp="${grp.id}" data-key="${key}" data-dir="-1" title="上移">&#9650;</div>
+                        <div class="mv" data-grp="${grp.id}" data-key="${key}" data-dir="1" title="下移">&#9660;</div>
+                        <span class="sec-title" contenteditable="true" data-key="${key}">${m.title}</span>
+                        <span class="sec-count">(${images.length}张)</span>
+                    </div>
+                    <div class="sec-right">
+                        <button class="btn btn-o btn-sm" data-upload="${key}">+ 添加图片</button>
+                    </div>
+                </div>
+            `;
+
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+
+            // 用 innerHTML 批量构建图片卡片（比逐个 createElement 快很多）
+            let cardsHtml = '';
+            images.forEach((img, i) => {
+                cardsHtml += `<div class="card"><div class="card-img" data-k="${key}" data-i="${i}"><img src="${img.file}" loading="lazy" style="object-position:${img.focusX}% ${img.focusY}%" draggable="false"></div><div class="card-ft"><span class="card-name">${img.file.split('/').pop()}</span><button class="btn-d" data-del="${key}" data-idx="${i}">删除</button></div></div>`;
+            });
+            // 添加卡片
+            cardsHtml += `<div class="add-card" data-upload="${key}"><span style="font-size:1.4rem">+</span><span>添加图片</span></div>`;
+            grid.innerHTML = cardsHtml;
+
+            sec.appendChild(grid);
+            frag.appendChild(sec);
+        });
+        body.appendChild(frag);
+    }
+
+    zone.appendChild(body);
+    app.appendChild(zone);
+}
+
+// ===== 事件委托（全局只注册一次，不重复绑定） =====
+document.getElementById('app').addEventListener('click', e => {
+    // 上移/下移
+    const mv = e.target.closest('.mv[data-grp]');
+    if (mv) {
+        moveInGroup(mv.dataset.grp, mv.dataset.key, parseInt(mv.dataset.dir));
+        return;
+    }
+    // 删除按钮
+    const delBtn = e.target.closest('[data-del]');
+    if (delBtn) {
+        del(delBtn.dataset.del, parseInt(delBtn.dataset.idx));
+        return;
+    }
+    // 上传按钮 / 添加卡片
+    const uploadBtn = e.target.closest('[data-upload]');
+    if (uploadBtn) {
+        upload(uploadBtn.dataset.upload);
+        return;
+    }
+});
+
+// rename - 用 focusout 事件委托
+document.getElementById('app').addEventListener('focusout', e => {
+    if (e.target.classList.contains('sec-title')) {
+        const key = e.target.dataset.key;
+        const v = e.target.textContent.trim();
+        if (!v) { e.target.textContent = meta[key]?.title || key; return; }
+        if (!meta[key]) meta[key] = { title: key, desc: '', tags: [], category: 'stylized' };
+        meta[key].title = v;
+    }
+});
+document.getElementById('app').addEventListener('keydown', e => {
+    if (e.target.classList.contains('sec-title') && e.key === 'Enter') {
+        e.preventDefault(); e.target.blur();
+    }
+});
+
+// ===== IMAGE FOCUS DRAG（事件委托，全局只绑定一次）=====
+let dragState = null; // { el, img, k, i, sx, sy, sfx, sfy, moved }
+
+document.addEventListener('mousedown', e => {
+    const cardImg = e.target.closest('.card-img');
+    if (!cardImg) return;
+    const k = cardImg.dataset.k, i = parseInt(cardImg.dataset.i);
+    if (!config[k] || !config[k][i]) return;
+    const img = cardImg.querySelector('img');
+    dragState = { el: cardImg, img, k, i, sx: e.clientX, sy: e.clientY, sfx: config[k][i].focusX, sfy: config[k][i].focusY, moved: false };
+    e.preventDefault();
+});
+
+document.addEventListener('mousemove', e => {
+    if (!dragState) return;
+    dragState.moved = true;
+    const { el, img, k, i, sx, sy, sfx, sfy } = dragState;
+    const rect = el.getBoundingClientRect();
+    const dx = -(e.clientX - sx) / rect.width * 80;
+    const dy = -(e.clientY - sy) / rect.height * 80;
+    const nx = Math.max(0, Math.min(100, sfx + dx));
+    const ny = Math.max(0, Math.min(100, sfy + dy));
+    config[k][i].focusX = Math.round(nx * 10) / 10;
+    config[k][i].focusY = Math.round(ny * 10) / 10;
+    img.style.objectPosition = `${nx}% ${ny}%`;
+});
+
+document.addEventListener('mouseup', e => {
+    if (!dragState) return;
+    const { el, moved, k, i } = dragState;
+    if (!moved) {
+        // 点击 → lightbox
+        document.getElementById('lbImg').src = config[k][i].file;
+        document.getElementById('lb').classList.add('show');
+    }
+    dragState = null;
+});
+
+// ===== DRAG & DROP（section 级别事件委托）=====
+document.getElementById('app').addEventListener('dragover', e => {
+    e.preventDefault();
+    const sec = e.target.closest('.sec[data-key]');
+    if (sec) sec.classList.add('sec-drag-over');
+});
+
+document.getElementById('app').addEventListener('dragenter', e => {
+    e.preventDefault();
+});
+
+document.getElementById('app').addEventListener('dragleave', e => {
+    const sec = e.target.closest('.sec[data-key]');
+    if (sec && !sec.contains(e.relatedTarget)) {
+        sec.classList.remove('sec-drag-over');
+    }
+});
+
+document.getElementById('app').addEventListener('drop', async e => {
+    e.preventDefault();
+    // 清除所有高亮
+    document.querySelectorAll('.sec-drag-over').forEach(el => el.classList.remove('sec-drag-over'));
+    
+    const sec = e.target.closest('.sec[data-key]');
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    if (!files.length) return;
+    
+    if (sec) {
+        await doUpload(files, sec.dataset.key);
+    } else {
+        toast('请将图片拖到具体目录区域内');
+    }
+});
+
+// 阻止浏览器默认打开图片
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => e.preventDefault());
+
+// ===== LIGHTBOX =====
+function closeLb() { document.getElementById('lb').classList.remove('show'); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        closeLb();
+        closeModal();
+    }
+});
+document.getElementById('lb').addEventListener('click', e => { if (e.target === e.currentTarget) closeLb(); });
+
+// ===== MOVE SECTION =====
+function moveInGroup(grpId, key, dir) {
+    const grp = groups.find(g => g.id === grpId);
+    if (!grp) return;
+    const idx = grp.keys.indexOf(key);
+    const ni = idx + dir;
+    if (ni < 0 || ni >= grp.keys.length) return;
+    [grp.keys[idx], grp.keys[ni]] = [grp.keys[ni], grp.keys[idx]];
+    render();
+    toast('顺序已调整');
+}
+
+// ===== DELETE IMAGE =====
+function del(key, idx) {
+    if (!config[key] || !Array.isArray(config[key]) || idx < 0 || idx >= config[key].length) return;
+    if (!confirm('确定删除？')) return;
+    config[key].splice(idx, 1);
+    render();
+}
+
+// ===== UPLOAD =====
+function upload(key) {
+    uploadTarget = key;
+    document.getElementById('fi').click();
+}
+
+document.getElementById('fi').addEventListener('change', async e => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    await doUpload(files, uploadTarget);
+    e.target.value = '';
+});
+
+async function doUpload(files, key) {
+    if (!key) { toast('上传失败：未指定目标目录'); return; }
+    if (!Array.isArray(config[key])) config[key] = [];
+    toast(`正在上传 ${files.length} 张图片...`);
+    let success = 0, fail = 0;
+    for (const f of files) {
+        const fd = new FormData();
+        fd.append('project', key);
+        fd.append('file', f);
+        try {
+            const r = await fetch('/api/upload', { method: 'POST', body: fd });
+            const d = await r.json();
+            if (d.ok) {
+                config[key].push({ file: d.file, focusX: 50, focusY: 30 });
+                success++;
+            } else { fail++; }
+        } catch(e) { fail++; console.error('Upload error:', e); }
+    }
+    await save(true);
+    render();
+    if (fail > 0) {
+        toast(`上传完成：${success} 成功，${fail} 失败`);
+    } else {
+        toast(`${success} 张图片已添加到「${(meta[key] && meta[key].title) || key}」`);
+    }
+}
+
+// ===== PASTE =====
+document.addEventListener('paste', async e => {
+    const files = Array.from(e.clipboardData.items).filter(i => i.type.startsWith('image/')).map(i => i.getAsFile()).filter(Boolean);
+    if (!files.length) return;
+    if (!uploadTarget) { toast('请先点击某个目录的「+ 添加图片」确定目标'); return; }
+    await doUpload(files, uploadTarget);
+});
+
+// ===== CREATE PROJECT =====
+let createTargetGroup = '';
+function openModal(grpId) { createTargetGroup = grpId || groups[0]?.id || ''; document.getElementById('modal').classList.add('show'); updateModalGroupLabel(); }
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+function updateModalGroupLabel() {
+    const grp = groups.find(g => g.id === createTargetGroup);
+    const el = document.getElementById('m_group_label');
+    if (el && grp) el.textContent = '将创建到：' + grp.title;
+}
+
+async function createProject() {
+    const title = document.getElementById('m_title').value.trim();
+    let key = document.getElementById('m_key').value.trim() || title;
+    const desc = document.getElementById('m_desc').value.trim();
+    const tags = document.getElementById('m_tags').value.split(',').map(t => t.trim()).filter(Boolean);
+    const cat = document.getElementById('m_cat').value;
+    if (!title) { alert('请填写目录名称'); return; }
+    if (config[key] !== undefined) { alert('该目录已存在'); return; }
+
+    try {
+        await fetch('/api/create-project', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }) });
+        config[key] = [];
+        meta[key] = { title, desc, tags, category: cat };
+        const grp = groups.find(g => g.id === createTargetGroup);
+        if (grp) grp.keys.push(key);
+        await save(true);
+        closeModal();
+        render();
+        toast(`目录「${title}」已创建到${grp ? grp.title : '默认分组'}`);
+        ['m_title','m_key','m_desc','m_tags'].forEach(id => document.getElementById(id).value = '');
+    } catch(e) {
+        toast('创建失败：' + e.message);
+        console.error('Create error:', e);
+    }
+}
+
+// ===== SAVE =====
+async function save(silent) {
+    const btn = document.getElementById('saveBtn');
+    if (!silent) btn.textContent = '保存中...';
+    const metaWithGroups = { ...meta, __groups: groups };
+    const payload = { ...config, __meta: metaWithGroups };
+    try {
+        const r = await fetch('/api/config', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload, null, 2) });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        if (!silent) { btn.textContent = '保存'; toast('已保存，展示页刷新可见'); }
+    } catch(e) {
+        btn.textContent = '保存';
+        toast('保存失败：' + e.message);
+        console.error('Save error:', e);
+    }
+}
+
+// ===== TOAST =====
+function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+init();
+</script>
+</body>
+</html>

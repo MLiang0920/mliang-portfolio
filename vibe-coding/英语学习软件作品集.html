@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>English Hub · 作品集</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#0a0c10;--bg-2:#12151c;--bg-3:#1a1e28;--line:#252a38;--text:#e2e5ed;--text-2:#8a93a5;--accent:#7c9cff;--accent-2:#5bd6a3;--warn:#ffb454;--danger:#ff6b6b}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Hero */
+.hero{
+  text-align:center;padding:80px 20px 60px;
+  background:linear-gradient(180deg,#0d1117 0%,#12151c 100%);
+  border-bottom:1px solid var(--line);
+}
+.hero h1{font-size:48px;font-weight:700;margin-bottom:12px;letter-spacing:-1px}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--text-2);font-size:18px;max-width:640px;margin:0 auto 28px}
+.badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.badge{padding:5px 14px;border-radius:20px;font-size:12px;border:1px solid var(--line);color:var(--text-2);background:var(--bg-3)}
+.badge.green{border-color:var(--accent-2);color:var(--accent-2)}
+.badge.blue{border-color:var(--accent);color:var(--accent)}
+
+/* Section */
+.section{max-width:1000px;margin:0 auto;padding:60px 24px}
+.section h2{font-size:28px;font-weight:600;margin-bottom:24px;color:var(--text);display:flex;align-items:center;gap:10px}
+.section h2::before{content:"";width:4px;height:28px;background:var(--accent);border-radius:2px}
+
+/* Cards */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:24px;transition:.2s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,156,255,.08)}
+.card h3{font-size:16px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card p{color:var(--text-2);font-size:14px;line-height:1.6}
+.card .icon{font-size:24px}
+
+/* Timeline */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:"";position:absolute;left:10px;top:4px;bottom:4px;width:2px;background:var(--line)}
+.tl-item{position:relative;margin-bottom:28px}
+.tl-item::before{content:"";position:absolute;left:-22px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.tl-item.done::before{background:var(--accent-2)}
+.tl-item .time{color:var(--text-2);font-size:12px;margin-bottom:4px}
+.tl-item .title{font-size:15px;font-weight:600;margin-bottom:4px}
+.tl-item .desc{color:var(--text-2);font-size:13px}
+
+/* Tech stack */
+.tech-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tech{padding:6px 14px;background:var(--bg-3);border:1px solid var(--line);border-radius:6px;font-size:13px;color:var(--text-2)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:20px;text-align:center}
+.stat-card .num{font-size:32px;font-weight:700;color:var(--accent);margin-bottom:4px}
+.stat-card .label{font-size:12px;color:var(--text-2)}
+
+/* Problems table */
+.problem-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px}
+.problem-table th,.problem-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+.problem-table th{color:var(--text-2);font-weight:500;background:var(--bg-3);font-size:12px}
+.problem-table tr:hover{background:rgba(124,156,255,.04)}
+.problem-table .status{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px}
+.problem-table .solved{background:rgba(91,214,163,.15);color:var(--accent-2)}
+
+/* Footer */
+.footer{text-align:center;padding:40px 20px;color:var(--text-2);font-size:13px;border-top:1px solid var(--line)}
+
+/* Responsive */
+@media(max-width:700px){
+  .hero h1{font-size:32px}
+  .hero p{font-size:15px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .section{padding:40px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <h1><span>English Hub</span></h1>
+  <p>从零到一，一天时间做出的整合版英语学习 APP。<br>借鉴 Anki / 多邻国 / 每日英语听力 / 欧路词典 / ChatGPT 五家精华。</p>
+  <div class="badges">
+    <span class="badge green">✓ 已上线 Android</span>
+    <span class="badge blue">PWA 离线可用</span>
+    <span class="badge">纯前端 · 零后端</span>
+    <span class="badge">SM-2 间隔重复</span>
+    <span class="badge">原生 TTS 朗读</span>
+    <span class="badge">4.78MB 安装包</span>
+  </div>
+</section>
+
+<!-- ===== 数字 ===== -->
+<section class="section">
+  <h2>项目数据</h2>
+  <div class="stats">
+    <div class="stat-card"><div class="num">4.78</div><div class="label">APK 大小 (MB)</div></div>
+    <div class="stat-card"><div class="num">2500+</div><div class="label">代码行数</div></div>
+    <div class="stat-card"><div class="num">250+</div><div class="label">内置单词</div></div>
+    <div class="stat-card"><div class="num">7</div><div class="label">踩坑并解决</div></div>
+  </div>
+</section>
+
+<!-- ===== 核心功能 ===== -->
+<section class="section">
+  <h2>核心功能</h2>
+  <div class="grid">
+    <div class="card"><h3><span class="icon">🎴</span>单词卡</h3><p>SM-2 间隔重复算法（Anki 同源），系统自动安排最佳复习时机。4 套词库从零基础到六级全覆盖。</p></div>
+    <div class="card"><h3><span class="icon">🎧</span>听力精听</h3><p>5 套双语材料，逐句循环播放 + 全文连播 + 四档语速。点击任意句子即播即停。</p></div>
+    <div class="card"><h3><span class="icon">💬</span>AI 陪练</h3><p>接入 DeepSeek / 通义 / 智谱任一大模型。自由聊天 / 场景角色扮演 / 作文批改 / 语法讲解，四模式四难度。</p></div>
+    <div class="card"><h3><span class="icon">✍️</span>默写小窗</h3><p>桌面独立悬浮工具。三等级：照输→看中文写→听音盲写。40%概率优先出错题，强化薄弱环节。</p></div>
+    <div class="card"><h3><span class="icon">📖</span>查词 & 生词本</h3><p>内置词库秒查 + 在线 API 兜底。一键加入生词本，跨模块联动——默写/单词卡自动用生词本出题。</p></div>
+    <div class="card"><h3><span class="icon">🔊</span>原生 TTS 朗读</h3><p>APK 调用 Android 系统 TTS 引擎（Capacitor 原生插件）。网页端降级到 Web Speech API，双通道保证全平台出声。</p></div>
+  </div>
+</section>
+
+<!-- ===== 技术栈 ===== -->
+<section class="section">
+  <h2>技术栈</h2>
+  <div class="tech-row">
+    <span class="tech">HTML5</span>
+    <span class="tech">CSS3 (暗色主题)</span>
+    <span class="tech">Vanilla JS (ES6+)</span>
+    <span class="tech">SM-2 Algorithm</span>
+    <span class="tech">Web Speech API</span>
+    <span class="tech">PWA (Service Worker)</span>
+    <span class="tech">Capacitor 6.x</span>
+    <span class="tech">Gradle 8.11.1</span>
+    <span class="tech">@capacitor-community/text-to-speech</span>
+    <span class="tech">Android Studio</span>
+    <span class="tech">Node.js v25</span>
+    <span class="tech">OpenAI Compatible API</span>
+  </div>
+</section>
+
+<!-- ===== 开发时间线 ===== -->
+<section class="section">
+  <h2>开发时间线</h2>
+  <div class="timeline">
+    <div class="tl-item done">
+      <div class="time">2026-04-23 下午</div>
+      <div class="title">需求分析 & 电脑端原型</div>
+      <div class="desc">调研5款主流英语软件 → 确定整合方案 → 完成单文件HTML主程序（SM-2单词卡+听力+AI陪练+查词）</div>
+    </div>
+    <div class="tl-item done">
+      <div class="time">2026-04-23 下午</div>
+      <div class="title">桌面默写小窗</div>
+      <div class="desc">独立HTML小部件 + 三等级默写 + 错题池机制 + Edge --app 模式启动</div>
+    </div>
+    <div class="tl-item done">
+      <div class="time">2026-04-23 晚上</div>
+      <div class="title">PWA 化 + 响应式改造</div>
+      <div class="desc">manifest + Service Worker + AI 生成图标 + 手机两级断点适配</div>
+    </div>
+    <div class="tl-item done">
+      <div class="time">2026-04-23 晚上</div>
+      <div class="title">Android 环境搭建</div>
+      <div class="desc">Node.js + Android Studio + SDK + 环境变量自动配置 + 国内镜像加速</div>
+    </div>
+    <div class="tl-item done">
+      <div class="time">2026-04-23 22:15</div>
+      <div class="title">首个 APK 产出</div>
+      <div class="desc">解决 Gradle 超时 / JDK 版本 / 中文路径三个关键问题，成功打出 4.78MB APK</div>
+    </div>
+    <div class="tl-item done">
+      <div class="time">2026-04-23 22:25</div>
+      <div class="title">修复 TTS 无声 → v2 发布</div>
+      <div class="desc">集成 Capacitor 原生 TTS 插件，双通道（原生+Web）确保全平台朗读正常</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 踩坑 & 解决 ===== -->
+<section class="section">
+  <h2>踩坑 & 解决方案</h2>
+  <table class="problem-table">
+    <thead><tr><th>#</th><th>问题</th><th>根因</th><th>解决方案</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>默写小窗 bat 打不开</td><td>cmd 中文路径 URL 编码乱码</td><td>PowerShell [uri] 转 URL + 纯 ASCII ps1</td><td><span class="status solved">已解决</span></td></tr>
+      <tr><td>2</td><td>Android SDK 缺失</td><td>首次启动跳过 Setup Wizard</td><td>重新打开 SDK Manager 下载</td><td><span class="status solved">已解决</span></td></tr>
+      <tr><td>3</td><td>java 命令不可用</td><td>环境变量未配</td><td>PowerShell 自动写入用户级变量</td><td><span class="status solved">已解决</span></td></tr>
+      <tr><td>4</td><td>Gradle 下载卡死</td><td>services.gradle.org 国内超时</td><td>改 wrapper 为腾讯云镜像</td><td><span class="status solved">已解决</span></td></tr>
+      <tr><td>5</td><td>JDK 21 与 Gradle 不兼容</td><td>AGP 版本限制</td><td>升级 Gradle 到 8.11.1</td><td><span class="status solved">已解决</span></td></tr>
+      <tr><td>6</td><td>中文路径拒绝构建</td><td>AGP non-ASCII 检测</td><td>gradle.properties 加 overridePathCheck</td><td><span class="status solved">已解决</span></td></tr>
+      <tr><td>7</td><td>APK 里 TTS 无声</td><td>WebView 禁用 Web Speech</td><td>Capacitor 原生 TTS 插件</td><td><span class="status solved">已解决</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== 收获 ===== -->
+<section class="section">
+  <h2>核心收获</h2>
+  <div class="grid" style="grid-template-columns:1fr 1fr">
+    <div class="card"><h3>🔧 工具链是真正的财富</h3><p>Android Studio + Node.js + Capacitor，一次搭建永久可用。以后做任何 Android / 前端 / 桌面项目都能直接跑。</p></div>
+    <div class="card"><h3>🧠 踩坑比不踩坑学得多</h3><p>7 个坑对应 Android 开发 7 类常见问题。读 10 篇教程不如自己踩一遍。</p></div>
+    <div class="card"><h3>🛡️ 分层降级是健壮软件的关键</h3><p>TTS 双通道、启动脚本三级方案、词库内置+在线双源……"主方案+两个兜底"才能在真实环境里稳定运行。</p></div>
+    <div class="card"><h3>⚡ 从想法到 APK，一天足够</h3><p>在 2026 年的技术栈下，一个人一天可以从零走完需求→设计→开发→打包→上机的全流程。</p></div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <p>English Hub · 个人作品 · 2026-04-23 一天完成</p>
+  <p style="margin-top:6px;font-size:11px;color:var(--line)">项目源码及完整开发记录均保留在本机 D:\英语软件\</p>
+</footer>
+
+</body>
+</html>

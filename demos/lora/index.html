@@ -1,0 +1,2067 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLiang LoRA 训练器</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; color: #ddd; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow-x: hidden; }
+body.light { background: #f4f4f6; color: #222; }
+a { color: inherit; text-decoration: none; }
+
+/* ===== 登录页 ===== */
+#login-page {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999;
+    background: linear-gradient(135deg, #0f1923, #1a2332, #0d1b2a);
+    display: flex; align-items: center; justify-content: center;
+}
+.login-card {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px; padding: 50px 44px; width: 400px; text-align: center;
+}
+.login-card h1 { font-size: 26px; font-weight: 300; color: #d8d8e0; margin-bottom: 6px; }
+.login-card p { font-size: 13px; color: #555; margin-bottom: 32px; }
+.login-input {
+    width: 100%; padding: 14px 18px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
+    color: #ddd; font-size: 15px; outline: none; transition: border 0.2s;
+}
+.login-input:focus { border-color: rgba(255,255,255,0.2); }
+.login-input::placeholder { color: #444; }
+.login-btn {
+    width: 100%; padding: 14px; margin-top: 16px; border-radius: 10px;
+    border: none; background: linear-gradient(135deg, #2a6a4f, #1a4a3a);
+    color: #ccc; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+}
+.login-btn:hover { background: linear-gradient(135deg, #3a8a6f, #2a6a5a); color: #fff; }
+
+/* ===== 导航栏 ===== */
+#app { display: none; }
+.navbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 0 24px;
+    height: 58px;
+    border-bottom: 1px solid #141414;
+    position: sticky; top: 0; z-index: 100; background: #0a0a0a;
+}
+body.light .navbar { background: #fff; border-bottom-color: #e8e8e8; }
+.nav-logo-block { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
+.nav-logo { font-size: 15px; font-weight: 600; color: #888; letter-spacing: 1px; white-space: nowrap; display: flex; align-items: center; gap: 10px; }
+.nav-gpu-name { font-size: 13px; font-weight: 400; color: #444; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 5px; }
+.gpu-badge {
+    font-size: 9px; padding: 1px 5px; border-radius: 8px;
+    background: #141a14; color: #2a5a2a; border: 1px solid #1e2e1e;
+    font-weight: 400; letter-spacing: 0;
+}
+.nav-right { display: flex; align-items: center; gap: 12px; justify-content: flex-end; }
+.mode-switch { display: flex; border-radius: 6px; overflow: hidden; border: 1px solid #222; }
+.mode-btn { padding: 5px 14px; font-size: 12px; cursor: pointer; background: transparent; color: #555; border: none; transition: all 0.2s; }
+.mode-btn.active { background: #1e1e1e; color: #ccc; }
+body.light .mode-switch { border-color: #ccc; }
+body.light .mode-btn.active { background: #e8e8e8; color: #222; }
+.nav-user { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: background 0.2s; }
+.nav-user:hover { background: #151515; }
+body.light .nav-user:hover { background: #f0f0f0; }
+.nav-user-avatar { width: 26px; height: 26px; border-radius: 50%; background: #252525; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #888; }
+.nav-user-name { font-size: 12px; color: #777; }
+
+/* ===== GPU Monitor in Navbar ===== */
+.nav-gpu { min-width: 0; display: flex; align-items: center; }
+.nav-gpu-offline { color: #2a2a2a; font-size: 11px; }
+.nav-gpu-stats {
+    display: grid; grid-template-columns: auto 1fr; gap: 0 24px; align-items: center; width: 100%;
+}
+.nav-gpu-left { display: flex; gap: 18px; }
+.gpu-item { display: flex; align-items: center; gap: 5px; }
+.gpu-item-icon { font-size: 11px; line-height: 1; }
+.gpu-item-label { color: #2a2a2a; font-size: 9px; line-height: 1.2; }
+.gpu-item-val { color: #555; font-size: 11px; font-weight: 500; }
+.nav-gpu-right { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.gpu-bar-row { display: flex; flex-direction: column; gap: 2px; }
+.gpu-bar-header { display: flex; justify-content: space-between; align-items: center; }
+.gpu-bar-label { color: #333; font-size: 10px; }
+.gpu-bar-label span { color: #555; }
+.gpu-bar-sub { color: #2a2a2a; font-size: 10px; }
+.gpu-bar-track { height: 2px; background: #181818; border-radius: 1px; overflow: hidden; }
+.gpu-bar-fill { height: 100%; border-radius: 1px; transition: width 0.8s ease; background: linear-gradient(90deg, #1a4a2a, #2a8a4f); }
+.gpu-bar-fill.warn { background: linear-gradient(90deg, #4a3a10, #c8920a); }
+.gpu-bar-fill.hot  { background: linear-gradient(90deg, #4a1010, #c82020); }
+.content-tags {
+    display: flex; gap: 16px; width: 100%; max-width: 880px;
+    margin-bottom: 10px; padding-left: 2px;
+}
+.nav-tag {
+    font-size: 12px; color: #444; cursor: pointer;
+    padding: 2px 0; border-bottom: 1px solid transparent; transition: all 0.2s;
+}
+.nav-tag:hover, .nav-tag.active { color: #ccc; border-bottom-color: #555; }
+body.light .nav-tag { color: #aaa; }
+body.light .nav-tag:hover, body.light .nav-tag.active { color: #222; border-bottom-color: #888; }
+
+/* ===== 卡片区域（垂直居中 + 分页） ===== */
+.content {
+    height: calc(100vh - 52px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 16px 40px; overflow: hidden;
+}
+.pager-wrapper { position: relative; width: 100%; max-width: 880px; }
+
+/* 左右翻页箭头 */
+.page-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; color: #666;
+    transition: all 0.2s; z-index: 10; user-select: none;
+}
+.page-arrow:hover { background: rgba(255,255,255,0.12); color: #ddd; }
+.page-arrow.hidden { opacity: 0; pointer-events: none; }
+.page-arrow.left  { left:  -46px; }
+.page-arrow.right { right: -46px; }
+body.light .page-arrow { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); color: #aaa; }
+body.light .page-arrow:hover { color: #333; }
+
+/* 滑动容器 */
+.grid-viewport { overflow: hidden; width: 100%; }
+.grid-track {
+    display: flex;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.grid-page {
+    min-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    gap: 10px;
+    justify-content: center;
+    align-content: start;
+}
+.grid-page > * {
+    max-width: 200px;
+    width: 200px;
+}
+
+/* 卡片 */
+.card { border-radius: 6px; overflow: hidden; background: #111; cursor: pointer; transition: transform 0.2s; }
+body.light .card { background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+.card:hover { transform: scale(1.03); }
+.card-cover { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
+.card-meta { padding: 6px 8px 8px; }
+.card-title { color: #ccc; font-size: 12px; font-weight: 500; }
+body.light .card-title { color: #222; }
+.card-desc { color: #555; font-size: 10px; margin-top: 2px; }
+
+/* 分页点 */
+.page-dots {
+    display: flex; gap: 6px; justify-content: center; margin-top: 16px;
+}
+.page-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #333; transition: all 0.2s; cursor: pointer;
+}
+.page-dot.active { background: #ddd; width: 18px; border-radius: 3px; }
+body.light .page-dot { background: #ccc; }
+body.light .page-dot.active { background: #555; }
+
+/* ===== 专业模式 ===== */
+#pro-frame { display: none; width: 100%; height: calc(100vh - 52px); border: none; }
+
+/* ===== 用户下拉菜单 ===== */
+.user-menu {
+    display: none; position: absolute; right: 28px; top: 52px;
+    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 10px;
+    padding: 6px 0; min-width: 150px; z-index: 200;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+body.light .user-menu { background: #fff; border-color: #e0e0e0; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+.user-menu.show { display: block; }
+.user-menu-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 16px; font-size: 13px; color: #999; cursor: pointer; transition: background 0.15s;
+}
+.user-menu-item:hover { background: #222; color: #ddd; }
+body.light .user-menu-item:hover { background: #f5f5f5; color: #222; }
+.user-menu-item .menu-icon { font-size: 15px; width: 18px; text-align: center; }
+.user-menu-divider { height: 1px; background: #2a2a2a; margin: 4px 0; }
+body.light .user-menu-divider { background: #eee; }
+
+/* ===== 侧边抽屉 ===== */
+.drawer-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 300; backdrop-filter: blur(2px);
+}
+.drawer-overlay.show { display: block; }
+.drawer {
+    position: fixed; top: 0; right: -520px; width: 500px; height: 100vh;
+    background: #111; border-left: 1px solid #222;
+    z-index: 400; transition: right 0.3s cubic-bezier(0.4,0,0.2,1);
+    display: flex; flex-direction: column; overflow: hidden;
+}
+body.light .drawer { background: #fafafa; border-left-color: #e0e0e0; }
+.drawer.open { right: 0; }
+.drawer-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px; border-bottom: 1px solid #1e1e1e; flex-shrink: 0;
+}
+body.light .drawer-header { border-bottom-color: #e8e8e8; }
+.drawer-title { font-size: 15px; font-weight: 600; color: #ddd; }
+body.light .drawer-title { color: #111; }
+.drawer-close {
+    width: 28px; height: 28px; border-radius: 50%; background: #222;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; color: #666; transition: all 0.2s; border: none;
+}
+.drawer-close:hover { background: #333; color: #ddd; }
+body.light .drawer-close { background: #eee; }
+.drawer-body { flex: 1; overflow-y: auto; padding: 20px 22px; }
+.drawer-body::-webkit-scrollbar { width: 4px; }
+.drawer-body::-webkit-scrollbar-track { background: transparent; }
+.drawer-body::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+/* ===== 用户中心 ===== */
+.profile-header {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    padding: 16px; background: #1a1a1a; border-radius: 10px;
+}
+body.light .profile-header { background: #f0f0f0; }
+.profile-avatar {
+    width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg,#2a6a4f,#1a4a3a);
+    display: flex; align-items: center; justify-content: center; font-size: 22px; color: #ccc; flex-shrink: 0;
+}
+.profile-name { font-size: 16px; font-weight: 600; color: #ddd; }
+body.light .profile-name { color: #111; }
+.profile-sub { font-size: 12px; color: #555; margin-top: 3px; }
+.section-label { font-size: 11px; color: #444; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+body.light .section-label { color: #999; }
+.record-list { display: flex; flex-direction: column; gap: 8px; }
+.record-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; background: #1a1a1a; border-radius: 8px; cursor: pointer;
+    transition: background 0.15s;
+}
+body.light .record-item { background: #f0f0f0; }
+.record-item:hover { background: #222; }
+body.light .record-item:hover { background: #e8e8e8; }
+.record-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.record-dot.done { background: #2a8a5f; }
+.record-dot.running { background: #e6a817; }
+.record-dot.fail { background: #c0392b; }
+.record-info { flex: 1; }
+.record-name { font-size: 13px; color: #ccc; }
+body.light .record-name { color: #222; }
+.record-meta { font-size: 11px; color: #555; margin-top: 2px; }
+.record-status { font-size: 11px; }
+.record-status.done { color: #2a8a5f; }
+.record-status.running { color: #e6a817; }
+.record-status.fail { color: #c0392b; }
+
+/* ===== 训练记录详情弹窗 ===== */
+.record-modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 500; backdrop-filter: blur(3px);
+}
+.record-modal-overlay.show { display: block; }
+.record-modal {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: min(880px, 92vw); max-height: 86vh;
+    background: #101010; border: 1px solid #1f1f1f; border-radius: 12px;
+    z-index: 501; display: none; flex-direction: column; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+body.light .record-modal { background: #ffffff; border-color: #e4e4e4; }
+.record-modal.show { display: flex; }
+.record-modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 22px; border-bottom: 1px solid #1e1e1e; flex-shrink: 0;
+}
+body.light .record-modal-header { border-bottom-color: #ececec; }
+.record-modal-title { font-size: 15px; font-weight: 600; color: #ddd; display:flex; align-items:center; gap:10px; }
+body.light .record-modal-title { color: #111; }
+.record-modal-title .rm-badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 10px;
+    background: #1a1a1a; color: #888; font-weight: 400;
+}
+body.light .record-modal-title .rm-badge { background: #f0f0f0; color: #555; }
+.record-modal-title .rm-badge.done { background: rgba(42,138,95,0.15); color: #2a8a5f; }
+.record-modal-title .rm-badge.running { background: rgba(230,168,23,0.15); color: #e6a817; }
+.record-modal-title .rm-badge.fail { background: rgba(192,57,43,0.15); color: #c0392b; }
+.record-modal-body {
+    flex: 1; overflow-y: auto; padding: 20px 22px;
+}
+.record-modal-body::-webkit-scrollbar { width: 4px; }
+.record-modal-body::-webkit-scrollbar-track { background: transparent; }
+.record-modal-body::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+.rm-section { margin-bottom: 22px; }
+.rm-section-title {
+    font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 10px; display:flex; align-items:center; justify-content:space-between;
+}
+body.light .rm-section-title { color: #999; }
+.rm-info-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 16px;
+    background: #1a1a1a; border-radius: 8px; padding: 14px 16px;
+}
+body.light .rm-info-grid { background: #f6f6f6; }
+.rm-info-item { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.rm-info-label { font-size: 11px; color: #666; }
+.rm-info-value {
+    font-size: 12px; color: #ccc; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; font-family: Consolas, Menlo, monospace;
+}
+body.light .rm-info-value { color: #222; }
+.rm-info-value.wrap { white-space: normal; word-break: break-all; }
+.rm-params-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 16px;
+    background: #1a1a1a; border-radius: 8px; padding: 14px 16px;
+}
+body.light .rm-params-grid { background: #f6f6f6; }
+.rm-param-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 0; border-bottom: 1px dashed #222; gap: 10px;
+    font-size: 12px; min-width: 0;
+}
+body.light .rm-param-row { border-bottom-color: #e8e8e8; }
+.rm-param-row:last-child { border-bottom: none; }
+.rm-param-key { color: #888; flex-shrink: 0; }
+.rm-param-val {
+    color: #ddd; font-family: Consolas, Menlo, monospace;
+    text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+body.light .rm-param-val { color: #222; }
+.rm-loss-wrap {
+    background: #1a1a1a; border-radius: 8px; padding: 14px 16px;
+    position: relative;
+}
+body.light .rm-loss-wrap { background: #f6f6f6; }
+.rm-loss-stats {
+    display:flex; gap: 16px; font-size: 11px; color:#666; margin-bottom: 8px;
+}
+.rm-loss-stats b { color:#ccc; font-weight: 500; }
+body.light .rm-loss-stats b { color: #222; }
+#rm-loss-canvas { width: 100%; height: 220px; display: block; }
+.rm-loss-empty {
+    text-align:center; padding: 28px 0; color: #555; font-size: 12px;
+}
+.rm-samples-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+}
+.rm-sample {
+    aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: #1a1a1a;
+    cursor: pointer; transition: transform 0.15s;
+}
+body.light .rm-sample { background: #eee; }
+.rm-sample:hover { transform: scale(1.03); }
+.rm-sample img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rm-config-toggle {
+    font-size: 11px; color: #888; cursor: pointer; user-select: none;
+    background: transparent; border: none; padding: 0;
+}
+.rm-config-toggle:hover { color: #ccc; }
+.rm-config-raw {
+    display: none; margin-top: 10px; max-height: 260px; overflow: auto;
+    background: #0b0b0b; border: 1px solid #1f1f1f; border-radius: 6px;
+    padding: 12px; font-family: Consolas, Menlo, monospace;
+    font-size: 11px; color: #aaa; white-space: pre; tab-size: 2;
+}
+body.light .rm-config-raw { background: #fafafa; border-color: #e6e6e6; color:#333; }
+.rm-config-raw.show { display: block; }
+.rm-empty-hint { color:#555; font-size:12px; padding: 12px 0; text-align:center; }
+.rm-loading { color:#666; font-size:12px; padding: 18px 0; text-align:center; }
+
+/* ===== 记录右键菜单 ===== */
+.record-ctx-menu {
+    position: fixed; z-index: 600;
+    min-width: 180px; padding: 6px 0;
+    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    display: none; font-size: 13px;
+    user-select: none;
+}
+body.light .record-ctx-menu { background: #ffffff; border-color: #e4e4e4; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.record-ctx-menu.show { display: block; }
+.record-ctx-item {
+    padding: 8px 14px; color: #ccc; cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    transition: background 0.1s;
+}
+body.light .record-ctx-item { color: #222; }
+.record-ctx-item:hover { background: #252525; }
+body.light .record-ctx-item:hover { background: #f0f0f0; }
+.record-ctx-item.danger { color: #c0392b; }
+.record-ctx-item.danger:hover { background: rgba(192,57,43,0.12); }
+.record-ctx-item.disabled { color: #555; cursor: not-allowed; }
+.record-ctx-item.disabled:hover { background: transparent; }
+.record-ctx-sep { height: 1px; background: #252525; margin: 4px 0; }
+body.light .record-ctx-sep { background: #ececec; }
+.record-ctx-icon { font-size: 14px; width: 16px; text-align: center; }
+
+/* ===== 轻量 Toast ===== */
+.rm-toast {
+    position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+    padding: 10px 18px; border-radius: 8px;
+    background: #1a1a1a; color: #ddd; border: 1px solid #2a2a2a;
+    font-size: 13px; z-index: 700;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    opacity: 0; transition: opacity 0.2s, top 0.2s;
+    pointer-events: none;
+}
+body.light .rm-toast { background: #fff; color: #222; border-color: #e0e0e0; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.rm-toast.show { opacity: 1; top: 80px; }
+.rm-toast.success { border-color: rgba(42,138,95,0.6); }
+.rm-toast.error   { border-color: rgba(192,57,43,0.6); }
+
+/* ===== 确认对话框 ===== */
+.rm-confirm-mask {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 650;
+    display: none; align-items: center; justify-content: center;
+}
+.rm-confirm-mask.show { display: flex; }
+.rm-confirm-box {
+    width: 360px; max-width: 92vw;
+    background: #101010; border: 1px solid #222; border-radius: 10px;
+    padding: 22px; color: #ddd;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+body.light .rm-confirm-box { background: #fff; border-color: #e4e4e4; color: #222; }
+.rm-confirm-title { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+.rm-confirm-text { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 18px; word-break: break-all; }
+body.light .rm-confirm-text { color: #555; }
+.rm-confirm-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.rm-btn {
+    padding: 7px 16px; border-radius: 6px; font-size: 13px;
+    border: 1px solid #2a2a2a; background: transparent; color: #ccc;
+    cursor: pointer; transition: all 0.15s;
+}
+body.light .rm-btn { border-color: #ddd; color: #333; }
+.rm-btn:hover { background: #222; }
+body.light .rm-btn:hover { background: #f0f0f0; }
+.rm-btn.danger { background: #c0392b; border-color: #c0392b; color: #fff; }
+.rm-btn.danger:hover { background: #a5311f; border-color: #a5311f; }
+
+/* ===== 素材 ===== */
+.material-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.material-item {
+    aspect-ratio: 1; border-radius: 6px; overflow: hidden;
+    background: #1a1a1a; position: relative; cursor: pointer;
+}
+.material-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.2s; }
+.material-item:hover img { opacity: 0.7; }
+.material-empty {
+    grid-column: 1/-1; text-align: center; padding: 60px 0;
+    color: #444; font-size: 13px;
+}
+.material-group-label { font-size: 12px; color: #555; margin: 16px 0 8px; }
+
+/* ===== 教程 ===== */
+.tutorial-tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+.tutorial-tab {
+    padding: 5px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;
+    background: #1a1a1a; color: #666; border: 1px solid #2a2a2a; transition: all 0.2s;
+}
+body.light .tutorial-tab { background: #eee; border-color: #ddd; }
+.tutorial-tab.active { background: #2a6a4f; color: #aed8c4; border-color: #2a6a4f; }
+.tutorial-panel { display: none; }
+.tutorial-panel.active { display: block; }
+.tut-card {
+    background: #161616; border-radius: 10px; padding: 16px 18px;
+    margin-bottom: 12px; border-left: 3px solid #2a6a4f;
+}
+body.light .tut-card { background: #f5f5f5; }
+.tut-card-title { font-size: 13px; font-weight: 600; color: #ccc; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+body.light .tut-card-title { color: #111; }
+.tut-badge {
+    font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500;
+}
+.tut-badge.sdxl { background: #1a3a5c; color: #6ab0e8; }
+.tut-badge.flux { background: #3a1a5c; color: #b06ae8; }
+.tut-badge.wan  { background: #1a3a2a; color: #6ae8b0; }
+.tut-badge.qwen { background: #5c3a1a; color: #e8b06a; }
+.tut-steps { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.tut-steps li {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 12px; color: #999; line-height: 1.6;
+}
+body.light .tut-steps li { color: #555; }
+.tut-step-num {
+    width: 18px; height: 18px; border-radius: 50%; background: #2a2a2a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #666; flex-shrink: 0; margin-top: 1px;
+}
+.tut-param-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }
+.tut-param-table th { text-align: left; color: #555; font-weight: 500; padding: 4px 8px; border-bottom: 1px solid #222; }
+.tut-param-table td { padding: 5px 8px; color: #888; border-bottom: 1px solid #1a1a1a; }
+body.light .tut-param-table th { color: #999; border-bottom-color: #ddd; }
+body.light .tut-param-table td { color: #555; border-bottom-color: #eee; }
+.tut-param-table td:first-child { color: #a8c8b8; font-family: monospace; font-size: 11px; }
+.tut-tip { font-size: 11px; color: #2a8a5f; margin-top: 8px; padding: 6px 10px; background: rgba(42,138,95,0.08); border-radius: 6px; }
+
+/* ===== 设置 ===== */
+.setting-section { margin-bottom: 24px; }
+.setting-section-title { font-size: 12px; color: #444; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+body.light .setting-section-title { color: #aaa; }
+.setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; background: #1a1a1a; border-radius: 8px; margin-bottom: 6px;
+}
+body.light .setting-row { background: #f0f0f0; }
+.setting-label { font-size: 13px; color: #ccc; }
+body.light .setting-label { color: #222; }
+.setting-sub { font-size: 11px; color: #555; margin-top: 2px; }
+.toggle {
+    width: 40px; height: 22px; border-radius: 11px; background: #2a2a2a;
+    position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+}
+.toggle.on { background: #2a6a4f; }
+.toggle::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 16px; height: 16px; border-radius: 50%; background: #555;
+    transition: left 0.2s, background 0.2s;
+}
+.toggle.on::after { left: 21px; background: #aed8c4; }
+
+/* ===== 关于 ===== */
+.about-hero {
+    text-align: center; padding: 28px 0 20px;
+    border-bottom: 1px solid #1e1e1e; margin-bottom: 20px;
+}
+body.light .about-hero { border-bottom-color: #eee; }
+.about-logo { font-size: 36px; font-weight: 200; color: #ccc; letter-spacing: 3px; margin-bottom: 6px; }
+body.light .about-logo { color: #222; }
+.about-version { font-size: 12px; color: #444; margin-bottom: 10px; }
+.about-desc { font-size: 13px; color: #666; line-height: 1.7; max-width: 380px; margin: 0 auto; }
+body.light .about-desc { color: #777; }
+.about-feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.about-feature {
+    padding: 12px 14px; background: #1a1a1a; border-radius: 8px;
+}
+body.light .about-feature { background: #f0f0f0; }
+.about-feature-icon { font-size: 18px; margin-bottom: 6px; }
+.about-feature-name { font-size: 12px; color: #ccc; font-weight: 500; }
+body.light .about-feature-name { color: #222; }
+.about-feature-desc { font-size: 11px; color: #555; margin-top: 2px; }
+.about-links { display: flex; flex-direction: column; gap: 6px; }
+.about-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: #1a1a1a; border-radius: 8px; cursor: pointer;
+    font-size: 13px; color: #888; transition: background 0.15s;
+}
+body.light .about-link { background: #f0f0f0; }
+.about-link:hover { background: #222; color: #ddd; }
+body.light .about-link:hover { background: #e8e8e8; }
+</style>
+</head>
+<body>
+
+<!-- 登录页 -->
+<div id="login-page">
+    <div class="login-card">
+        <h1>欢迎回来</h1>
+        <p>MLiang LoRA · 输入名字开始</p>
+        <input type="text" class="login-input" id="login-name" placeholder="输入你的名字" autofocus>
+        <button class="login-btn" id="login-btn">进入</button>
+    </div>
+</div>
+
+<!-- 主应用 -->
+<div id="app">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <!-- 左侧：Logo + GPU 型号（同一行） -->
+        <div class="nav-logo-block">
+            <div class="nav-logo">MLiang LoRA <span class="nav-gpu-name" id="gpu-name-logo">--<span class="gpu-badge">#0</span></span></div>
+        </div>
+
+        <!-- 中间：GPU Monitor 三行布局 -->
+        <div class="nav-gpu" id="nav-gpu">
+            <div class="nav-gpu-offline" id="gpu-offline">GPU 数据加载中...</div>
+            <div id="gpu-body" style="display:none; width:100%">
+                <div class="nav-gpu-stats">
+                    <!-- 左侧小数据 -->
+                    <div class="nav-gpu-left">
+                        <div class="gpu-item">
+                            <span class="gpu-item-icon" style="color:#4a9a7a">▲</span>
+                            <div><div class="gpu-item-label">Temperature</div><div class="gpu-item-val" id="gpu-temp">-</div></div>
+                        </div>
+                        <div class="gpu-item">
+                            <span class="gpu-item-icon" style="color:#4a7a9a">❋</span>
+                            <div><div class="gpu-item-label">Fan Speed</div><div class="gpu-item-val" id="gpu-fan">-</div></div>
+                        </div>
+                        <div class="gpu-item">
+                            <span class="gpu-item-icon" style="color:#7a6a9a">◎</span>
+                            <div><div class="gpu-item-label">Clock Speed</div><div class="gpu-item-val" id="gpu-clock">-</div></div>
+                        </div>
+                    </div>
+                    <!-- 右侧进度条 -->
+                    <div class="nav-gpu-right">
+                        <div class="gpu-bar-row">
+                            <div class="gpu-bar-header">
+                                <span class="gpu-bar-label">GPU Load <span id="gpu-load-pct">0%</span></span>
+                            </div>
+                            <div class="gpu-bar-track"><div class="gpu-bar-fill" id="gpu-load-bar" style="width:0%"></div></div>
+                        </div>
+                        <div class="gpu-bar-row">
+                            <div class="gpu-bar-header">
+                                <span class="gpu-bar-label">Memory <span id="gpu-mem-pct">0%</span></span>
+                                <span class="gpu-bar-sub" id="gpu-mem-sub">- / -</span>
+                            </div>
+                            <div class="gpu-bar-track"><div class="gpu-bar-fill" id="gpu-mem-bar" style="width:0%"></div></div>
+                        </div>
+                        <div class="gpu-bar-row">
+                            <div class="gpu-bar-header">
+                                <span class="gpu-bar-label">Power Draw</span>
+                                <span class="gpu-bar-sub" id="gpu-power">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <div class="mode-switch">
+                <button class="mode-btn active" id="mode-simple">简易</button>
+                <button class="mode-btn" id="mode-pro">专业</button>
+            </div>
+            <div class="nav-user" id="nav-user">
+                <div class="nav-user-avatar" id="user-avatar">M</div>
+                <span class="nav-user-name" id="user-name">MLiang</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 用户下拉菜单 -->
+    <div class="user-menu" id="user-menu">
+        <div class="user-menu-item" data-drawer="profile">
+            <span class="menu-icon">🧑</span> 用户中心
+        </div>
+        <div class="user-menu-item" data-drawer="material">
+            <span class="menu-icon">🖼️</span> 素材
+        </div>
+        <div class="user-menu-item" data-drawer="tutorial">
+            <span class="menu-icon">📖</span> 教程
+        </div>
+        <div class="user-menu-item" data-drawer="settings">
+            <span class="menu-icon">⚙️</span> 设置
+        </div>
+        <div class="user-menu-item" data-drawer="about">
+            <span class="menu-icon">ℹ️</span> 关于
+        </div>
+        <div class="user-menu-divider"></div>
+        <div class="user-menu-item" id="menu-switch-user">
+            <span class="menu-icon">🔄</span> 切换用户
+        </div>
+    </div>
+
+    <!-- 简易模式：卡片分页 -->
+    <div class="content" id="simple-content">
+
+        <!-- 标签栏 -->
+        <div class="content-tags" id="content-tags">
+            <span class="nav-tag active" data-tag="all">全部</span>
+            <span class="nav-tag" data-tag="sdxl">SDXL</span>
+            <span class="nav-tag" data-tag="flux">Flux</span>
+            <span class="nav-tag" data-tag="qwen">Qwen-Image</span>
+            <span class="nav-tag" data-tag="wan">Wan 视频</span>
+        </div>
+
+        <!-- 卡片分页 -->
+        <div class="pager-wrapper">
+            <div class="page-arrow left hidden" id="arrow-left">‹</div>
+            <div class="grid-viewport">
+                <div class="grid-track" id="grid-track"></div>
+            </div>
+            <div class="page-arrow right hidden" id="arrow-right">›</div>
+        </div>
+        <div class="page-dots" id="page-dots"></div>
+    </div>
+
+    <!-- 专业模式：Gradio iframe -->
+    <iframe id="pro-frame" src="pro.html"></iframe>
+</div>
+
+<!-- 抽屉遮罩 -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+
+<!-- ===== 抽屉：用户中心 ===== -->
+<div class="drawer" id="drawer-profile">
+    <div class="drawer-header">
+        <span class="drawer-title">用户中心</span>
+        <button class="drawer-close" data-close="profile">✕</button>
+    </div>
+    <div class="drawer-body">
+        <div class="profile-header">
+            <div class="profile-avatar" id="drawer-avatar">M</div>
+            <div>
+                <div class="profile-name" id="drawer-name">MLiang</div>
+                <div class="profile-sub">本地用户 · LoRA 训练师</div>
+            </div>
+        </div>
+        <div class="section-label" style="margin-bottom:10px">训练记录</div>
+        <div class="record-list" id="record-list">
+            <div style="text-align:center;padding:48px 0;color:#333;font-size:13px;">加载中...</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 训练记录详情弹窗 ===== -->
+<div class="record-modal-overlay" id="record-modal-overlay"></div>
+<div class="record-modal" id="record-modal">
+    <div class="record-modal-header">
+        <div class="record-modal-title">
+            <span id="rm-title">训练记录详情</span>
+            <span class="rm-badge" id="rm-status-badge">-</span>
+        </div>
+        <button class="drawer-close" id="rm-close">✕</button>
+    </div>
+    <div class="record-modal-body" id="rm-body">
+        <div class="rm-loading">加载中…</div>
+    </div>
+</div>
+
+<!-- ===== 训练记录右键菜单 ===== -->
+<div class="record-ctx-menu" id="record-ctx-menu">
+    <div class="record-ctx-item" data-action="detail">
+        <span class="record-ctx-icon">📋</span><span>查看详情</span>
+    </div>
+    <div class="record-ctx-item" data-action="download">
+        <span class="record-ctx-icon">⬇</span><span>下载训练配置</span>
+    </div>
+    <div class="record-ctx-sep"></div>
+    <div class="record-ctx-item danger" data-action="delete">
+        <span class="record-ctx-icon">🗑</span><span>删除这条记录</span>
+    </div>
+</div>
+
+<!-- 轻量 Toast -->
+<div class="rm-toast" id="rm-toast"></div>
+
+<!-- 确认删除对话框 -->
+<div class="rm-confirm-mask" id="rm-confirm-mask">
+    <div class="rm-confirm-box">
+        <div class="rm-confirm-title" id="rm-confirm-title">确认删除</div>
+        <div class="rm-confirm-text" id="rm-confirm-text">此操作将从数据库移除这条训练记录（不会删除磁盘上的模型文件）。</div>
+        <div class="rm-confirm-actions">
+            <button class="rm-btn" id="rm-confirm-cancel">取消</button>
+            <button class="rm-btn danger" id="rm-confirm-ok">删除</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 抽屉：素材 ===== -->
+<div class="drawer" id="drawer-material">
+    <div class="drawer-header">
+        <span class="drawer-title">素材库</span>
+        <button class="drawer-close" data-close="material">✕</button>
+    </div>
+    <div class="drawer-body">
+        <div style="text-align:center;padding:48px 0;color:#333;font-size:13px;">暂无素材，训练时上传的图片将在此显示</div>
+    </div>
+</div>
+
+<!-- ===== 抽屉：教程 ===== -->
+<div class="drawer" id="drawer-tutorial">
+    <div class="drawer-header">
+        <span class="drawer-title">训练教程</span>
+        <button class="drawer-close" data-close="tutorial">✕</button>
+    </div>
+    <div class="drawer-body">
+        <div class="tutorial-tabs">
+            <div class="tutorial-tab active" data-tab="usage">使用指南</div>
+            <div class="tutorial-tab" data-tab="tag">🏷️ 打标指南</div>
+            <div class="tutorial-tab" data-tab="sdxl">SDXL</div>
+            <div class="tutorial-tab" data-tab="flux">Flux</div>
+            <div class="tutorial-tab" data-tab="wan">Wan 视频</div>
+            <div class="tutorial-tab" data-tab="qwen">Qwen-Image</div>
+        </div>
+
+        <!-- 使用指南 -->
+        <div class="tutorial-panel active" id="tab-usage">
+            <div class="tut-card">
+                <div class="tut-card-title">🚀 快速开始</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">1</div>登录后选择训练模板卡片（简易模式首页）</li>
+                    <li><div class="tut-step-num">2</div>切换到「专业模式」，填写数据集路径和输出路径</li>
+                    <li><div class="tut-step-num">3</div>选择对应的基础模型类型（SDXL / Flux / Wan 等）</li>
+                    <li><div class="tut-step-num">4</div>调整 Rank、学习率、训练步数等核心参数</li>
+                    <li><div class="tut-step-num">5</div>点击「开始训练」，等待 Loss 曲线收敛</li>
+                    <li><div class="tut-step-num">6</div>每 200 步生成预览图，可实时监控训练效果</li>
+                </ul>
+            </div>
+            <div class="tut-card">
+                <div class="tut-card-title">📁 数据集目录结构</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">·</div>每张图片需对应同名 .txt 文件写入描述词</li>
+                    <li><div class="tut-step-num">·</div>支持 jpg / jpeg / png 格式，不支持 webp</li>
+                    <li><div class="tut-step-num">·</div>无需手动裁剪，训练器自动处理不同尺寸</li>
+                    <li><div class="tut-step-num">·</div>建议图片清晰、背景干净，质量优于数量</li>
+                </ul>
+                <div class="tut-tip">💡 图片命名示例：01.jpg + 01.txt，txt 内容写触发词和描述</div>
+            </div>
+        </div>
+
+        <!-- SDXL -->
+        <div class="tutorial-panel" id="tab-sdxl">
+            <div class="tut-card" style="border-left-color:#2a5c8a">
+                <div class="tut-card-title">
+                    <span class="tut-badge sdxl">SDXL</span> 基础参数推荐
+                </div>
+                <table class="tut-param-table">
+                    <tr><th>参数</th><th>推荐值</th><th>说明</th></tr>
+                    <tr><td>network_dim</td><td>16 ~ 64</td><td>Rank，越大表现力越强</td></tr>
+                    <tr><td>network_alpha</td><td>等于或小于 dim</td><td>防下溢，稳定训练</td></tr>
+                    <tr><td>learning_rate</td><td>1e-4</td><td>标准学习率</td></tr>
+                    <tr><td>text_encoder_lr</td><td>5e-5</td><td>文本编码器单独设低一点</td></tr>
+                    <tr><td>max_train_steps</td><td>1000 ~ 3000</td><td>图片数 × 重复次数 × epoch</td></tr>
+                    <tr><td>optimizer</td><td>AdamW8bit</td><td>省显存，稳定</td></tr>
+                </table>
+            </div>
+            <div class="tut-card" style="border-left-color:#2a5c8a">
+                <div class="tut-card-title"><span class="tut-badge sdxl">SDXL</span> 训练流程</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">1</div>准备 15~30 张高质量目标图片 + 对应 caption</li>
+                    <li><div class="tut-step-num">2</div>选基础模型：SDXL 1.0 / illustrious / noobai 等</li>
+                    <li><div class="tut-step-num">3</div>开启 cache_latents + gradient_checkpointing 省显存</li>
+                    <li><div class="tut-step-num">4</div>角色训练建议 Rank 32，画风训练建议 Rank 64</li>
+                    <li><div class="tut-step-num">5</div>训练完成后用 WebUI 加载 LoRA 测试效果</li>
+                </ul>
+                <div class="tut-tip">💡 最低 8GB 显存可运行，建议 12GB+ 更流畅</div>
+            </div>
+        </div>
+
+        <!-- Flux -->
+        <div class="tutorial-panel" id="tab-flux">
+            <div class="tut-card" style="border-left-color:#6a2a8a">
+                <div class="tut-card-title">
+                    <span class="tut-badge flux">Flux</span> 支持的模型
+                </div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">·</div>FLUX.1-dev — 主力图像生成模型</li>
+                    <li><div class="tut-step-num">·</div>FLUX.2-dev — 更新版本</li>
+                    <li><div class="tut-step-num">·</div>FLUX.1-Kontext-dev — 支持图像指令编辑</li>
+                    <li><div class="tut-step-num">·</div>Flex.1-alpha / Flex.2-preview — 轻量版本</li>
+                </ul>
+            </div>
+            <div class="tut-card" style="border-left-color:#6a2a8a">
+                <div class="tut-card-title"><span class="tut-badge flux">Flux</span> 训练流程</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">1</div>准备数据集：jpg/png + 同名 .txt，无需裁剪</li>
+                    <li><div class="tut-step-num">2</div>在训练器中选 Flux 模板，填入数据集路径</li>
+                    <li><div class="tut-step-num">3</div>Rank 推荐 16~32，学习率 1e-4</li>
+                    <li><div class="tut-step-num">4</div>开始训练，支持 Ctrl+C 中断后续训自动续训</li>
+                    <li><div class="tut-step-num">5</div>输出 .safetensors 文件可直接加载使用</li>
+                </ul>
+                <div class="tut-tip">💡 ⚠️ 保存 checkpoint 时勿中断，会损坏文件</div>
+            </div>
+            <div class="tut-card" style="border-left-color:#6a2a8a">
+                <div class="tut-card-title"><span class="tut-badge flux">Flux</span> 核心参数</div>
+                <table class="tut-param-table">
+                    <tr><th>参数</th><th>推荐值</th><th>说明</th></tr>
+                    <tr><td>linear (rank)</td><td>16 ~ 128</td><td>LoRA 维度</td></tr>
+                    <tr><td>linear_alpha</td><td>同 rank</td><td>Alpha 值</td></tr>
+                    <tr><td>学习率</td><td>1e-4</td><td>标准值</td></tr>
+                    <tr><td>训练步数</td><td>1000 ~ 2000</td><td>视数据量调整</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Wan -->
+        <div class="tutorial-panel" id="tab-wan">
+            <div class="tut-card" style="border-left-color:#2a8a4f">
+                <div class="tut-card-title">
+                    <span class="tut-badge wan">Wan</span> 视频数据集准备
+                </div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">1</div>准备短视频片段（5~15 秒为宜）</li>
+                    <li><div class="tut-step-num">2</div>建议分辨率：480×832 或 720×1280</li>
+                    <li><div class="tut-step-num">3</div>帧率：16fps 或 24fps</li>
+                    <li><div class="tut-step-num">4</div>每个视频对应同名 .txt 描述文件</li>
+                    <li><div class="tut-step-num">5</div>内容尽量统一风格，避免场景跳跃过大</li>
+                </ul>
+            </div>
+            <div class="tut-card" style="border-left-color:#2a8a4f">
+                <div class="tut-card-title"><span class="tut-badge wan">Wan</span> 训练参数</div>
+                <table class="tut-param-table">
+                    <tr><th>参数</th><th>推荐值</th><th>说明</th></tr>
+                    <tr><td>network_dim</td><td>32</td><td>视频模型建议稍高</td></tr>
+                    <tr><td>network_alpha</td><td>16</td><td>约为 dim 的一半</td></tr>
+                    <tr><td>max_frames</td><td>16</td><td>每次训练抽取帧数</td></tr>
+                    <tr><td>learning_rate</td><td>1e-4</td><td>标准值</td></tr>
+                    <tr><td>max_train_steps</td><td>500 ~ 1500</td><td>视频内容较简单可少些</td></tr>
+                </table>
+                <div class="tut-tip">💡 视频训练消耗显存更多，建议 16GB+ 显卡</div>
+            </div>
+        </div>
+
+        <!-- Qwen -->
+        <div class="tutorial-panel" id="tab-qwen">
+            <div class="tut-card" style="border-left-color:#8a6a2a">
+                <div class="tut-card-title">
+                    <span class="tut-badge qwen">Qwen</span> 支持的模型
+                </div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">·</div>Qwen-Image — 标准文生图模型</li>
+                    <li><div class="tut-step-num">·</div>Qwen-Image-2512 — 更新版本</li>
+                    <li><div class="tut-step-num">·</div>Qwen-Image-Edit — 支持图像指令编辑</li>
+                    <li><div class="tut-step-num">·</div>Qwen-Image-Edit-2511 — 最新编辑版本</li>
+                </ul>
+            </div>
+            <div class="tut-card" style="border-left-color:#8a6a2a">
+                <div class="tut-card-title"><span class="tut-badge qwen">Qwen</span> 训练流程</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">1</div>准备图片数据集：jpg/png + 同名 .txt</li>
+                    <li><div class="tut-step-num">2</div>可在 caption 中用 [trigger] 作为触发词占位符</li>
+                    <li><div class="tut-step-num">3</div>选择 Qwen 模板，配置 trigger_word 参数</li>
+                    <li><div class="tut-step-num">4</div>Rank 推荐 16~32，训练步数 1000~2000</li>
+                    <li><div class="tut-step-num">5</div>输出 LoRA 文件与 Qwen 模型结合使用</li>
+                </ul>
+                <div class="tut-tip">💡 图片无需手动缩放，加载器自动处理宽高比</div>
+            </div>
+        </div>
+
+        <!-- 🏷️ 打标指南 -->
+        <div class="tutorial-panel" id="tab-tag">
+            <div class="tut-card" style="border-left-color:#c07040">
+                <div class="tut-card-title">🎯 打标是什么？为什么重要？</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">·</div>每张训练图都需要一个同名 .txt 文件，写着"这张图是什么"</li>
+                    <li><div class="tut-step-num">·</div>打标质量直接决定 LoRA 最终效果——标签越准，出图越像</li>
+                    <li><div class="tut-step-num">·</div>训练器自带两套打标系统：Booru 标签（短词）和自然语言（完整句子）</li>
+                </ul>
+                <div class="tut-tip">💡 图片 01.jpg 就要配一个 01.txt，两者必须同名</div>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#c07040">
+                <div class="tut-card-title">🏷️ Booru 标签 vs 📝 自然语言 — 选哪个？</div>
+                <table class="tut-param-table">
+                    <tr><th>训练模型</th><th>推荐打标方式</th><th>示例标签</th></tr>
+                    <tr><td>SDXL / Illustrious / Pony / NoobAI / Animagine</td><td><b>🏷️ Booru 标签</b></td><td>1girl, red_eyes, white_hair, ...</td></tr>
+                    <tr><td>Flux.1 / Flux.2 / Flux Kontext</td><td><b>📝 自然语言</b></td><td>a girl with red eyes and white hair, ...</td></tr>
+                    <tr><td>Qwen-Image / Qwen-Image-Edit</td><td><b>📝 自然语言</b></td><td>a detailed portrait of a character ...</td></tr>
+                    <tr><td>SD 1.5</td><td>🏷️ Booru 标签</td><td>1girl, outdoors, ...</td></tr>
+                </table>
+                <div class="tut-tip">⚠️ 搞错会严重影响效果：Flux 看不懂逗号短标签，SDXL 也不太理解长句子</div>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#c07040">
+                <div class="tut-card-title">🎯 触发词 / 调用词 — 必填字段</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">·</div>触发词就是你训练后用来"召唤"这个 LoRA 的关键词</li>
+                    <li><div class="tut-step-num">·</div>会被自动加到每个 .txt 的最前面，例如：<code>myfp_v1, 1girl, red_eyes, ...</code></li>
+                    <li><div class="tut-step-num">·</div>训练完后，出图时在 prompt 开头加这个词就能召唤角色</li>
+                </ul>
+                <div class="tut-tip">💡 取名规则：独特 + 模型不认识的词。推荐格式 <code>角色名缩写_版本</code>，如 <code>myfp_v1</code>、<code>anya_v1</code>、<code>goblin_fp</code>。<b>不要</b>用 <code>girl</code>、<code>hero</code> 这种常见词！</div>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#4a7a8a">
+                <div class="tut-card-title">🏷️ Booru 打标模型对比（SDXL 系）</div>
+                <table class="tut-param-table">
+                    <tr><th>模型</th><th>特点</th><th>推荐场景</th></tr>
+                    <tr><td><b>cl_tagger</b></td><td>最新，22 个标签类别，更细致</td><td>🌟 默认首选</td></tr>
+                    <tr><td>swinv2_v3</td><td>高精度 v3，SmilingWolf 出品</td><td>追求准确度</td></tr>
+                    <tr><td>eva02_v3</td><td>EVA02 大模型，最准但慢</td><td>精品数据集</td></tr>
+                    <tr><td>vit_v2</td><td>经典通用版</td><td>兼容性好</td></tr>
+                    <tr><td>swinv2_v2</td><td>经典高精度</td><td>老数据集</td></tr>
+                    <tr><td>convnext_v2</td><td>最快，精度略低</td><td>大批量快速打标</td></tr>
+                </table>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#4a7a8a">
+                <div class="tut-card-title">⚙️ Booru 三个核心阈值参数</div>
+                <table class="tut-param-table">
+                    <tr><th>参数</th><th>作用</th><th>推荐值</th></tr>
+                    <tr><td>通用标签阈值 General</td><td>置信度高于此值的标签才会被保留。越低标签越多</td><td><b>0.35 ~ 0.6</b></td></tr>
+                    <tr><td>角色标签阈值 Character</td><td>识别已知角色（如原神/崩铁 IP 角色）。<b>训练自己的角色时设 1.0</b>（关闭）</td><td><b>1.0</b>（训练原创时）</td></tr>
+                    <tr><td>批量大小 Batch Size</td><td>一次处理几张图，越大越快但占显存</td><td>8 ~ 16（12GB显卡）</td></tr>
+                </table>
+                <div class="tut-tip">💡 刚开始不知道设多少？General 用 0.5，Character 用 1.0，Batch 12，基本通用</div>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#6a8a4a">
+                <div class="tut-card-title">⚙️ Booru 高级选项 — 标签开关详解</div>
+                <table class="tut-param-table">
+                    <tr><th>选项</th><th>意思</th><th>建议</th></tr>
+                    <tr><td><b>下划线转空格</b></td><td>把 <code>tag_name</code> 转成 <code>tag name</code></td><td>✅ <b>开</b>（SDXL/Flux 都更喜欢空格）</td></tr>
+                    <tr><td><b>使用评级标签</b></td><td>加 <code>safe/questionable/explicit</code> 表示画面尺度</td><td>✅ <b>开</b>（让模型知道画面性质）</td></tr>
+                    <tr><td><b>使用质量标签</b></td><td>加 <code>best_quality</code>、<code>high_quality</code></td><td>❌ 关（避免跟训练时的质量词冲突）</td></tr>
+                    <tr><td><b>使用模型标签</b></td><td>加模型专属标签（仅 cl_tagger 有）</td><td>❌ 关</td></tr>
+                    <tr><td><b>评级标签放最后</b></td><td>把 safe/explicit 排到末尾</td><td>❌ 关</td></tr>
+                    <tr><td><b>角色标签排前面</b></td><td>把识别到的角色名放最前</td><td>❌ 关（训练原创时）</td></tr>
+                    <tr><td><b>展开角色标签</b></td><td>把 <code>anya (spy_x_family)</code> 的括号去掉</td><td>❌ 关</td></tr>
+                    <tr><td><b>按置信度排序</b></td><td>标签按识别置信度从高到低排</td><td>❌ 关（按默认分类排更合理）</td></tr>
+                    <tr><td><b>移除父标签</b></td><td>有 <code>blue_eyes</code> 就删掉 <code>eyes</code>，避免重复</td><td>✅ <b>开</b>（推荐）</td></tr>
+                    <tr><td><b>标注置信度数值</b></td><td>每个标签后加 <code>:0.95</code> 的数值</td><td>❌ 关（训练不需要这玩意）</td></tr>
+                    <tr><td><b>覆盖已有标签</b></td><td>重新打标时覆盖旧的 .txt 文件</td><td>✅ 想重打就开，手动改过的就关</td></tr>
+                    <tr><td><b>同时输出 JSON</b></td><td>额外生成一份 .json 格式标签</td><td>❌ 关（用不上）</td></tr>
+                    <tr><td><b>递归子目录</b></td><td>扫描文件夹里的所有子文件夹</td><td>✅ 如果数据集有分 1_char/2_char 这种结构就开</td></tr>
+                </table>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#8a5a2a">
+                <div class="tut-card-title">🔧 Booru 标签过滤 & 替换</div>
+                <table class="tut-param-table">
+                    <tr><th>字段</th><th>作用</th><th>示例</th></tr>
+                    <tr><td><b>始终排在最前的标签</b></td><td>这些标签不管识别置信度多低，都会出现且排最前</td><td>1girl, solo, 1boy</td></tr>
+                    <tr><td><b>排除的标签</b></td><td>永远不会出现在结果里的标签</td><td>watermark, signature, text, artist_name</td></tr>
+                    <tr><td><b>标签替换规则</b></td><td>自动把某些词替换成另一个。格式 <code>原词,新词;原词2,新词2</code></td><td>1girl,1woman;2girls,2women</td></tr>
+                </table>
+                <div class="tut-tip">💡 <b>排除标签</b>实用场景：数据集带水印 → 加 <code>watermark,signature,text,logo</code>，训练后出图就不会自动生成水印了</div>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#6a4a8a">
+                <div class="tut-card-title">📝 自然语言打标器对比（Flux/Qwen 系）</div>
+                <table class="tut-param-table">
+                    <tr><th>模型</th><th>下载大小</th><th>描述风格</th><th>推荐</th></tr>
+                    <tr><td><b>Florence-2</b> (详细描述)</td><td>~1.5 GB</td><td>中等长度，结构清晰</td><td>🌟 <b>默认首选</b>，Flux 官方用的就是它</td></tr>
+                    <tr><td>Florence-2 (超详细)</td><td>~1.5 GB</td><td>非常长，细节更多</td><td>需要详细描述时用</td></tr>
+                    <tr><td>BLIP-2</td><td>~5 GB</td><td>简短，1~2 句话</td><td>想要简洁描述时用</td></tr>
+                </table>
+                <div class="tut-tip">⚠️ 首次使用会自动从 hf-mirror.com 下载模型，需要等几分钟（取决于网速）</div>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#c07040">
+                <div class="tut-card-title">🚀 推荐打标流程（按场景）</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">1</div>把图片放到一个文件夹（推荐 <code>D:\MLiang XLQ\datasets\项目名\</code>）</li>
+                    <li><div class="tut-step-num">2</div>「标签处理」Tab → 填图片文件夹路径（或点 📁 浏览）</li>
+                    <li><div class="tut-step-num">3</div><b>填触发词</b>（如 <code>myfp_v1</code>）→ 这步<b>必做</b>！</li>
+                    <li><div class="tut-step-num">4</div>选打标模式：<br>&nbsp;&nbsp;&nbsp;• SDXL 系 → 🏷️ Booru 标签（选 cl_tagger，其他用默认）<br>&nbsp;&nbsp;&nbsp;• Flux/Qwen → 📝 自然语言（选 florence2）</li>
+                    <li><div class="tut-step-num">5</div>点「🚀 开始...打标」，等进度条跑完</li>
+                    <li><div class="tut-step-num">6</div>检查几张图的 .txt 内容是否合理，触发词是否在最前</li>
+                    <li><div class="tut-step-num">7</div>如果有需要修改的标签，用下方「标签批量编辑」功能</li>
+                </ul>
+            </div>
+
+            <div class="tut-card" style="border-left-color:#c04040">
+                <div class="tut-card-title">❌ 常见坑（新手必看）</div>
+                <ul class="tut-steps">
+                    <li><div class="tut-step-num">·</div><b>训练 SDXL 用了自然语言打标</b> → 触发词会失效，角色特征学不进去</li>
+                    <li><div class="tut-step-num">·</div><b>训练 Flux 用了 Booru 标签</b> → 出图效果很差，Flux 看不懂逗号短词</li>
+                    <li><div class="tut-step-num">·</div><b>触发词用了常见词</b>（如 <code>girl</code>、<code>hero</code>）→ 跟模型已有知识冲突，训练失败</li>
+                    <li><div class="tut-step-num">·</div><b>数据集带水印但没排除 watermark 标签</b> → 训练后出图自动带水印</li>
+                    <li><div class="tut-step-num">·</div><b>角色标签阈值设太低</b>（训练原创时）→ 会识别成其他 IP 角色，污染训练</li>
+                    <li><div class="tut-step-num">·</div><b>打标后不检查就训练</b> → 标签写错会让 LoRA 学偏，一定要抽查几张图！</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 抽屉：设置 ===== -->
+<div class="drawer" id="drawer-settings">
+    <div class="drawer-header">
+        <span class="drawer-title">设置</span>
+        <button class="drawer-close" data-close="settings">✕</button>
+    </div>
+    <div class="drawer-body">
+        <div class="setting-section">
+            <div class="setting-section-title">下载源</div>
+            <div class="setting-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                <div class="setting-label">HuggingFace Token
+                    <span style="color:#333;font-size:10px;margin-left:6px;">用于下载门控模型（如 Flux Dev）</span>
+                </div>
+                <input type="password" id="setting-hf-token" placeholder="hf_xxxxxxxxxxxxxxxx"
+                    style="width:100%;padding:8px 12px;background:#111;border:1px solid #1e1e1e;border-radius:6px;color:#888;font-size:12px;outline:none;"
+                    onfocus="this.style.borderColor='#333'" onblur="this.style.borderColor='#1e1e1e'"/>
+                <div style="display:flex;gap:8px;width:100%;">
+                    <button onclick="saveHFToken()" style="flex:1;padding:7px;background:#1a3a2a;border:1px solid #2a5a3a;border-radius:6px;color:#7ac4a0;font-size:12px;cursor:pointer;">保存 Token</button>
+                    <button onclick="testHFToken()" style="flex:1;padding:7px;background:#161616;border:1px solid #222;border-radius:6px;color:#555;font-size:12px;cursor:pointer;">测试连接</button>
+                </div>
+                <div id="hf-token-status" style="font-size:11px;color:#333;min-height:16px;"></div>
+            </div>
+            <div class="setting-row" style="margin-top:6px;">
+                <div>
+                    <div class="setting-label">无法访问 HuggingFace 时</div>
+                    <div class="setting-sub">自动切换到 hf-mirror.com 镜像下载</div>
+                </div>
+                <div class="toggle on" id="toggle-hfmirror"></div>
+            </div>
+        </div>
+        <div class="setting-section">
+            <div class="setting-section-title">外观</div>
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">浅色模式</div>
+                    <div class="setting-sub">开启后切换为白色主题</div>
+                </div>
+                <div class="toggle" id="toggle-light"></div>
+            </div>
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">卡片动画</div>
+                    <div class="setting-sub">鼠标悬停时卡片放大效果</div>
+                </div>
+                <div class="toggle on" id="toggle-anim"></div>
+            </div>
+        </div>
+        <div class="setting-section">
+            <div class="setting-section-title">训练</div>
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">训练完成通知</div>
+                    <div class="setting-sub">训练结束后弹出提示</div>
+                </div>
+                <div class="toggle on" id="toggle-notify"></div>
+            </div>
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">自动保存记录</div>
+                    <div class="setting-sub">将训练参数保存到历史记录</div>
+                </div>
+                <div class="toggle on" id="toggle-save"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 抽屉：关于 ===== -->
+<div class="drawer" id="drawer-about">
+    <div class="drawer-header">
+        <span class="drawer-title">关于</span>
+        <button class="drawer-close" data-close="about">✕</button>
+    </div>
+    <div class="drawer-body">
+        <div class="about-hero">
+            <div class="about-logo">MLiang LoRA</div>
+            <div class="about-version">Version 1.0.0 · 基于 ai-toolkit & kohya-ss</div>
+            <div class="about-desc">
+                一款专为 LoRA 模型训练打造的整合工具，支持 SDXL、Flux、Wan 视频、Qwen-Image 等主流模型，提供简易与专业双模式界面。
+            </div>
+        </div>
+        <div class="section-label" style="margin-bottom:10px">核心功能</div>
+        <div class="about-feature-grid">
+            <div class="about-feature">
+                <div class="about-feature-icon">🎯</div>
+                <div class="about-feature-name">多模型支持</div>
+                <div class="about-feature-desc">SDXL / Flux / Wan / Qwen</div>
+            </div>
+            <div class="about-feature">
+                <div class="about-feature-icon">📈</div>
+                <div class="about-feature-name">实时 Loss 曲线</div>
+                <div class="about-feature-desc">1 秒刷新训练状态</div>
+            </div>
+            <div class="about-feature">
+                <div class="about-feature-icon">🖼️</div>
+                <div class="about-feature-name">预览图生成</div>
+                <div class="about-feature-desc">每 200 步自动采样</div>
+            </div>
+            <div class="about-feature">
+                <div class="about-feature-icon">📦</div>
+                <div class="about-feature-name">离线整合包</div>
+                <div class="about-feature-desc">开箱即用，无需配置</div>
+            </div>
+        </div>
+        <div class="section-label" style="margin-bottom:10px">链接</div>
+        <div class="about-links">
+            <div class="about-link" onclick="window.open('https://github.com/ostris/ai-toolkit','_blank')">
+                🔗 ai-toolkit（Flux 训练后端）
+            </div>
+            <div class="about-link" onclick="window.open('https://github.com/kohya-ss/sd-scripts','_blank')">
+                🔗 kohya-ss / sd-scripts（SDXL 训练后端）
+            </div>
+            <div class="about-link" onclick="window.open('https://huggingface.co/models','_blank')">
+                🔗 HuggingFace 模型库
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== 卡片数据 =====
+const CARDS = [
+    { img: "static/img/cover_1.jpg", title: "SDXL 角色训练", desc: "15-30张 · Rank 32", tag: "sdxl" },
+    { img: "static/img/cover_2.jpg", title: "SDXL 画风训练", desc: "50-200张 · Rank 64", tag: "sdxl" },
+    { img: "static/img/cover_3.jpg", title: "快速测试", desc: "5张 · Rank 16 · 500步", tag: "sdxl" },
+    { img: "static/img/cover_4.jpg", title: "Flux 角色训练", desc: "Flux Dev · Rank 16", tag: "flux" },
+    { img: "static/img/cover_5.jpg", title: "Wan 视频训练", desc: "Wan 2.2 · 视频帧", tag: "wan" },
+    { img: "static/img/cover_6.jpg", title: "Qwen 文生图", desc: "Qwen-Image · Rank 16", tag: "qwen" },
+    { img: "static/img/cover_7.jpg", title: "SDXL 写真风格", desc: "真人风 · Rank 32", tag: "sdxl" },
+    { img: "static/img/cover_8.jpg", title: "二次元角色", desc: "动漫风 · Rank 32", tag: "sdxl" },
+    { img: "static/img/cover_9.jpg", title: "Flux 画风迁移", desc: "Flux Dev · 50张", tag: "flux" },
+    { img: "static/img/cover_10.jpg", title: "概念艺术", desc: "场景风格 · Rank 64", tag: "sdxl" },
+    { img: "static/img/cover_11.jpg", title: "插画风格", desc: "插画训练 · Rank 64", tag: "sdxl" },
+    { img: "static/img/cover_12.jpg", title: "赛博朋克", desc: "科幻风格 · Rank 64", tag: "sdxl" },
+    { img: "static/img/cover_13.jpg", title: "东方幻想", desc: "仙侠风格 · Rank 64", tag: "sdxl" },
+];
+
+// ===== 分页卡片系统 =====
+const PAGE_SIZE = 12;
+let currentPage = 0;
+let totalPages = 0;
+
+function renderCards(tag) {
+    const filtered = tag === 'all' ? CARDS : CARDS.filter(c => c.tag === tag);
+    const track = document.getElementById('grid-track');
+    const dots = document.getElementById('page-dots');
+
+    totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+    currentPage = 0;
+
+    // 生成每一页
+    track.innerHTML = '';
+    for (let p = 0; p < totalPages; p++) {
+        const page = document.createElement('div');
+        page.className = 'grid-page';
+        const slice = filtered.slice(p * PAGE_SIZE, (p + 1) * PAGE_SIZE);
+        page.innerHTML = slice.map(c => `
+            <div class="card">
+                <img src="${c.img}" class="card-cover" alt="${c.title}" onerror="this.style.background='#222';this.style.height='80px'"/>
+                <div class="card-meta">
+                    <div class="card-title">${c.title}</div>
+                    <div class="card-desc">${c.desc}</div>
+                </div>
+            </div>
+        `).join('');
+        track.appendChild(page);
+    }
+
+    // 分页点
+    dots.innerHTML = '';
+    if (totalPages > 1) {
+        for (let p = 0; p < totalPages; p++) {
+            const dot = document.createElement('div');
+            dot.className = 'page-dot' + (p === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goToPage(p));
+            dots.appendChild(dot);
+        }
+    }
+
+    goToPage(0);
+}
+
+function goToPage(p) {
+    currentPage = p;
+    document.getElementById('grid-track').style.transform = `translateX(-${p * 100}%)`;
+
+    // 更新箭头
+    const arrowL = document.getElementById('arrow-left');
+    const arrowR = document.getElementById('arrow-right');
+    arrowL.classList.toggle('hidden', p === 0);
+    arrowR.classList.toggle('hidden', p >= totalPages - 1);
+
+    // 更新分页点
+    document.querySelectorAll('.page-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === p);
+    });
+}
+
+document.getElementById('arrow-left').addEventListener('click', () => {
+    if (currentPage > 0) goToPage(currentPage - 1);
+});
+document.getElementById('arrow-right').addEventListener('click', () => {
+    if (currentPage < totalPages - 1) goToPage(currentPage + 1);
+});
+
+// 键盘方向键
+document.addEventListener('keydown', e => {
+    if (document.querySelector('.drawer.open')) return; // 抽屉打开时不拦截
+    if (e.key === 'ArrowLeft'  && currentPage > 0) goToPage(currentPage - 1);
+    if (e.key === 'ArrowRight' && currentPage < totalPages - 1) goToPage(currentPage + 1);
+});
+
+// 触摸/鼠标滑动
+(function() {
+    const vp = document.getElementById('simple-content');
+    let startX = 0, isDragging = false;
+    vp.addEventListener('mousedown',  e => { startX = e.clientX; isDragging = true; });
+    vp.addEventListener('mousemove',  e => { if (!isDragging) return; });
+    vp.addEventListener('mouseup',    e => {
+        if (!isDragging) return; isDragging = false;
+        const diff = e.clientX - startX;
+        if (diff < -60 && currentPage < totalPages - 1) goToPage(currentPage + 1);
+        if (diff >  60 && currentPage > 0) goToPage(currentPage - 1);
+    });
+    vp.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    vp.addEventListener('touchend',   e => {
+        const diff = e.changedTouches[0].clientX - startX;
+        if (diff < -60 && currentPage < totalPages - 1) goToPage(currentPage + 1);
+        if (diff >  60 && currentPage > 0) goToPage(currentPage - 1);
+    }, { passive: true });
+})();
+
+// ===== 登录 =====
+const loginPage = document.getElementById('login-page');
+const app = document.getElementById('app');
+const loginBtn = document.getElementById('login-btn');
+const loginInput = document.getElementById('login-name');
+
+function doLogin() {
+    const name = loginInput.value.trim();
+    if (!name) return;
+    localStorage.setItem('mliang_user', name);
+    localStorage.setItem('mliang_username', 'admin');
+    showApp(name);
+}
+function showApp(name) {
+    loginPage.style.display = 'none';
+    app.style.display = 'block';
+    document.getElementById('user-name').textContent = name;
+    document.getElementById('user-avatar').textContent = name[0].toUpperCase();
+    document.getElementById('drawer-name').textContent = name;
+    document.getElementById('drawer-avatar').textContent = name[0].toUpperCase();
+    renderCards('all');
+}
+loginBtn.addEventListener('click', doLogin);
+loginInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+const saved = localStorage.getItem('mliang_user');
+if (saved) { localStorage.setItem('mliang_username', 'admin'); showApp(saved); }
+
+// ===== 标签筛选（现在在内容区） =====
+document.querySelectorAll('#content-tags .nav-tag').forEach(el => {
+    el.addEventListener('click', () => {
+        document.querySelectorAll('#content-tags .nav-tag').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        renderCards(el.dataset.tag);
+    });
+});
+
+// ===== 简易/专业切换 =====
+const modeSimple = document.getElementById('mode-simple');
+const modePro = document.getElementById('mode-pro');
+const simpleContent = document.getElementById('simple-content');
+const proFrame = document.getElementById('pro-frame');
+
+modeSimple.addEventListener('click', () => {
+    modeSimple.classList.add('active'); modePro.classList.remove('active');
+    simpleContent.style.display = 'flex'; proFrame.style.display = 'none';
+});
+modePro.addEventListener('click', () => {
+    modePro.classList.add('active'); modeSimple.classList.remove('active');
+    simpleContent.style.display = 'none'; proFrame.style.display = 'block';
+});
+
+// ===== GPU Monitor =====
+function fmtTime() {
+    const n = new Date();
+    return `Last updated ${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}:${n.getSeconds().toString().padStart(2,'0')}`;
+}
+function setBar(barId, pct) {
+    const el = document.getElementById(barId);
+    if (!el) return;
+    el.style.width = pct + '%';
+    el.className = 'gpu-bar-fill' + (pct > 90 ? ' hot' : pct > 70 ? ' warn' : '');
+}
+async function fetchGPU() {
+    try {
+        const r = await fetch('javascript:void(0)&&/api/gpu');
+        const d = await r.json();
+        if (!d.available || !d.gpus || d.gpus.length === 0) {
+            document.getElementById('gpu-offline').textContent = 'GPU 数据不可用';
+            return;
+        }
+        const g = d.gpus[0];
+        document.getElementById('gpu-offline').style.display = 'none';
+        document.getElementById('gpu-body').style.display = 'block';
+        // GPU 名显示在 Logo 后面
+        const gpuNameEl = document.getElementById('gpu-name-logo');
+        const badge = gpuNameEl.querySelector('.gpu-badge');
+        gpuNameEl.textContent = g.name + ' ';
+        gpuNameEl.appendChild(badge);
+        document.getElementById('gpu-temp').textContent = g.temp !== null ? g.temp + '°C' : '--';
+        document.getElementById('gpu-fan').textContent = g.fan !== null ? g.fan + '%' : '--';
+        document.getElementById('gpu-clock').textContent = g.clock_mhz !== null ? g.clock_mhz + ' MHz' : '--';
+        const load = g.gpu_load !== null ? g.gpu_load : 0;
+        document.getElementById('gpu-load-pct').textContent = load + '%';
+        setBar('gpu-load-bar', load);
+        document.getElementById('gpu-mem-pct').textContent = g.mem_pct + '%';
+        document.getElementById('gpu-mem-sub').textContent = `${(g.mem_used_mb/1024).toFixed(1)} GB / ${(g.mem_total_mb/1024).toFixed(1)} GB`;
+        setBar('gpu-mem-bar', g.mem_pct);
+        if (g.power_w !== null) {
+            document.getElementById('gpu-power').textContent = `${g.power_w}W / ${g.power_limit_w}W`;
+        }
+    } catch(e) {
+        document.getElementById('gpu-offline').textContent = 'GPU 监控连接失败';
+    }
+}
+fetchGPU();
+setInterval(fetchGPU, 2000);
+
+// ===== 用户菜单 =====
+const navUser = document.getElementById('nav-user');
+const userMenu = document.getElementById('user-menu');
+navUser.addEventListener('click', e => { e.stopPropagation(); userMenu.classList.toggle('show'); });
+document.addEventListener('click', e => {
+    if (!navUser.contains(e.target) && !userMenu.contains(e.target)) userMenu.classList.remove('show');
+});
+document.getElementById('menu-switch-user').addEventListener('click', () => {
+    localStorage.removeItem('mliang_user');
+    app.style.display = 'none';
+    loginPage.style.display = 'flex';
+    loginInput.value = '';
+    loginInput.focus();
+    userMenu.classList.remove('show');
+});
+
+// ===== 抽屉系统 =====
+const overlay = document.getElementById('drawer-overlay');
+
+// ===== 训练记录加载 =====
+async function loadRecords() {
+    const username = localStorage.getItem('mliang_username') || 'admin';
+    const list = document.getElementById('record-list');
+    if (!list) return;
+    list.innerHTML = '<div style="text-align:center;padding:24px 0;color:#333;font-size:13px;">加载中...</div>';
+    try {
+        const r = await fetch('javascript:void(0)&&/api/records?username=' + encodeURIComponent(username));
+        const d = await r.json();
+        if (!d.ok || !d.records || d.records.length === 0) {
+            list.innerHTML = '<div style="text-align:center;padding:48px 0;color:#333;font-size:13px;">暂无训练记录</div>';
+            return;
+        }
+        list.innerHTML = d.records.map(rec => `
+            <div class="record-item" data-id="${rec.id}" data-name="${escapeAttr(rec.name)}" data-status="${escapeAttr(rec.status)}" data-label="${escapeAttr(rec.label)}">
+                <div class="record-dot ${rec.status}"></div>
+                <div class="record-info">
+                    <div class="record-name">${rec.name}</div>
+                    <div class="record-meta">${rec.preset || '-'} · ${rec.current}/${rec.total} 步 · ${rec.date}</div>
+                </div>
+                <span class="record-status ${rec.status}">${rec.label}</span>
+            </div>
+        `).join('');
+        // 绑定点击 → 打开详情；右键 → 菜单
+        list.querySelectorAll('.record-item').forEach(el => {
+            el.addEventListener('click', () => {
+                const id = el.dataset.id;
+                if (id) openRecordDetail(id);
+            });
+            el.addEventListener('contextmenu', e => {
+                e.preventDefault();
+                openRecordCtxMenu(e.clientX, e.clientY, el);
+            });
+        });
+    } catch(e) {
+        list.innerHTML = '<div style="text-align:center;padding:48px 0;color:#555;font-size:13px;">加载失败</div>';
+    }
+}
+
+function openDrawer(id) {
+    document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
+    const drawer = document.getElementById('drawer-' + id);
+    if (drawer) { drawer.classList.add('open'); overlay.classList.add('show'); }
+    userMenu.classList.remove('show');
+    if (id === 'profile') loadRecords();
+}
+function closeAllDrawers() {
+    document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
+    overlay.classList.remove('show');
+}
+
+// 菜单项点击打开对应抽屉
+document.querySelectorAll('.user-menu-item[data-drawer]').forEach(item => {
+    item.addEventListener('click', () => openDrawer(item.dataset.drawer));
+});
+// 关闭按钮
+document.querySelectorAll('.drawer-close').forEach(btn => {
+    btn.addEventListener('click', closeAllDrawers);
+});
+// 遮罩点击关闭
+overlay.addEventListener('click', closeAllDrawers);
+
+// ===== 教程 Tab 切换 =====
+document.querySelectorAll('.tutorial-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tutorial-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tutorial-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+});
+
+// ===== HF Token =====
+(function initHFToken() {
+    const saved = localStorage.getItem('hf_token') || '';
+    const el = document.getElementById('setting-hf-token');
+    if (el && saved) el.value = saved;
+})();
+
+function saveHFToken() {
+    const token = document.getElementById('setting-hf-token').value.trim();
+    const st = document.getElementById('hf-token-status');
+    if (!token) { st.style.color = '#c05050'; st.textContent = '请输入 Token'; return; }
+    localStorage.setItem('hf_token', token);
+    // 同步到后端环境变量
+    fetch('javascript:void(0)&&/api/set_hf_token', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({token})
+    }).catch(() => {});
+    st.style.color = '#2a8a5f'; st.textContent = '✓ 已保存';
+    setTimeout(() => st.textContent = '', 3000);
+}
+
+async function testHFToken() {
+    const st = document.getElementById('hf-token-status');
+    st.style.color = '#888'; st.textContent = '测试中...';
+    try {
+        const r = await fetch('javascript:void(0)&&/api/test_hf', {method: 'POST'});
+        const d = await r.json();
+        if (d.reachable) {
+            st.style.color = '#2a8a5f'; st.textContent = '✓ HuggingFace 可直连';
+        } else {
+            st.style.color = '#e6a817'; st.textContent = '⚠ 无法直连，将使用 hf-mirror.com';
+        }
+    } catch(e) {
+        st.style.color = '#e6a817'; st.textContent = '⚠ 无法直连，将使用 hf-mirror.com';
+    }
+}
+
+// 恢复 Token 到后端（页面加载时）
+(function restoreToken() {
+    const t = localStorage.getItem('hf_token');
+    if (t) fetch('javascript:void(0)&&/api/set_hf_token', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({token:t})}).catch(()=>{});
+})();
+document.querySelectorAll('.toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => toggle.classList.toggle('on'));
+});
+document.getElementById('toggle-light').addEventListener('click', () => {
+    document.body.classList.toggle('light');
+});
+
+// ===== 训练记录详情弹窗 =====
+const rmOverlay = document.getElementById('record-modal-overlay');
+const rmModal   = document.getElementById('record-modal');
+const rmBody    = document.getElementById('rm-body');
+const rmTitle   = document.getElementById('rm-title');
+const rmBadge   = document.getElementById('rm-status-badge');
+
+function closeRecordDetail() {
+    rmModal.classList.remove('show');
+    rmOverlay.classList.remove('show');
+    rmBody.innerHTML = '';
+}
+document.getElementById('rm-close').addEventListener('click', closeRecordDetail);
+rmOverlay.addEventListener('click', closeRecordDetail);
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && rmModal.classList.contains('show')) closeRecordDetail();
+});
+
+function escapeHtml(s) {
+    if (s === null || s === undefined) return '-';
+    return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+async function openRecordDetail(id) {
+    console.log('[record-detail] open id=', id);
+    if (!rmOverlay || !rmModal || !rmBody) {
+        alert('详情弹窗 DOM 未加载（可能是缓存问题），请按 Ctrl+F5 强制刷新页面');
+        return;
+    }
+    rmOverlay.classList.add('show');
+    rmModal.classList.add('show');
+    rmTitle.textContent = '训练记录详情';
+    rmBadge.textContent = '加载中';
+    rmBadge.className = 'rm-badge';
+    rmBody.innerHTML = '<div class="rm-loading">加载中…</div>';
+
+    // 并行拉三路
+    let detail = null, loss = null, samples = null;
+    try {
+        const [rd, rl, rs] = await Promise.all([
+            fetch('javascript:void(0)&&/api/job/' + id).then(r => r.json()).catch(() => ({ok:false})),
+            fetch('javascript:void(0)&&/api/job/' + id + '/loss').then(r => r.json()).catch(() => ({ok:false, steps:[], losses:[]})),
+            fetch('javascript:void(0)&&/api/job/' + id + '/samples').then(r => r.json()).catch(() => ({ok:false, samples:[]})),
+        ]);
+        detail = rd; loss = rl; samples = rs;
+    } catch(e) {
+        rmBody.innerHTML = '<div class="rm-empty-hint">加载失败：' + escapeHtml(e.message) + '</div>';
+        return;
+    }
+
+    if (!detail || !detail.ok || !detail.job) {
+        const errMsg = (detail && detail.error) ? detail.error : '未知错误';
+        rmBody.innerHTML = `
+            <div class="rm-section">
+                <div class="rm-section-title">读取失败</div>
+                <div class="rm-info-grid">
+                    <div class="rm-info-item" style="grid-column:1/-1">
+                        <span class="rm-info-label">任务 ID</span>
+                        <span class="rm-info-value">#${escapeHtml(id)}</span>
+                    </div>
+                    <div class="rm-info-item" style="grid-column:1/-1">
+                        <span class="rm-info-label">错误信息</span>
+                        <span class="rm-info-value wrap">${escapeHtml(errMsg)}</span>
+                    </div>
+                    <div class="rm-info-item" style="grid-column:1/-1">
+                        <span class="rm-info-label">排查建议</span>
+                        <span class="rm-info-value wrap">① 刷新页面（Ctrl+F5） ② 检查控制台 Network 看 /api/job/${escapeHtml(id)} 的返回 ③ 确认数据库 data/users.db 中存在此记录</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        console.error('[record-detail] detail api failed:', detail);
+        return;
+    }
+    const job = detail.job;
+
+    // 状态徽标
+    rmTitle.textContent = job.name || '训练记录';
+    rmBadge.textContent = job.status_label || job.status || '-';
+    const sMap = { completed:'done', running:'running', failed:'fail', stopped:'fail', created:'running' };
+    rmBadge.className = 'rm-badge ' + (sMap[job.status] || '');
+
+    // 基本信息
+    const progress = (job.total_steps ? `${job.current_step} / ${job.total_steps}` : (job.current_step || 0) + ' 步');
+    const infoHtml = `
+        <div class="rm-section">
+            <div class="rm-section-title">基本信息</div>
+            <div class="rm-info-grid">
+                <div class="rm-info-item">
+                    <span class="rm-info-label">任务 ID</span>
+                    <span class="rm-info-value">#${escapeHtml(job.id)}</span>
+                </div>
+                <div class="rm-info-item">
+                    <span class="rm-info-label">进度</span>
+                    <span class="rm-info-value">${escapeHtml(progress)}</span>
+                </div>
+                <div class="rm-info-item">
+                    <span class="rm-info-label">创建时间</span>
+                    <span class="rm-info-value">${escapeHtml(job.created_at)}</span>
+                </div>
+                <div class="rm-info-item">
+                    <span class="rm-info-label">更新时间</span>
+                    <span class="rm-info-value">${escapeHtml(job.updated_at)}</span>
+                </div>
+                <div class="rm-info-item">
+                    <span class="rm-info-label">模型预设</span>
+                    <span class="rm-info-value">${escapeHtml(job.preset)}</span>
+                </div>
+                <div class="rm-info-item">
+                    <span class="rm-info-label">状态</span>
+                    <span class="rm-info-value">${escapeHtml(job.status_label)}</span>
+                </div>
+                <div class="rm-info-item" style="grid-column:1/-1">
+                    <span class="rm-info-label">模型路径</span>
+                    <span class="rm-info-value wrap" title="${escapeHtml(job.model_path)}">${escapeHtml(job.model_path)}</span>
+                </div>
+                <div class="rm-info-item" style="grid-column:1/-1">
+                    <span class="rm-info-label">数据集路径</span>
+                    <span class="rm-info-value wrap" title="${escapeHtml(job.dataset_path)}">${escapeHtml(job.dataset_path)}</span>
+                </div>
+                <div class="rm-info-item" style="grid-column:1/-1">
+                    <span class="rm-info-label">输出目录</span>
+                    <span class="rm-info-value wrap" title="${escapeHtml(job.output_path)}">${escapeHtml(job.output_path)}</span>
+                </div>
+                <div class="rm-info-item" style="grid-column:1/-1">
+                    <span class="rm-info-label">配置文件</span>
+                    <span class="rm-info-value wrap" title="${escapeHtml(job.config_path)}">${escapeHtml(job.config_path)}</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // 训练参数
+    const params = job.params || {};
+    const paramKeys = Object.keys(params);
+    let paramsHtml = '';
+    if (paramKeys.length > 0) {
+        const rows = paramKeys.map(k => `
+            <div class="rm-param-row">
+                <span class="rm-param-key">${escapeHtml(k)}</span>
+                <span class="rm-param-val" title="${escapeHtml(params[k])}">${escapeHtml(params[k])}</span>
+            </div>
+        `).join('');
+        paramsHtml = `
+            <div class="rm-section">
+                <div class="rm-section-title">
+                    <span>训练参数</span>
+                    ${job.config_raw ? '<button class="rm-config-toggle" id="rm-toggle-raw">查看原始 YAML ▾</button>' : ''}
+                </div>
+                <div class="rm-params-grid">${rows}</div>
+                ${job.config_raw ? `<pre class="rm-config-raw" id="rm-raw">${escapeHtml(job.config_raw)}</pre>` : ''}
+            </div>
+        `;
+    } else {
+        paramsHtml = `
+            <div class="rm-section">
+                <div class="rm-section-title">训练参数</div>
+                <div class="rm-empty-hint">没有读到参数（配置文件可能已被移动或删除）</div>
+            </div>
+        `;
+    }
+
+    // Loss 区域
+    const steps = (loss && loss.steps) || [];
+    const losses = (loss && loss.losses) || [];
+    let lossHtml;
+    if (losses.length === 0) {
+        lossHtml = `
+            <div class="rm-section">
+                <div class="rm-section-title">Loss 曲线</div>
+                <div class="rm-loss-wrap"><div class="rm-loss-empty">暂无 loss 数据（可能训练日志尚未生成）</div></div>
+            </div>
+        `;
+    } else {
+        const minL = Math.min(...losses);
+        const maxL = Math.max(...losses);
+        const avgL = losses.reduce((a,b)=>a+b,0) / losses.length;
+        const lastL = losses[losses.length - 1];
+        lossHtml = `
+            <div class="rm-section">
+                <div class="rm-section-title">Loss 曲线</div>
+                <div class="rm-loss-wrap">
+                    <div class="rm-loss-stats">
+                        <span>采样点 <b>${losses.length}</b></span>
+                        <span>最新 <b>${lastL.toFixed(4)}</b></span>
+                        <span>最小 <b>${minL.toFixed(4)}</b></span>
+                        <span>最大 <b>${maxL.toFixed(4)}</b></span>
+                        <span>平均 <b>${avgL.toFixed(4)}</b></span>
+                    </div>
+                    <canvas id="rm-loss-canvas"></canvas>
+                </div>
+            </div>
+        `;
+    }
+
+    // 采样图
+    let samplesHtml = '';
+    const sampleList = (samples && samples.samples) || [];
+    if (sampleList.length > 0) {
+        const items = sampleList.slice(0, 12).map(s => `
+            <div class="rm-sample"><img loading="lazy" src="${escapeHtml(s.url)}" alt="sample"></div>
+        `).join('');
+        samplesHtml = `
+            <div class="rm-section">
+                <div class="rm-section-title">采样预览（最新 ${Math.min(sampleList.length, 12)} 张）</div>
+                <div class="rm-samples-grid">${items}</div>
+            </div>
+        `;
+    }
+
+    rmBody.innerHTML = infoHtml + paramsHtml + lossHtml + samplesHtml;
+
+    // 绑定"查看原始 YAML"切换
+    const togBtn = document.getElementById('rm-toggle-raw');
+    const rawEl  = document.getElementById('rm-raw');
+    if (togBtn && rawEl) {
+        togBtn.addEventListener('click', () => {
+            const on = rawEl.classList.toggle('show');
+            togBtn.textContent = on ? '收起原始 YAML ▴' : '查看原始 YAML ▾';
+        });
+    }
+
+    // 绘制 loss 曲线
+    if (losses.length > 0) {
+        const cv = document.getElementById('rm-loss-canvas');
+        if (cv) requestAnimationFrame(() => drawLossChart(cv, steps, losses));
+    }
+}
+
+function drawLossChart(canvas, steps, losses) {
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth;
+    const cssH = canvas.clientHeight || 220;
+    canvas.width  = Math.floor(cssW * dpr);
+    canvas.height = Math.floor(cssH * dpr);
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+
+    const isLight = document.body.classList.contains('light');
+    const axisColor = isLight ? '#bbb' : '#333';
+    const gridColor = isLight ? '#eee' : '#1e1e1e';
+    const textColor = isLight ? '#666' : '#666';
+    const lineColor = '#2a8a5f';
+    const fillColor = 'rgba(42, 138, 95, 0.12)';
+
+    const padL = 44, padR = 12, padT = 10, padB = 24;
+    const w = cssW - padL - padR;
+    const h = cssH - padT - padB;
+
+    const xsRaw = (steps && steps.length === losses.length) ? steps : losses.map((_, i) => i + 1);
+    const xMin = Math.min(...xsRaw);
+    const xMax = Math.max(...xsRaw);
+    const yMin = Math.min(...losses);
+    const yMax = Math.max(...losses);
+    const yPad = (yMax - yMin) * 0.1 || 0.01;
+    const yLo = Math.max(0, yMin - yPad);
+    const yHi = yMax + yPad;
+    const xSpan = (xMax - xMin) || 1;
+    const ySpan = (yHi - yLo) || 1;
+
+    const xPix = x => padL + ((x - xMin) / xSpan) * w;
+    const yPix = y => padT + (1 - (y - yLo) / ySpan) * h;
+
+    // 网格 + Y 刻度
+    ctx.font = '10px Consolas, Menlo, monospace';
+    ctx.fillStyle = textColor;
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 1;
+    const yTicks = 4;
+    for (let i = 0; i <= yTicks; i++) {
+        const v = yLo + (ySpan * i / yTicks);
+        const y = yPix(v);
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(cssW - padR, y);
+        ctx.stroke();
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(v.toFixed(3), padL - 6, y);
+    }
+
+    // X 刻度（3 档）
+    const xTicks = 3;
+    for (let i = 0; i <= xTicks; i++) {
+        const v = xMin + (xSpan * i / xTicks);
+        const x = xPix(v);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(Math.round(v).toString(), x, cssH - padB + 6);
+    }
+
+    // 坐标轴
+    ctx.strokeStyle = axisColor;
+    ctx.beginPath();
+    ctx.moveTo(padL, padT);
+    ctx.lineTo(padL, cssH - padB);
+    ctx.lineTo(cssW - padR, cssH - padB);
+    ctx.stroke();
+
+    // 面积填充
+    ctx.beginPath();
+    ctx.moveTo(xPix(xsRaw[0]), yPix(losses[0]));
+    for (let i = 1; i < losses.length; i++) {
+        ctx.lineTo(xPix(xsRaw[i]), yPix(losses[i]));
+    }
+    ctx.lineTo(xPix(xsRaw[xsRaw.length - 1]), cssH - padB);
+    ctx.lineTo(xPix(xsRaw[0]), cssH - padB);
+    ctx.closePath();
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+
+    // 折线
+    ctx.beginPath();
+    ctx.moveTo(xPix(xsRaw[0]), yPix(losses[0]));
+    for (let i = 1; i < losses.length; i++) {
+        ctx.lineTo(xPix(xsRaw[i]), yPix(losses[i]));
+    }
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+}
+
+// ===== 训练记录：右键菜单 + 下载 + 删除 =====
+function escapeAttr(s) {
+    if (s === null || s === undefined) return '';
+    return String(s)
+        .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// --- Toast ---
+const rmToast = document.getElementById('rm-toast');
+let _toastTimer = null;
+function showToast(msg, type = '') {
+    if (!rmToast) return;
+    rmToast.textContent = msg;
+    rmToast.className = 'rm-toast show ' + type;
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => {
+        rmToast.className = 'rm-toast ' + type;
+    }, 2400);
+}
+
+// --- 确认对话框（Promise 版） ---
+const rmConfirmMask = document.getElementById('rm-confirm-mask');
+const rmConfirmTitle = document.getElementById('rm-confirm-title');
+const rmConfirmText  = document.getElementById('rm-confirm-text');
+const rmConfirmOk    = document.getElementById('rm-confirm-ok');
+const rmConfirmCancel= document.getElementById('rm-confirm-cancel');
+let _rmConfirmResolver = null;
+
+function rmConfirm({ title = '确认操作', text = '', okText = '确定', dangerous = false }) {
+    return new Promise(resolve => {
+        rmConfirmTitle.textContent = title;
+        rmConfirmText.textContent  = text;
+        rmConfirmOk.textContent    = okText;
+        rmConfirmOk.className      = 'rm-btn' + (dangerous ? ' danger' : '');
+        rmConfirmMask.classList.add('show');
+        _rmConfirmResolver = resolve;
+    });
+}
+function _rmConfirmClose(result) {
+    rmConfirmMask.classList.remove('show');
+    if (_rmConfirmResolver) { _rmConfirmResolver(result); _rmConfirmResolver = null; }
+}
+rmConfirmOk.addEventListener('click',     () => _rmConfirmClose(true));
+rmConfirmCancel.addEventListener('click', () => _rmConfirmClose(false));
+rmConfirmMask.addEventListener('click', e => {
+    if (e.target === rmConfirmMask) _rmConfirmClose(false);
+});
+
+// --- 右键菜单 ---
+const rmCtxMenu = document.getElementById('record-ctx-menu');
+let _ctxTargetEl = null;
+
+function openRecordCtxMenu(x, y, targetEl) {
+    _ctxTargetEl = targetEl;
+
+    // 根据任务状态控制"删除"可用性
+    const status = targetEl.dataset.status || '';
+    const delItem = rmCtxMenu.querySelector('[data-action="delete"]');
+    if (status === 'running') {
+        delItem.classList.add('disabled');
+        delItem.title = '任务训练中，无法删除';
+    } else {
+        delItem.classList.remove('disabled');
+        delItem.title = '';
+    }
+
+    // 先显示再测尺寸，避免菜单超出视口
+    rmCtxMenu.classList.add('show');
+    const mw = rmCtxMenu.offsetWidth;
+    const mh = rmCtxMenu.offsetHeight;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    let left = x, top = y;
+    if (left + mw + 6 > vw) left = vw - mw - 6;
+    if (top  + mh + 6 > vh) top  = vh - mh - 6;
+    rmCtxMenu.style.left = left + 'px';
+    rmCtxMenu.style.top  = top + 'px';
+}
+function closeRecordCtxMenu() {
+    rmCtxMenu.classList.remove('show');
+    _ctxTargetEl = null;
+}
+
+// 全局关闭：点别处 / Esc / 滚动 / 窗口大小变
+document.addEventListener('click', e => {
+    if (!rmCtxMenu.contains(e.target)) closeRecordCtxMenu();
+});
+document.addEventListener('contextmenu', e => {
+    // 非记录条目上的右键也关掉菜单
+    if (!e.target.closest('.record-item')) closeRecordCtxMenu();
+});
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeRecordCtxMenu();
+});
+window.addEventListener('resize', closeRecordCtxMenu);
+window.addEventListener('scroll', closeRecordCtxMenu, true);
+
+// 菜单项点击
+rmCtxMenu.addEventListener('click', async e => {
+    const item = e.target.closest('.record-ctx-item');
+    if (!item || item.classList.contains('disabled')) return;
+    const action = item.dataset.action;
+    const target = _ctxTargetEl;
+    closeRecordCtxMenu();
+    if (!target) return;
+    const id    = target.dataset.id;
+    const name  = target.dataset.name || ('#' + id);
+    if (!id) return;
+
+    if (action === 'detail') {
+        openRecordDetail(id);
+    } else if (action === 'download') {
+        downloadJobConfig(id, name);
+    } else if (action === 'delete') {
+        const ok = await rmConfirm({
+            title: '删除训练记录',
+            text: `确定要删除记录「${name}」吗？\n\n该操作只会从数据库移除这条记录，不会删除磁盘上的模型文件或输出目录。`,
+            okText: '删除',
+            dangerous: true,
+        });
+        if (ok) deleteJobRecord(id, name, target);
+    }
+});
+
+// --- 下载训练配置 ---
+async function downloadJobConfig(id, name) {
+    const url = '/api/job/' + encodeURIComponent(id) + '/config';
+    showToast('正在准备配置文件…');
+    try {
+        const r = await fetch(url);
+        const ct = (r.headers.get('content-type') || '').toLowerCase();
+
+        // 后端在文件不存在/出错时返回 JSON（带 ok:false, error:...）
+        if (!r.ok || ct.includes('application/json')) {
+            let msg = '配置文件不存在或已被移动';
+            try {
+                const d = await r.json();
+                if (d && d.error) {
+                    // 后端错误码映射为中文提示（避免把 Python traceback 直接弹给用户）
+                    const errMap = {
+                        'record_not_found': '找不到该训练记录',
+                        'config_missing':   '配置文件不存在或已被移动',
+                    };
+                    msg = errMap[d.error] || ('下载失败：' + d.error);
+                }
+            } catch (_) {}
+            showToast(msg, 'error');
+            return;
+        }
+
+        // 正常下载：拿到 blob 后用 <a> 触发保存
+        const blob = await r.blob();
+        // 从 Content-Disposition 提取文件名
+        // RFC 5987: filename*=UTF-8''<百分号编码中文>  ——含中文时必须优先取这个
+        // 退化：filename="xxx.yaml"                  ——纯 ASCII 兜底名，只在没有 filename* 时才用
+        let filename = (name || ('job_' + id)) + '.yaml';
+        const cd = r.headers.get('content-disposition') || '';
+        // 1) 优先匹配 filename*=...（RFC 5987，支持 UTF-8/utf-8，大小写不敏感）
+        const mStar = cd.match(/filename\*\s*=\s*(?:UTF-8|utf-8)''([^;]+)/i);
+        if (mStar && mStar[1]) {
+            try { filename = decodeURIComponent(mStar[1].trim().replace(/^"|"$/g, '')); }
+            catch (_) { filename = mStar[1]; }
+        } else {
+            // 2) 没有 filename*，才退回 filename="..."
+            const mPlain = cd.match(/filename\s*=\s*"?([^";]+)"?/i);
+            if (mPlain && mPlain[1]) {
+                filename = mPlain[1].trim();
+            }
+        }
+
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
+
+        showToast(`已下载 ${filename}`, 'success');
+    } catch (e) {
+        showToast('下载失败：' + (e.message || e), 'error');
+    }
+}
+
+// --- 删除记录 ---
+async function deleteJobRecord(id, name, domEl) {
+    try {
+        const r = await fetch('javascript:void(0)&&/api/job/' + encodeURIComponent(id), { method: 'DELETE' });
+        const d = await r.json();
+        if (!d.ok) {
+            showToast('删除失败：' + (d.error || '未知错误'), 'error');
+            return;
+        }
+        // 本地移除 DOM，避免重新拉列表闪一下
+        if (domEl && domEl.parentNode) {
+            domEl.style.transition = 'opacity 0.2s, height 0.2s, margin 0.2s, padding 0.2s';
+            domEl.style.overflow = 'hidden';
+            domEl.style.opacity = '0';
+            setTimeout(() => {
+                if (domEl.parentNode) domEl.parentNode.removeChild(domEl);
+                // 若列表已空，显示占位
+                const list = document.getElementById('record-list');
+                if (list && list.children.length === 0) {
+                    list.innerHTML = '<div style="text-align:center;padding:48px 0;color:#333;font-size:13px;">暂无训练记录</div>';
+                }
+            }, 220);
+        }
+        showToast(`已删除「${name}」`, 'success');
+    } catch (e) {
+        showToast('删除失败：' + e.message, 'error');
+    }
+}
+</script>
+</body>
+</html>

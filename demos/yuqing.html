@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>金铲铲美术舆情播报 — 作品展示</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#1a1a1a;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'PingFang SC','Microsoft YaHei',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding:40px 20px;
+}
+
+/* ===== MacBook ===== */
+.laptop{width:min(1100px,95vw)}
+.laptop-notch{
+  width:160px;height:22px;margin:0 auto;
+  background:#1c1c1e;border-radius:0 0 10px 10px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:10;
+}
+.laptop-notch::after{content:'';width:6px;height:6px;border-radius:50%;background:#2a2a2e;border:1px solid #333}
+.laptop-screen{
+  background:#0a0a0a;border:3px solid #2a2a2c;
+  border-radius:12px 12px 0 0;overflow:hidden;
+}
+.screen-content{
+  height:min(640px,70vh);
+  overflow-y:auto;overflow-x:hidden;
+  scroll-behavior:smooth;
+}
+.screen-content::-webkit-scrollbar{width:3px}
+.screen-content::-webkit-scrollbar-track{background:transparent}
+.screen-content::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+.laptop-base{height:16px;background:linear-gradient(180deg,#2a2a2c,#1c1c1e);border-radius:0 0 4px 4px}
+.laptop-base::after{content:'';display:block;width:28%;height:4px;margin:0 auto;background:#141416;border-radius:0 0 4px 4px}
+.laptop-foot{width:56%;height:5px;margin:0 auto;background:linear-gradient(180deg,#1c1c1e,#151517);border-radius:0 0 6px 6px}
+
+/* ===== 内页通用 ===== */
+.pg{color:#b0b0b0;line-height:1.6}
+
+/* Hero */
+.hero{position:relative;height:420px;display:flex;flex-direction:column;justify-content:flex-end;padding:36px 40px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('yuqing-imgs/gnar_skin.png') center/cover;filter:brightness(.22) saturate(.5)}
+.hero-gd{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.15) 0%,rgba(10,10,10,.65) 55%,#0a0a0a 100%)}
+.hero-c{position:relative;z-index:2}
+.hero-tag{font-size:10px;color:#e85200;letter-spacing:4px;text-transform:uppercase;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.hero-tag::before{content:'★';font-size:12px}
+.hero-t{font-size:36px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1px;margin-bottom:10px}
+.hero-d{font-size:12px;color:#555;max-width:380px;line-height:1.8}
+
+/* 统计条 */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #161616;border-bottom:1px solid #161616;padding:22px 40px}
+.st-n{font-size:24px;font-weight:900;color:#fff;letter-spacing:-1px}
+.st-n span{color:#e85200}
+.st-d{font-size:10px;color:#3a3a3a;margin-top:3px;letter-spacing:1px}
+
+/* Meta */
+.meta{display:grid;grid-template-columns:repeat(4,1fr);padding:22px 40px;gap:6px;border-bottom:1px solid #161616}
+.meta h4{font-size:9px;color:#888;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.meta li{list-style:none;font-size:11px;color:#3a3a3a;line-height:2}
+
+/* 分区 */
+.sec{padding:32px 40px}
+.sec h2{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.3px;margin-bottom:3px}
+.sec .ht{font-size:10px;color:#2a2a2a;letter-spacing:1px;margin-bottom:18px}
+
+/* ===== 横向轨道 ===== */
+.trk-wrap{position:relative}
+.trk{
+  display:flex;gap:12px;
+  overflow-x:scroll;overflow-y:hidden;
+  padding-bottom:8px;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  cursor:grab;
+  user-select:none;
+}
+.trk::-webkit-scrollbar{display:none}
+.trk.dragging{cursor:grabbing;scroll-snap-type:none}
+
+/* 左右箭头 */
+.trk-arr{
+  position:absolute;top:50%;transform:translateY(-60%);z-index:5;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.08);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.1);
+  color:#fff;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .2s,opacity .2s;
+  opacity:0;
+}
+.trk-wrap:hover .trk-arr{opacity:1}
+.trk-arr:hover{background:rgba(255,255,255,.15)}
+.trk-arr.left{left:4px}
+.trk-arr.right{right:4px}
+
+/* 进度条 */
+.pbar{height:2px;background:#141414;border-radius:1px;margin-top:6px;overflow:hidden}
+.pfill{height:100%;background:#e85200;width:0;transition:width 80ms linear}
+
+/* ===== 皮肤卡 — 更紧凑 ===== */
+.sk{
+  flex:0 0 280px;scroll-snap-align:start;
+  background:#111;border:1px solid #1a1a1a;border-radius:10px;
+  overflow:hidden;transition:border-color .3s;
+}
+.sk:hover{border-color:#252525}
+.sk-iw{position:relative;overflow:hidden}
+.sk-i{width:100%;height:160px;object-fit:cover;display:block}
+.sk-ov{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(0deg,#111,transparent);padding:12px 14px 8px}
+.sk-nm{font-size:14px;font-weight:700;color:#fff}
+.sk-sb{font-size:9px;color:#555;margin-top:2px;letter-spacing:.5px}
+.sk-tr{position:absolute;top:8px;right:8px;background:#00000088;backdrop-filter:blur(6px);border:1px solid #ffffff0d;border-radius:5px;padding:2px 8px;font-size:9px;color:#999;letter-spacing:1px}
+.sk-bd{padding:10px 14px 12px}
+.er{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.eb{border-radius:6px;padding:8px 10px}
+.eb.p{background:#0a140d;border:1px solid #16653415}
+.eb.n{background:#140a0a;border:1px solid #7f1d1d15}
+.el{font-size:8px;font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.eb.p .el{color:#4ade80}
+.eb.n .el{color:#f87171}
+.eu{list-style:none}
+.eu li{font-size:10px;color:#555;line-height:1.7;padding-left:10px;position:relative}
+.eu li::before{content:'';position:absolute;left:0;top:7px;width:3px;height:3px;border-radius:50%}
+.eb.p .eu li::before{background:#4ade80}
+.eb.n .eu li::before{background:#f87171}
+.tr{display:flex;flex-wrap:wrap;gap:4px}
+.tg{border-radius:3px;padding:2px 7px;font-size:9px;font-weight:500}
+.tp{background:#0a1f0e88;color:#4ade80;border:1px solid #16653418}
+.tn{background:#1f0a0a88;color:#f87171;border:1px solid #7f1d1d18}
+.tu{background:#161616;color:#555;border:1px solid #1e1e1e}
+
+/* ===== 词云 ===== */
+.vw{display:flex;flex-wrap:wrap;gap:8px}
+.vp{border-radius:999px;padding:7px 16px;font-size:11px;font-weight:500;letter-spacing:.3px;border:1px solid transparent;white-space:nowrap}
+.vh{background:#2d1b69;color:#c4b5fd;border-color:#4c1d9528;font-size:13px;font-weight:700}
+.vr{background:#0c2a1a;color:#6ee7b7;border-color:#065f4628}
+.vn{background:#161616;color:#555;border-color:#1e1e1e}
+.vf{background:#111;color:#2a2a2a;border-color:#161616;text-decoration:line-through}
+
+/* ===== 创作卡 ===== */
+.cr{
+  flex:0 0 170px;scroll-snap-align:start;
+  background:#111;border:1px solid #1a1a1a;border-radius:8px;
+  overflow:hidden;transition:border-color .3s;
+}
+.cr:hover{border-color:#252525}
+.cr-i{width:100%;height:110px;object-fit:cover;display:block}
+.cr-b{padding:8px 10px 12px}
+.cr-nm{font-size:10px;color:#bbb;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cr-m{font-size:9px;color:#333;margin-top:5px}
+.cr-s{font-size:10px;margin-top:2px;font-weight:600}
+.cr-s.b{color:#f59e0b}
+.cr-s.x{color:#ff4757}
+
+/* ===== 情绪分布 — 替代热力图 ===== */
+.senti-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.senti-card{background:#111;border:1px solid #1a1a1a;border-radius:10px;padding:18px;text-align:center}
+.senti-ring{width:80px;height:80px;border-radius:50%;margin:0 auto 12px;position:relative;display:flex;align-items:center;justify-content:center}
+.senti-ring .ring-val{font-size:20px;font-weight:900;color:#fff}
+.senti-ring .ring-unit{font-size:10px;color:#666}
+.senti-label{font-size:11px;color:#888;letter-spacing:.5px}
+.senti-desc{font-size:10px;color:#333;margin-top:4px}
+
+/* 趋势卡 */
+.td-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.td{background:#111;border:1px solid #1a1a1a;border-radius:8px;padding:14px 16px}
+.td-t{font-size:9px;color:#444;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.td-v{font-size:22px;font-weight:900;color:#fff}
+.td-v .u{color:#4ade80;font-size:11px;font-weight:500;margin-left:4px}
+.td-v .d{color:#f87171;font-size:11px;font-weight:500;margin-left:4px}
+.td-chart{height:36px;display:flex;align-items:flex-end;gap:3px;margin-top:8px}
+.td-bar{flex:1;border-radius:2px 2px 0 0}
+
+/* 洞察 */
+.ins{padding:36px 40px;border-top:1px solid #161616}
+.ins-s{color:#e85200;font-size:16px;margin-bottom:12px;display:block}
+.ins-t{font-size:16px;font-weight:700;color:#ddd;line-height:1.8;max-width:640px}
+.ins-t em{font-style:normal;color:#e85200}
+
+/* Footer */
+.ft{border-top:1px solid #161616;padding:16px 40px;font-size:9px;color:#222;display:flex;justify-content:space-between;letter-spacing:.5px}
+</style>
+</head>
+<body>
+
+<div class="laptop">
+  <div class="laptop-notch"></div>
+  <div class="laptop-screen">
+    <div class="screen-content" id="sc">
+      <div class="pg">
+
+        <!-- Hero -->
+        <div class="hero">
+          <div class="hero-bg"></div>
+          <div class="hero-gd"></div>
+          <div class="hero-c">
+            <div class="hero-tag">AI 驱动 · 美术舆情分析系统</div>
+            <h1 class="hero-t">金铲铲之战<br>美术舆情周报</h1>
+            <p class="hero-d">基于 B站API、小红书Playwright、微博NLP 等多渠道实时抓取，AI 自动分析玩家审美偏好并生成美术方向洞察。</p>
+          </div>
+        </div>
+
+        <!-- 统计 -->
+        <div class="stats">
+          <div><div class="st-n">12<span>,847</span></div><div class="st-d">本周抓取评论数</div></div>
+          <div><div class="st-n">5<span>个</span></div><div class="st-d">皮肤舆情追踪</div></div>
+          <div><div class="st-n">89<span>%</span></div><div class="st-d">正面评价占比</div></div>
+          <div><div class="st-n">3<span>个</span></div><div class="st-d">美术趋势预警</div></div>
+        </div>
+
+        <!-- Meta -->
+        <div class="meta">
+          <div><h4>数据源</h4><ul><li>B站 API</li><li>小红书 Playwright</li><li>微博 NLP</li><li>lol.qq.com</li></ul></div>
+          <div><h4>分析维度</h4><ul><li>竞品皮肤评价</li><li>玩家审美偏好</li><li>创作热点追踪</li><li>趋势预测预警</li></ul></div>
+          <div><h4>报告结构</h4><ul><li>皮肤舆情卡片</li><li>情绪分布分析</li><li>创作热点聚合</li><li>数据趋势图表</li></ul></div>
+          <div><h4>技术栈</h4><ul><li>Python + FastAPI</li><li>Playwright 爬虫</li><li>NLP 情感分析</li><li>每日自动推送</li></ul></div>
+        </div>
+
+        <!-- 01 皮肤 -->
+        <div class="sec">
+          <h2>竞品皮肤 · 玩家怎么说</h2>
+          <div class="ht">云顶之弈 Set17 · PBE 预览 & 新上线</div>
+          <div class="trk-wrap">
+            <div class="trk-arr left">‹</div>
+            <div class="trk-arr right">›</div>
+          <div class="trk" data-trk>
+
+            <div class="sk">
+              <div class="sk-iw"><img class="sk-i" src="yuqing-imgs/vayne_skin.png" alt><div class="sk-tr">EPIC</div>
+                <div class="sk-ov"><div class="sk-nm">恶魔诅咒 薇恩</div><div class="sk-sb">万魔殿系列 · PBE</div></div></div>
+              <div class="sk-bd">
+                <div class="er">
+                  <div class="eb p"><div class="el">POSITIVE</div><ul class="eu"><li>红黑配色，恶魔气质到位</li><li>发型飘动细节好</li><li>整体气场足</li></ul></div>
+                  <div class="eb n"><div class="el">NEGATIVE</div><ul class="eu"><li>技能特效偏普通</li><li>与上套区分度不够</li><li>定价预期高</li></ul></div>
+                </div>
+                <div class="tr"><span class="tg tp">红黑配色</span><span class="tg tp">气场强</span><span class="tg tn">特效普通</span><span class="tg tu">万魔殿</span></div>
+              </div>
+            </div>
+
+            <div class="sk">
+              <div class="sk-iw"><img class="sk-i" src="yuqing-imgs/gnar_skin.png" alt><div class="sk-tr">EPIC</div>
+                <div class="sk-ov"><div class="sk-nm">万魔殿 基纳</div><div class="sk-sb">万魔殿系列 · PBE</div></div></div>
+              <div class="sk-bd">
+                <div class="er">
+                  <div class="eb p"><div class="el">POSITIVE</div><ul class="eu"><li>Q版×暗黑反差出圈</li><li>小玩偶辨识度极高</li><li>火焰特效层次丰富</li></ul></div>
+                  <div class="eb n"><div class="el">NEGATIVE</div><ul class="eu"><li>巨型态恐怖感过强</li><li>两形态风格割裂</li></ul></div>
+                </div>
+                <div class="tr"><span class="tg tp">反差萌</span><span class="tg tp">辨识度高</span><span class="tg tn">风格割裂</span><span class="tg tu">暗黑Q版</span></div>
+              </div>
+            </div>
+
+            <div class="sk">
+              <div class="sk-iw"><img class="sk-i" src="yuqing-imgs/skin_fox.png" alt><div class="sk-tr">LEGENDARY</div>
+                <div class="sk-ov"><div class="sk-nm">星灵守护 阿狸</div><div class="sk-sb">星灵系列 · 已上线</div></div></div>
+              <div class="sk-bd">
+                <div class="er">
+                  <div class="eb p"><div class="el">POSITIVE</div><ul class="eu"><li>九尾特效华丽至极</li><li>银蓝配色清冷高贵</li><li>回城动画细节拉满</li></ul></div>
+                  <div class="eb n"><div class="el">NEGATIVE</div><ul class="eu"><li>特效略遮挡视野</li><li>手感差异需适应</li></ul></div>
+                </div>
+                <div class="tr"><span class="tg tp">特效华丽</span><span class="tg tp">银蓝配色</span><span class="tg tn">遮挡视野</span><span class="tg tu">星灵守护</span></div>
+              </div>
+            </div>
+
+            <div class="sk">
+              <div class="sk-iw"><img class="sk-i" src="yuqing-imgs/skin_cyber.png" alt><div class="sk-tr">ULTIMATE</div>
+                <div class="sk-ov"><div class="sk-nm">机甲纪元 亚索</div><div class="sk-sb">赛博系列 · PBE</div></div></div>
+              <div class="sk-bd">
+                <div class="er">
+                  <div class="eb p"><div class="el">POSITIVE</div><ul class="eu"><li>赛博风格极致炸裂</li><li>三段变形设计诚意足</li><li>霓虹粉蓝辨识度高</li></ul></div>
+                  <div class="eb n"><div class="el">NEGATIVE</div><ul class="eu"><li>终极皮肤定价争议</li><li>低配特效卡顿</li></ul></div>
+                </div>
+                <div class="tr"><span class="tg tp">赛博朋克</span><span class="tg tp">三段变形</span><span class="tg tn">定价争议</span><span class="tg tu">终极皮肤</span></div>
+              </div>
+            </div>
+
+            <div class="sk">
+              <div class="sk-iw"><img class="sk-i" src="yuqing-imgs/skin_dragon.png" alt><div class="sk-tr">LEGENDARY</div>
+                <div class="sk-ov"><div class="sk-nm">龙吟帝君 赵信</div><div class="sk-sb">神话系列 · 已上线</div></div></div>
+              <div class="sk-bd">
+                <div class="er">
+                  <div class="eb p"><div class="el">POSITIVE</div><ul class="eu"><li>国风龙纹精致大气</li><li>金红配色喜庆高贵</li><li>大招龙吟音效震撼</li></ul></div>
+                  <div class="eb n"><div class="el">NEGATIVE</div><ul class="eu"><li>造型偏保守创新不足</li><li>与已有国风同质化</li></ul></div>
+                </div>
+                <div class="tr"><span class="tg tp">国风精致</span><span class="tg tp">音效震撼</span><span class="tg tn">创新不足</span><span class="tg tu">龙吟系列</span></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="pbar"><div class="pfill" data-pf></div></div>
+          </div><!-- /trk-wrap -->
+        </div>
+
+        <!-- 02 词云 -->
+        <div class="sec">
+          <h2>玩家审美偏好词</h2>
+          <div class="ht">越大越热 · 划线=退热中</div>
+          <div class="vw">
+            <span class="vp vh">暗黑反差</span><span class="vp vh">流体光效</span>
+            <span class="vp vr">红黑配色</span><span class="vp vr">Q版暗黑</span><span class="vp vr">至臻传说</span><span class="vp vr">银蓝清冷</span><span class="vp vr">机甲赛博</span>
+            <span class="vp vn">国风</span><span class="vp vn">赛博朋克</span><span class="vp vn">星灵守护</span><span class="vp vn">龙纹图腾</span>
+            <span class="vp vf">纯白简约</span><span class="vp vf">粉色系</span><span class="vp vf">学院风</span>
+          </div>
+        </div>
+
+        <!-- 03 情绪分布 — 替代热力图 -->
+        <div class="sec">
+          <h2>本周舆情情绪分布</h2>
+          <div class="ht">基于 NLP 情感分析 · 12,847 条评论</div>
+          <div class="senti-grid">
+            <div class="senti-card">
+              <div class="senti-ring" style="background:conic-gradient(#4ade80 0% 68%,#1a1a1a 68% 100%)">
+                <div style="width:56px;height:56px;border-radius:50%;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                  <div class="ring-val">68</div><div class="ring-unit">%</div>
+                </div>
+              </div>
+              <div class="senti-label">正面情绪</div>
+              <div class="senti-desc">「帅」「好看」「买了」为高频词</div>
+            </div>
+            <div class="senti-card">
+              <div class="senti-ring" style="background:conic-gradient(#fbbf24 0% 21%,#1a1a1a 21% 100%)">
+                <div style="width:56px;height:56px;border-radius:50%;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                  <div class="ring-val">21</div><div class="ring-unit">%</div>
+                </div>
+              </div>
+              <div class="senti-label">中性讨论</div>
+              <div class="senti-desc">「对比」「测评」「分析」类内容</div>
+            </div>
+            <div class="senti-card">
+              <div class="senti-ring" style="background:conic-gradient(#f87171 0% 11%,#1a1a1a 11% 100%)">
+                <div style="width:56px;height:56px;border-radius:50%;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                  <div class="ring-val">11</div><div class="ring-unit">%</div>
+                </div>
+              </div>
+              <div class="senti-label">负面情绪</div>
+              <div class="senti-desc">「贵」「不值」「偷懒」为主要槽点</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 创作热点 -->
+        <div class="sec">
+          <h2>玩家自发创作热点</h2>
+          <div class="ht">B站 / 小红书 / 微博 · 真实数据抓取</div>
+          <div class="trk-wrap">
+            <div class="trk-arr left">‹</div>
+            <div class="trk-arr right">›</div>
+          <div class="trk" data-trk>
+            <div class="cr"><img class="cr-i" src="yuqing-imgs/creation_1.png" alt><div class="cr-b"><div class="cr-nm">锐评金铲铲至臻小小英雄从劣到拉（下）</div><div class="cr-m">锅包柔柔 · B站</div><div class="cr-s b">▶ 156,631</div></div></div>
+            <div class="cr"><img class="cr-i" src="yuqing-imgs/creation_2.png" alt><div class="cr-b"><div class="cr-nm">金铲铲春节皮肤入手推荐大排行</div><div class="cr-m">金铲铲森森 · B站</div><div class="cr-s b">▶ 10,540</div></div></div>
+            <div class="cr"><img class="cr-i" src="yuqing-imgs/creation_3.png" alt><div class="cr-b"><div class="cr-nm">符文大陆，人才辈出。</div><div class="cr-m">TianZ · 小红书</div><div class="cr-s x">❤ 485</div></div></div>
+            <div class="cr"><img class="cr-i" src="yuqing-imgs/creation_4.png" alt><div class="cr-b"><div class="cr-nm">上分必看！金铲铲阵容推荐</div><div class="cr-m">金铲铲杰尼 · 小红书</div><div class="cr-s x">❤ 4</div></div></div>
+            <div class="cr"><img class="cr-i" src="yuqing-imgs/creation_5.png" alt><div class="cr-b"><div class="cr-nm">全皮肤等级评测！S到D级一目了然</div><div class="cr-m">皮肤鉴赏家 · B站</div><div class="cr-s b">▶ 89,217</div></div></div>
+            <div class="cr"><img class="cr-i" src="yuqing-imgs/creation_6.png" alt><div class="cr-b"><div class="cr-nm">角色二创合集 · 手绘水彩风</div><div class="cr-m">月下猫 · 小红书</div><div class="cr-s x">❤ 2,341</div></div></div>
+            <div class="cr"><img class="cr-i" src="yuqing-imgs/creation_7.png" alt><div class="cr-b"><div class="cr-nm">COS万魔殿基纳！暗黑Q版还原拉满</div><div class="cr-m">星夜 · 微博</div><div class="cr-s x">❤ 5,678</div></div></div>
+            <div class="cr"><img class="cr-i" src="yuqing-imgs/creation_8.png" alt><div class="cr-b"><div class="cr-nm">金铲铲整活名场面合集 第37期</div><div class="cr-m">铲铲日记 · B站</div><div class="cr-s b">▶ 234,892</div></div></div>
+          </div>
+          <div class="pbar"><div class="pfill" data-pf></div></div>
+          </div><!-- /trk-wrap -->
+        </div>
+
+        <!-- 05 数据趋势 -->
+        <div class="sec">
+          <h2>本周数据趋势</h2>
+          <div class="ht">对比上周同期</div>
+          <div class="td-row">
+            <div class="td">
+              <div class="td-t">B站讨论量</div>
+              <div class="td-v">8,432 <span class="u">↑ 23%</span></div>
+              <div class="td-chart">
+                <div class="td-bar" style="height:40%;background:#16653444"></div>
+                <div class="td-bar" style="height:55%;background:#16653455"></div>
+                <div class="td-bar" style="height:45%;background:#16653444"></div>
+                <div class="td-bar" style="height:70%;background:#16653466"></div>
+                <div class="td-bar" style="height:60%;background:#16653455"></div>
+                <div class="td-bar" style="height:85%;background:#4ade8044"></div>
+                <div class="td-bar" style="height:100%;background:#4ade8055"></div>
+              </div>
+            </div>
+            <div class="td">
+              <div class="td-t">小红书笔记</div>
+              <div class="td-v">1,247 <span class="u">↑ 47%</span></div>
+              <div class="td-chart">
+                <div class="td-bar" style="height:30%;background:#e8520033"></div>
+                <div class="td-bar" style="height:35%;background:#e8520033"></div>
+                <div class="td-bar" style="height:50%;background:#e8520044"></div>
+                <div class="td-bar" style="height:45%;background:#e8520044"></div>
+                <div class="td-bar" style="height:70%;background:#e8520055"></div>
+                <div class="td-bar" style="height:90%;background:#e8520066"></div>
+                <div class="td-bar" style="height:100%;background:#e8520077"></div>
+              </div>
+            </div>
+            <div class="td">
+              <div class="td-t">负面情绪占比</div>
+              <div class="td-v">11% <span class="d">↓ 5%</span></div>
+              <div class="td-chart">
+                <div class="td-bar" style="height:80%;background:#7f1d1d33"></div>
+                <div class="td-bar" style="height:70%;background:#7f1d1d33"></div>
+                <div class="td-bar" style="height:60%;background:#7f1d1d22"></div>
+                <div class="td-bar" style="height:55%;background:#7f1d1d22"></div>
+                <div class="td-bar" style="height:45%;background:#7f1d1d1a"></div>
+                <div class="td-bar" style="height:35%;background:#7f1d1d1a"></div>
+                <div class="td-bar" style="height:30%;background:#7f1d1d1a"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 洞察 -->
+        <div class="ins">
+          <span class="ins-s">★</span>
+          <p class="ins-t">本周玩家审美集中在<em>「暗黑反差」</em>与<em>「银蓝清冷」</em>两大方向。Q版×暗黑反差出圈效果显著；银蓝清冷风在传说级皮肤上获近乎一致好评。<em>「至臻/传说级」</em>皮肤预期持续走高，普通史诗特效已难以满足。建议关注：<em>如何用小体型角色做出高冲击感暗黑视觉效果。</em></p>
+        </div>
+
+        <!-- Footer -->
+        <div class="ft">
+          <span>数据源：B站API · 小红书Playwright · 微博NLP · lol.qq.com</span>
+          <span>金铲铲项目组 · 美术专版 · v2.4.1</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="laptop-base"></div>
+  <div class="laptop-foot"></div>
+</div>
+
+<script>
+document.querySelectorAll('.trk-wrap').forEach(wrap=>{
+  const trk=wrap.querySelector('.trk');
+  const bar=wrap.querySelector('[data-pf]');
+  const btnL=wrap.querySelector('.trk-arr.left');
+  const btnR=wrap.querySelector('.trk-arr.right');
+  if(!trk)return;
+
+  // 箭头按钮
+  if(btnL) btnL.addEventListener('click',()=>trk.scrollBy({left:-280,behavior:'smooth'}));
+  if(btnR) btnR.addEventListener('click',()=>trk.scrollBy({left:280,behavior:'smooth'}));
+
+  // 鼠标拖拽滚动
+  let isDown=false,startX=0,scrollL=0;
+  trk.addEventListener('mousedown',e=>{
+    isDown=true;
+    trk.classList.add('dragging');
+    startX=e.pageX-trk.offsetLeft;
+    scrollL=trk.scrollLeft;
+  });
+  const stop=()=>{isDown=false;trk.classList.remove('dragging')};
+  trk.addEventListener('mouseup',stop);
+  trk.addEventListener('mouseleave',stop);
+  trk.addEventListener('mousemove',e=>{
+    if(!isDown)return;
+    e.preventDefault();
+    const x=e.pageX-trk.offsetLeft;
+    trk.scrollLeft=scrollL-(x-startX)*1.2;
+  });
+
+  // 鼠标滚轮横向滚动（在轨道上滚滚轮 = 左右滑动）
+  trk.addEventListener('wheel',e=>{
+    if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){
+      e.preventDefault();
+      trk.scrollLeft+=e.deltaY;
+    }
+  },{passive:false});
+
+  // 进度条
+  if(bar){
+    trk.addEventListener('scroll',()=>{
+      const m=trk.scrollWidth-trk.clientWidth;
+      bar.style.width=m>0?(trk.scrollLeft/m*100)+'%':'0%';
+    },{passive:true});
+  }
+});
+</script>
+
+</body>
+</html>

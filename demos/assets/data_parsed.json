@@ -1,0 +1,1774 @@
+{
+  "starter": [
+    [
+      "hello",
+      "/həˈloʊ/",
+      "int.",
+      "你好",
+      "— Hello! — Hi there!"
+    ],
+    [
+      "thank",
+      "/θæŋk/",
+      "v.",
+      "感谢",
+      "Thank you very much."
+    ],
+    [
+      "please",
+      "/pliːz/",
+      "adv.",
+      "请",
+      "Please sit down."
+    ],
+    [
+      "sorry",
+      "/ˈsɒri/",
+      "adj.",
+      "抱歉的",
+      "I'm sorry for being late."
+    ],
+    [
+      "yes",
+      "/jes/",
+      "adv.",
+      "是的",
+      "Yes, I agree with you."
+    ],
+    [
+      "no",
+      "/noʊ/",
+      "adv.",
+      "不",
+      "No, I don't think so."
+    ],
+    [
+      "good",
+      "/ɡʊd/",
+      "adj.",
+      "好的",
+      "Have a good day!"
+    ],
+    [
+      "bad",
+      "/bæd/",
+      "adj.",
+      "坏的",
+      "The weather is bad today."
+    ],
+    [
+      "big",
+      "/bɪɡ/",
+      "adj.",
+      "大的",
+      "This is a big house."
+    ],
+    [
+      "small",
+      "/smɔːl/",
+      "adj.",
+      "小的",
+      "She has a small dog."
+    ],
+    [
+      "eat",
+      "/iːt/",
+      "v.",
+      "吃",
+      "I eat breakfast at 7."
+    ],
+    [
+      "drink",
+      "/drɪŋk/",
+      "v.",
+      "喝",
+      "Drink more water."
+    ],
+    [
+      "sleep",
+      "/sliːp/",
+      "v.",
+      "睡觉",
+      "I need to sleep."
+    ],
+    [
+      "work",
+      "/wɜːrk/",
+      "n./v.",
+      "工作",
+      "I work in an office."
+    ],
+    [
+      "study",
+      "/ˈstʌdi/",
+      "v.",
+      "学习",
+      "She studies English every day."
+    ],
+    [
+      "read",
+      "/riːd/",
+      "v.",
+      "阅读",
+      "I read books on weekends."
+    ],
+    [
+      "write",
+      "/raɪt/",
+      "v.",
+      "写",
+      "Please write your name."
+    ],
+    [
+      "listen",
+      "/ˈlɪsn/",
+      "v.",
+      "听",
+      "Listen to me carefully."
+    ],
+    [
+      "speak",
+      "/spiːk/",
+      "v.",
+      "说",
+      "Do you speak English?"
+    ],
+    [
+      "watch",
+      "/wɒtʃ/",
+      "v.",
+      "观看",
+      "I watch TV every night."
+    ],
+    [
+      "love",
+      "/lʌv/",
+      "v.",
+      "爱",
+      "I love my family."
+    ],
+    [
+      "like",
+      "/laɪk/",
+      "v.",
+      "喜欢",
+      "I like this song."
+    ],
+    [
+      "want",
+      "/wɒnt/",
+      "v.",
+      "想要",
+      "I want some coffee."
+    ],
+    [
+      "need",
+      "/niːd/",
+      "v.",
+      "需要",
+      "I need your help."
+    ],
+    [
+      "know",
+      "/noʊ/",
+      "v.",
+      "知道",
+      "I don't know the answer."
+    ],
+    [
+      "think",
+      "/θɪŋk/",
+      "v.",
+      "认为",
+      "I think you are right."
+    ],
+    [
+      "come",
+      "/kʌm/",
+      "v.",
+      "来",
+      "Please come here."
+    ],
+    [
+      "go",
+      "/ɡoʊ/",
+      "v.",
+      "去",
+      "I go to work by bus."
+    ],
+    [
+      "see",
+      "/siː/",
+      "v.",
+      "看见",
+      "Nice to see you."
+    ],
+    [
+      "give",
+      "/ɡɪv/",
+      "v.",
+      "给",
+      "Give me a chance."
+    ],
+    [
+      "take",
+      "/teɪk/",
+      "v.",
+      "拿；取",
+      "Take your umbrella."
+    ],
+    [
+      "make",
+      "/meɪk/",
+      "v.",
+      "制作",
+      "Let me make a cup of tea."
+    ],
+    [
+      "get",
+      "/ɡet/",
+      "v.",
+      "得到",
+      "I got a new job."
+    ],
+    [
+      "find",
+      "/faɪnd/",
+      "v.",
+      "找到",
+      "I can't find my keys."
+    ],
+    [
+      "help",
+      "/help/",
+      "v./n.",
+      "帮助",
+      "Can you help me?"
+    ],
+    [
+      "learn",
+      "/lɜːrn/",
+      "v.",
+      "学习",
+      "I'm learning Chinese."
+    ],
+    [
+      "play",
+      "/pleɪ/",
+      "v.",
+      "玩",
+      "The kids are playing."
+    ],
+    [
+      "run",
+      "/rʌn/",
+      "v.",
+      "跑",
+      "I run every morning."
+    ],
+    [
+      "walk",
+      "/wɔːk/",
+      "v.",
+      "走",
+      "Let's walk to the park."
+    ],
+    [
+      "open",
+      "/ˈoʊpən/",
+      "v.",
+      "打开",
+      "Please open the door."
+    ],
+    [
+      "close",
+      "/kloʊz/",
+      "v.",
+      "关上",
+      "Close the window, please."
+    ],
+    [
+      "start",
+      "/stɑːrt/",
+      "v.",
+      "开始",
+      "Let's start the meeting."
+    ],
+    [
+      "stop",
+      "/stɒp/",
+      "v.",
+      "停止",
+      "Stop it right now."
+    ],
+    [
+      "finish",
+      "/ˈfɪnɪʃ/",
+      "v.",
+      "完成",
+      "I finished my homework."
+    ],
+    [
+      "wait",
+      "/weɪt/",
+      "v.",
+      "等",
+      "Please wait a moment."
+    ],
+    [
+      "buy",
+      "/baɪ/",
+      "v.",
+      "购买",
+      "I want to buy a book."
+    ],
+    [
+      "sell",
+      "/sel/",
+      "v.",
+      "卖",
+      "They sell fresh fruits."
+    ],
+    [
+      "live",
+      "/lɪv/",
+      "v.",
+      "居住",
+      "I live in Shanghai."
+    ],
+    [
+      "happy",
+      "/ˈhæpi/",
+      "adj.",
+      "开心的",
+      "I am so happy today."
+    ],
+    [
+      "sad",
+      "/sæd/",
+      "adj.",
+      "难过的",
+      "Why do you look sad?"
+    ],
+    [
+      "tired",
+      "/ˈtaɪərd/",
+      "adj.",
+      "疲倦的",
+      "I'm too tired to cook."
+    ],
+    [
+      "busy",
+      "/ˈbɪzi/",
+      "adj.",
+      "忙碌的",
+      "I'm busy this week."
+    ],
+    [
+      "free",
+      "/friː/",
+      "adj.",
+      "空闲的",
+      "Are you free tomorrow?"
+    ],
+    [
+      "new",
+      "/njuː/",
+      "adj.",
+      "新的",
+      "I got a new phone."
+    ],
+    [
+      "old",
+      "/oʊld/",
+      "adj.",
+      "旧的；老的",
+      "My car is old."
+    ],
+    [
+      "young",
+      "/jʌŋ/",
+      "adj.",
+      "年轻的",
+      "She is still young."
+    ],
+    [
+      "easy",
+      "/ˈiːzi/",
+      "adj.",
+      "容易的",
+      "This question is easy."
+    ],
+    [
+      "hard",
+      "/hɑːrd/",
+      "adj.",
+      "困难的",
+      "Learning is hard but fun."
+    ],
+    [
+      "fast",
+      "/fæst/",
+      "adj./adv.",
+      "快的",
+      "He runs very fast."
+    ],
+    [
+      "slow",
+      "/sloʊ/",
+      "adj.",
+      "慢的",
+      "Please speak slowly."
+    ],
+    [
+      "hot",
+      "/hɒt/",
+      "adj.",
+      "热的",
+      "It's too hot today."
+    ],
+    [
+      "cold",
+      "/koʊld/",
+      "adj.",
+      "冷的",
+      "The soup is cold."
+    ],
+    [
+      "beautiful",
+      "/ˈbjuːtɪfl/",
+      "adj.",
+      "美丽的",
+      "What a beautiful view!"
+    ],
+    [
+      "nice",
+      "/naɪs/",
+      "adj.",
+      "好的",
+      "She is a nice person."
+    ],
+    [
+      "right",
+      "/raɪt/",
+      "adj.",
+      "对的；右",
+      "You are absolutely right."
+    ],
+    [
+      "left",
+      "/left/",
+      "adj.",
+      "左的",
+      "Turn left at the corner."
+    ],
+    [
+      "today",
+      "/təˈdeɪ/",
+      "n.",
+      "今天",
+      "Today is Monday."
+    ],
+    [
+      "tomorrow",
+      "/təˈmɒroʊ/",
+      "n.",
+      "明天",
+      "See you tomorrow."
+    ],
+    [
+      "yesterday",
+      "/ˈjestərdeɪ/",
+      "n.",
+      "昨天",
+      "Yesterday was rainy."
+    ],
+    [
+      "morning",
+      "/ˈmɔːrnɪŋ/",
+      "n.",
+      "早晨",
+      "Good morning!"
+    ],
+    [
+      "night",
+      "/naɪt/",
+      "n.",
+      "夜晚",
+      "Good night, sleep well."
+    ],
+    [
+      "week",
+      "/wiːk/",
+      "n.",
+      "星期",
+      "See you next week."
+    ],
+    [
+      "month",
+      "/mʌnθ/",
+      "n.",
+      "月",
+      "This month is March."
+    ],
+    [
+      "year",
+      "/jɪr/",
+      "n.",
+      "年",
+      "Happy New Year!"
+    ],
+    [
+      "time",
+      "/taɪm/",
+      "n.",
+      "时间",
+      "What time is it?"
+    ],
+    [
+      "home",
+      "/hoʊm/",
+      "n.",
+      "家",
+      "Welcome home."
+    ],
+    [
+      "school",
+      "/skuːl/",
+      "n.",
+      "学校",
+      "I go to school by bus."
+    ],
+    [
+      "family",
+      "/ˈfæməli/",
+      "n.",
+      "家庭",
+      "Family comes first."
+    ],
+    [
+      "friend",
+      "/frend/",
+      "n.",
+      "朋友",
+      "He is my best friend."
+    ],
+    [
+      "food",
+      "/fuːd/",
+      "n.",
+      "食物",
+      "The food is delicious."
+    ],
+    [
+      "water",
+      "/ˈwɔːtər/",
+      "n.",
+      "水",
+      "A glass of water, please."
+    ],
+    [
+      "money",
+      "/ˈmʌni/",
+      "n.",
+      "钱",
+      "Money isn't everything."
+    ],
+    [
+      "car",
+      "/kɑːr/",
+      "n.",
+      "汽车",
+      "I bought a new car."
+    ],
+    [
+      "book",
+      "/bʊk/",
+      "n.",
+      "书",
+      "This book is amazing."
+    ],
+    [
+      "phone",
+      "/foʊn/",
+      "n.",
+      "电话",
+      "My phone is dead."
+    ],
+    [
+      "computer",
+      "/kəmˈpjuːtər/",
+      "n.",
+      "电脑",
+      "I need a new computer."
+    ],
+    [
+      "city",
+      "/ˈsɪti/",
+      "n.",
+      "城市",
+      "Beijing is a big city."
+    ],
+    [
+      "country",
+      "/ˈkʌntri/",
+      "n.",
+      "国家",
+      "China is my country."
+    ],
+    [
+      "language",
+      "/ˈlæŋɡwɪdʒ/",
+      "n.",
+      "语言",
+      "English is a global language."
+    ],
+    [
+      "question",
+      "/ˈkwestʃən/",
+      "n.",
+      "问题",
+      "I have a question."
+    ],
+    [
+      "answer",
+      "/ˈænsər/",
+      "n./v.",
+      "回答",
+      "Please answer me."
+    ],
+    [
+      "problem",
+      "/ˈprɒbləm/",
+      "n.",
+      "问题",
+      "No problem."
+    ],
+    [
+      "way",
+      "/weɪ/",
+      "n.",
+      "方式；道路",
+      "This is the right way."
+    ],
+    [
+      "place",
+      "/pleɪs/",
+      "n.",
+      "地方",
+      "Let's find a quiet place."
+    ],
+    [
+      "thing",
+      "/θɪŋ/",
+      "n.",
+      "事情",
+      "Everything will be fine."
+    ],
+    [
+      "people",
+      "/ˈpiːpl/",
+      "n.",
+      "人们",
+      "People love good music."
+    ],
+    [
+      "child",
+      "/tʃaɪld/",
+      "n.",
+      "小孩",
+      "The child is crying."
+    ],
+    [
+      "man",
+      "/mæn/",
+      "n.",
+      "男人",
+      "That man is my father."
+    ],
+    [
+      "woman",
+      "/ˈwʊmən/",
+      "n.",
+      "女人",
+      "She is a strong woman."
+    ],
+    [
+      "life",
+      "/laɪf/",
+      "n.",
+      "生活",
+      "Life is beautiful."
+    ],
+    [
+      "world",
+      "/wɜːrld/",
+      "n.",
+      "世界",
+      "The world is changing."
+    ],
+    [
+      "always",
+      "/ˈɔːlweɪz/",
+      "adv.",
+      "总是",
+      "She is always smiling."
+    ]
+  ],
+  "cet4": [
+    [
+      "abandon",
+      "/əˈbændən/",
+      "v.",
+      "放弃；抛弃",
+      "He abandoned his car in the snow."
+    ],
+    [
+      "abroad",
+      "/əˈbrɔːd/",
+      "adv.",
+      "在国外",
+      "She went abroad to study."
+    ],
+    [
+      "absolute",
+      "/ˈæbsəluːt/",
+      "adj.",
+      "绝对的",
+      "This is an absolute must."
+    ],
+    [
+      "absorb",
+      "/əbˈzɔːrb/",
+      "v.",
+      "吸收",
+      "Plants absorb sunlight."
+    ],
+    [
+      "academic",
+      "/ˌækəˈdemɪk/",
+      "adj.",
+      "学术的",
+      "She has excellent academic records."
+    ],
+    [
+      "accept",
+      "/əkˈsept/",
+      "v.",
+      "接受",
+      "I accept your apology."
+    ],
+    [
+      "access",
+      "/ˈækses/",
+      "n.",
+      "访问；接近",
+      "You have access to the database."
+    ],
+    [
+      "accident",
+      "/ˈæksɪdənt/",
+      "n.",
+      "事故",
+      "There was a car accident."
+    ],
+    [
+      "accompany",
+      "/əˈkʌmpəni/",
+      "v.",
+      "陪伴",
+      "I'll accompany you home."
+    ],
+    [
+      "accomplish",
+      "/əˈkʌmplɪʃ/",
+      "v.",
+      "完成",
+      "We accomplished the mission."
+    ],
+    [
+      "account",
+      "/əˈkaʊnt/",
+      "n.",
+      "账户",
+      "Please log into your account."
+    ],
+    [
+      "accurate",
+      "/ˈækjərət/",
+      "adj.",
+      "精确的",
+      "The data must be accurate."
+    ],
+    [
+      "achieve",
+      "/əˈtʃiːv/",
+      "v.",
+      "达到",
+      "She achieved her goal."
+    ],
+    [
+      "acknowledge",
+      "/əkˈnɒlɪdʒ/",
+      "v.",
+      "承认",
+      "He acknowledged his mistake."
+    ],
+    [
+      "acquire",
+      "/əˈkwaɪər/",
+      "v.",
+      "获得",
+      "She acquired valuable experience."
+    ],
+    [
+      "adapt",
+      "/əˈdæpt/",
+      "v.",
+      "适应",
+      "Adapt to the new environment quickly."
+    ],
+    [
+      "adequate",
+      "/ˈædɪkwət/",
+      "adj.",
+      "足够的",
+      "The supply is adequate."
+    ],
+    [
+      "adjust",
+      "/əˈdʒʌst/",
+      "v.",
+      "调整",
+      "Adjust the volume, please."
+    ],
+    [
+      "admire",
+      "/ədˈmaɪər/",
+      "v.",
+      "钦佩",
+      "I admire her courage."
+    ],
+    [
+      "admit",
+      "/ədˈmɪt/",
+      "v.",
+      "承认",
+      "He admitted he was wrong."
+    ],
+    [
+      "adopt",
+      "/əˈdɒpt/",
+      "v.",
+      "采纳；收养",
+      "They adopted a new policy."
+    ],
+    [
+      "advance",
+      "/ədˈvæns/",
+      "v.",
+      "前进；进步",
+      "Technology keeps advancing."
+    ],
+    [
+      "advantage",
+      "/ədˈvæntɪdʒ/",
+      "n.",
+      "优势",
+      "He has a clear advantage."
+    ],
+    [
+      "adventure",
+      "/ədˈventʃər/",
+      "n.",
+      "冒险",
+      "Life is a great adventure."
+    ],
+    [
+      "advise",
+      "/ədˈvaɪz/",
+      "v.",
+      "建议",
+      "I advise you to rest."
+    ],
+    [
+      "affect",
+      "/əˈfekt/",
+      "v.",
+      "影响",
+      "Smoking affects your health."
+    ],
+    [
+      "afford",
+      "/əˈfɔːrd/",
+      "v.",
+      "负担得起",
+      "Can you afford this car?"
+    ],
+    [
+      "agency",
+      "/ˈeɪdʒənsi/",
+      "n.",
+      "机构",
+      "A travel agency helped us."
+    ],
+    [
+      "aggressive",
+      "/əˈɡresɪv/",
+      "adj.",
+      "侵略性的",
+      "Don't be so aggressive."
+    ],
+    [
+      "agree",
+      "/əˈɡriː/",
+      "v.",
+      "同意",
+      "I agree with you."
+    ],
+    [
+      "aim",
+      "/eɪm/",
+      "n.",
+      "目标",
+      "Our aim is to win."
+    ],
+    [
+      "alarm",
+      "/əˈlɑːrm/",
+      "n.",
+      "警报",
+      "Set the alarm for 6 a.m."
+    ],
+    [
+      "allow",
+      "/əˈlaʊ/",
+      "v.",
+      "允许",
+      "Smoking is not allowed here."
+    ],
+    [
+      "ambitious",
+      "/æmˈbɪʃəs/",
+      "adj.",
+      "有野心的",
+      "He is very ambitious."
+    ],
+    [
+      "amount",
+      "/əˈmaʊnt/",
+      "n.",
+      "数量",
+      "A huge amount of data."
+    ],
+    [
+      "analyze",
+      "/ˈænəlaɪz/",
+      "v.",
+      "分析",
+      "Let's analyze this report."
+    ],
+    [
+      "ancient",
+      "/ˈeɪnʃənt/",
+      "adj.",
+      "古代的",
+      "Ancient China had many inventions."
+    ],
+    [
+      "announce",
+      "/əˈnaʊns/",
+      "v.",
+      "宣布",
+      "They announced the result."
+    ],
+    [
+      "annoy",
+      "/əˈnɔɪ/",
+      "v.",
+      "使恼火",
+      "Her attitude really annoys me."
+    ],
+    [
+      "annual",
+      "/ˈænjuəl/",
+      "adj.",
+      "年度的",
+      "It's an annual event."
+    ],
+    [
+      "anxious",
+      "/ˈæŋkʃəs/",
+      "adj.",
+      "焦虑的",
+      "She feels anxious about the exam."
+    ],
+    [
+      "apologize",
+      "/əˈpɒlədʒaɪz/",
+      "v.",
+      "道歉",
+      "I apologize for the delay."
+    ],
+    [
+      "apparent",
+      "/əˈpærənt/",
+      "adj.",
+      "显而易见的",
+      "It's apparent that he's lying."
+    ],
+    [
+      "appeal",
+      "/əˈpiːl/",
+      "v.",
+      "呼吁；吸引",
+      "The idea appeals to me."
+    ],
+    [
+      "appear",
+      "/əˈpɪər/",
+      "v.",
+      "出现",
+      "Problems appeared suddenly."
+    ],
+    [
+      "apply",
+      "/əˈplaɪ/",
+      "v.",
+      "申请；应用",
+      "Apply for the job online."
+    ],
+    [
+      "appreciate",
+      "/əˈpriːʃieɪt/",
+      "v.",
+      "感激",
+      "I really appreciate your help."
+    ],
+    [
+      "approach",
+      "/əˈproʊtʃ/",
+      "n./v.",
+      "接近；方法",
+      "A new approach to the problem."
+    ],
+    [
+      "approve",
+      "/əˈpruːv/",
+      "v.",
+      "赞成；批准",
+      "The manager approved the plan."
+    ],
+    [
+      "argue",
+      "/ˈɑːrɡjuː/",
+      "v.",
+      "争论",
+      "They argue about money."
+    ]
+  ],
+  "cet6": [
+    [
+      "abolish",
+      "/əˈbɒlɪʃ/",
+      "v.",
+      "废除",
+      "Slavery was abolished long ago."
+    ],
+    [
+      "abundant",
+      "/əˈbʌndənt/",
+      "adj.",
+      "丰富的",
+      "The region has abundant resources."
+    ],
+    [
+      "accelerate",
+      "/əkˈseləreɪt/",
+      "v.",
+      "加速",
+      "The car accelerated quickly."
+    ],
+    [
+      "accumulate",
+      "/əˈkjuːmjəleɪt/",
+      "v.",
+      "积累",
+      "He accumulated a fortune."
+    ],
+    [
+      "acquaint",
+      "/əˈkweɪnt/",
+      "v.",
+      "使熟悉",
+      "Get acquainted with the rules."
+    ],
+    [
+      "adhere",
+      "/ədˈhɪər/",
+      "v.",
+      "坚持",
+      "Adhere to the principles."
+    ],
+    [
+      "advocate",
+      "/ˈædvəkeɪt/",
+      "v.",
+      "提倡",
+      "She advocates equality."
+    ],
+    [
+      "aggregate",
+      "/ˈæɡrɪɡət/",
+      "n.",
+      "总计",
+      "The aggregate amount is huge."
+    ],
+    [
+      "allege",
+      "/əˈledʒ/",
+      "v.",
+      "断言",
+      "He alleged that he was innocent."
+    ],
+    [
+      "alleviate",
+      "/əˈliːvieɪt/",
+      "v.",
+      "减轻",
+      "This medicine alleviates pain."
+    ],
+    [
+      "allocate",
+      "/ˈæləkeɪt/",
+      "v.",
+      "分配",
+      "Allocate the budget wisely."
+    ],
+    [
+      "ambiguous",
+      "/æmˈbɪɡjuəs/",
+      "adj.",
+      "模糊的",
+      "His answer was ambiguous."
+    ],
+    [
+      "amend",
+      "/əˈmend/",
+      "v.",
+      "修改",
+      "The law was amended last year."
+    ],
+    [
+      "amplify",
+      "/ˈæmplɪfaɪ/",
+      "v.",
+      "放大",
+      "Amplify the signal."
+    ],
+    [
+      "anonymous",
+      "/əˈnɒnɪməs/",
+      "adj.",
+      "匿名的",
+      "An anonymous donor helped."
+    ],
+    [
+      "apparatus",
+      "/ˌæpəˈrætəs/",
+      "n.",
+      "设备",
+      "The lab has modern apparatus."
+    ],
+    [
+      "append",
+      "/əˈpend/",
+      "v.",
+      "附加",
+      "Append the file to the email."
+    ],
+    [
+      "arbitrary",
+      "/ˈɑːrbɪtreri/",
+      "adj.",
+      "任意的",
+      "The decision seems arbitrary."
+    ],
+    [
+      "arouse",
+      "/əˈraʊz/",
+      "v.",
+      "唤起",
+      "The movie aroused interest."
+    ],
+    [
+      "ascertain",
+      "/ˌæsərˈteɪn/",
+      "v.",
+      "查明",
+      "Ascertain the truth first."
+    ],
+    [
+      "assert",
+      "/əˈsɜːrt/",
+      "v.",
+      "断言",
+      "He asserts his innocence."
+    ],
+    [
+      "assess",
+      "/əˈses/",
+      "v.",
+      "评估",
+      "Assess the risk carefully."
+    ],
+    [
+      "assume",
+      "/əˈsuːm/",
+      "v.",
+      "假设",
+      "I assume you agree."
+    ],
+    [
+      "attain",
+      "/əˈteɪn/",
+      "v.",
+      "达到",
+      "Attain your goals step by step."
+    ],
+    [
+      "attribute",
+      "/əˈtrɪbjuːt/",
+      "v.",
+      "归因于",
+      "He attributes his success to luck."
+    ],
+    [
+      "authentic",
+      "/ɔːˈθentɪk/",
+      "adj.",
+      "真实的",
+      "This is an authentic antique."
+    ],
+    [
+      "benevolent",
+      "/bəˈnevələnt/",
+      "adj.",
+      "仁慈的",
+      "A benevolent king."
+    ],
+    [
+      "bewilder",
+      "/bɪˈwɪldər/",
+      "v.",
+      "使迷惑",
+      "The news bewildered us all."
+    ],
+    [
+      "boost",
+      "/buːst/",
+      "v.",
+      "提高",
+      "Exercise boosts your mood."
+    ],
+    [
+      "cater",
+      "/ˈkeɪtər/",
+      "v.",
+      "提供服务",
+      "They cater to tourists."
+    ],
+    [
+      "cease",
+      "/siːs/",
+      "v.",
+      "停止",
+      "Cease fire immediately."
+    ],
+    [
+      "circulate",
+      "/ˈsɜːrkjəleɪt/",
+      "v.",
+      "流通",
+      "Blood circulates through the body."
+    ],
+    [
+      "coincide",
+      "/ˌkoʊɪnˈsaɪd/",
+      "v.",
+      "一致",
+      "Our opinions coincide."
+    ],
+    [
+      "commence",
+      "/kəˈmens/",
+      "v.",
+      "开始",
+      "The ceremony will commence at 7."
+    ],
+    [
+      "commission",
+      "/kəˈmɪʃən/",
+      "n.",
+      "委员会",
+      "The commission investigated."
+    ],
+    [
+      "comply",
+      "/kəmˈplaɪ/",
+      "v.",
+      "遵守",
+      "Comply with the rules."
+    ],
+    [
+      "compound",
+      "/ˈkɒmpaʊnd/",
+      "n.",
+      "化合物",
+      "Water is a chemical compound."
+    ],
+    [
+      "comprehend",
+      "/ˌkɒmprɪˈhend/",
+      "v.",
+      "理解",
+      "I can't comprehend his logic."
+    ],
+    [
+      "compromise",
+      "/ˈkɒmprəmaɪz/",
+      "n.",
+      "妥协",
+      "We reached a compromise."
+    ],
+    [
+      "conceive",
+      "/kənˈsiːv/",
+      "v.",
+      "构想",
+      "She conceived a brilliant idea."
+    ],
+    [
+      "condemn",
+      "/kənˈdem/",
+      "v.",
+      "谴责",
+      "We condemn violence."
+    ],
+    [
+      "confine",
+      "/kənˈfaɪn/",
+      "v.",
+      "限制",
+      "Confine your answer to facts."
+    ],
+    [
+      "conform",
+      "/kənˈfɔːrm/",
+      "v.",
+      "遵守",
+      "Conform to the standards."
+    ],
+    [
+      "consent",
+      "/kənˈsent/",
+      "n.",
+      "同意",
+      "He gave his consent."
+    ],
+    [
+      "consequence",
+      "/ˈkɒnsɪkwens/",
+      "n.",
+      "后果",
+      "Face the consequences."
+    ],
+    [
+      "considerable",
+      "/kənˈsɪdərəbl/",
+      "adj.",
+      "相当大的",
+      "A considerable amount of money."
+    ],
+    [
+      "consistent",
+      "/kənˈsɪstənt/",
+      "adj.",
+      "一致的",
+      "Her story is consistent."
+    ],
+    [
+      "contemporary",
+      "/kənˈtempəreri/",
+      "adj.",
+      "当代的",
+      "Contemporary art is diverse."
+    ],
+    [
+      "contempt",
+      "/kənˈtempt/",
+      "n.",
+      "蔑视",
+      "He showed contempt for the rules."
+    ],
+    [
+      "contradict",
+      "/ˌkɒntrəˈdɪkt/",
+      "v.",
+      "反驳",
+      "Don't contradict your teacher."
+    ]
+  ],
+  "daily": [
+    [
+      "awesome",
+      "/ˈɔːsəm/",
+      "adj.",
+      "棒极了",
+      "That was awesome!"
+    ],
+    [
+      "cool",
+      "/kuːl/",
+      "adj.",
+      "酷的",
+      "Your jacket is so cool."
+    ],
+    [
+      "chill",
+      "/tʃɪl/",
+      "v.",
+      "放松",
+      "Let's just chill tonight."
+    ],
+    [
+      "hang out",
+      "/hæŋ aʊt/",
+      "phr.",
+      "闲逛",
+      "We hung out at the mall."
+    ],
+    [
+      "grab",
+      "/ɡræb/",
+      "v.",
+      "抓；随便吃点",
+      "Let's grab some coffee."
+    ],
+    [
+      "catch up",
+      "—",
+      "phr.",
+      "叙旧",
+      "We need to catch up soon."
+    ],
+    [
+      "figure out",
+      "—",
+      "phr.",
+      "弄清楚",
+      "I can't figure it out."
+    ],
+    [
+      "show up",
+      "—",
+      "phr.",
+      "出现",
+      "He didn't show up."
+    ],
+    [
+      "look forward to",
+      "—",
+      "phr.",
+      "期待",
+      "I look forward to seeing you."
+    ],
+    [
+      "go over",
+      "—",
+      "phr.",
+      "复习；过一遍",
+      "Go over your notes."
+    ],
+    [
+      "run out of",
+      "—",
+      "phr.",
+      "用光",
+      "We ran out of milk."
+    ],
+    [
+      "give up",
+      "—",
+      "phr.",
+      "放弃",
+      "Don't give up."
+    ],
+    [
+      "pick up",
+      "—",
+      "phr.",
+      "捡起；学会",
+      "I picked up some Spanish."
+    ],
+    [
+      "come up with",
+      "—",
+      "phr.",
+      "想出",
+      "She came up with a great idea."
+    ],
+    [
+      "deal with",
+      "—",
+      "phr.",
+      "处理",
+      "How do you deal with stress?"
+    ],
+    [
+      "get along",
+      "—",
+      "phr.",
+      "相处",
+      "They get along well."
+    ],
+    [
+      "hold on",
+      "—",
+      "phr.",
+      "等等",
+      "Hold on a second."
+    ],
+    [
+      "keep up",
+      "—",
+      "phr.",
+      "跟上",
+      "Keep up the good work."
+    ],
+    [
+      "take care",
+      "—",
+      "phr.",
+      "保重",
+      "Take care of yourself."
+    ],
+    [
+      "make it",
+      "—",
+      "phr.",
+      "成功；赶上",
+      "You can make it!"
+    ],
+    [
+      "no worries",
+      "—",
+      "phr.",
+      "没事",
+      "No worries, it's fine."
+    ],
+    [
+      "my bad",
+      "—",
+      "phr.",
+      "我的错",
+      "My bad, I forgot."
+    ],
+    [
+      "for sure",
+      "—",
+      "phr.",
+      "当然",
+      "For sure, I'll be there."
+    ],
+    [
+      "by the way",
+      "—",
+      "phr.",
+      "顺便",
+      "By the way, happy birthday."
+    ],
+    [
+      "kind of",
+      "—",
+      "phr.",
+      "有点",
+      "I'm kind of tired."
+    ],
+    [
+      "a lot",
+      "—",
+      "phr.",
+      "很多",
+      "Thanks a lot."
+    ],
+    [
+      "anyway",
+      "/ˈeniweɪ/",
+      "adv.",
+      "不管怎样",
+      "Anyway, let's move on."
+    ],
+    [
+      "actually",
+      "/ˈæktʃuəli/",
+      "adv.",
+      "实际上",
+      "Actually, I disagree."
+    ],
+    [
+      "basically",
+      "/ˈbeɪsɪkli/",
+      "adv.",
+      "基本上",
+      "Basically, that's the idea."
+    ],
+    [
+      "totally",
+      "/ˈtoʊtəli/",
+      "adv.",
+      "完全地",
+      "I totally agree with you."
+    ],
+    [
+      "seriously",
+      "/ˈsɪriəsli/",
+      "adv.",
+      "认真地",
+      "Are you serious?"
+    ],
+    [
+      "honestly",
+      "/ˈɒnɪstli/",
+      "adv.",
+      "说实话",
+      "Honestly, I don't know."
+    ],
+    [
+      "probably",
+      "/ˈprɒbəbli/",
+      "adv.",
+      "大概",
+      "I'll probably be late."
+    ],
+    [
+      "maybe",
+      "/ˈmeɪbi/",
+      "adv.",
+      "也许",
+      "Maybe next time."
+    ],
+    [
+      "somehow",
+      "/ˈsʌmhaʊ/",
+      "adv.",
+      "以某种方式",
+      "Somehow it worked."
+    ],
+    [
+      "whatever",
+      "/wɒtˈevər/",
+      "pron.",
+      "随便",
+      "Whatever you say."
+    ],
+    [
+      "definitely",
+      "/ˈdefɪnətli/",
+      "adv.",
+      "绝对",
+      "Definitely, I'll go."
+    ],
+    [
+      "absolutely",
+      "/ˈæbsəluːtli/",
+      "adv.",
+      "绝对地",
+      "Absolutely amazing!"
+    ],
+    [
+      "exactly",
+      "/ɪɡˈzæktli/",
+      "adv.",
+      "确切地",
+      "That's exactly right."
+    ],
+    [
+      "pretty",
+      "/ˈprɪti/",
+      "adv.",
+      "相当",
+      "It's pretty cold outside."
+    ],
+    [
+      "quite",
+      "/kwaɪt/",
+      "adv.",
+      "相当",
+      "That's quite interesting."
+    ],
+    [
+      "rather",
+      "/ˈrɑːðər/",
+      "adv.",
+      "宁愿",
+      "I'd rather stay home."
+    ],
+    [
+      "nevermind",
+      "—",
+      "phr.",
+      "算了",
+      "Nevermind, forget it."
+    ],
+    [
+      "cheers",
+      "/tʃɪrz/",
+      "int.",
+      "干杯；再见",
+      "Cheers! Have a good one."
+    ],
+    [
+      "bless you",
+      "—",
+      "phr.",
+      "保重（喷嚏后）",
+      "Bless you!"
+    ],
+    [
+      "no problem",
+      "—",
+      "phr.",
+      "没问题",
+      "No problem at all."
+    ],
+    [
+      "you bet",
+      "—",
+      "phr.",
+      "当然",
+      "You bet I will."
+    ],
+    [
+      "good luck",
+      "—",
+      "phr.",
+      "祝好运",
+      "Good luck with your exam."
+    ],
+    [
+      "take it easy",
+      "—",
+      "phr.",
+      "放松点",
+      "Take it easy, man."
+    ],
+    [
+      "cheer up",
+      "—",
+      "phr.",
+      "高兴起来",
+      "Cheer up, things will get better."
+    ]
+  ]
+}

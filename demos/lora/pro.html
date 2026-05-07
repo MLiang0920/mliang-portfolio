@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0e0e0e;color:#ccc;font-family:-apple-system,sans-serif;padding:20px 24px;font-size:13px}
+.tabs{display:flex;gap:18px;border-bottom:1px solid #222;padding-bottom:10px;margin-bottom:20px}
+.tab{color:#555;cursor:pointer;padding:4px 0;border-bottom:2px solid transparent;font-size:13px}
+.tab.active{color:#e8734a;border-bottom-color:#e8734a}
+.sec{background:#141414;border:1px solid #1e1e1e;border-radius:8px;margin-bottom:10px;overflow:hidden}
+.sec-hd{padding:14px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#888}
+.sec-hd:hover{background:#1a1a1a}
+.sec-hd svg{transition:transform .2s;color:#444}
+.sec-hd.open svg{transform:rotate(180deg)}
+.sec-bd{display:none;padding:0 18px 16px;border-top:1px solid #1a1a1a}
+.sec-bd.open{display:block;padding-top:14px}
+.row{display:flex;gap:14px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.row label{font-size:11px;color:#555;min-width:140px}
+select,input[type=text],input[type=number]{background:#0a0a0a;border:1px solid #222;border-radius:6px;padding:7px 12px;color:#999;font-size:12px;min-width:180px}
+input[type=number]{min-width:80px;width:80px}
+.hint{font-size:10px;color:#333;margin-top:2px;margin-bottom:8px}
+.btn{padding:12px 0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;transition:all .2s}
+.btn-start{background:linear-gradient(135deg,#e8734a,#d4522a);color:#fff}
+.btn-stop{background:linear-gradient(135deg,#c0392b,#a33020);color:#fff}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.slider-row{display:flex;align-items:center;gap:10px}
+.slider-row input[type=range]{flex:1;accent-color:#e8734a}
+.slider-val{color:#888;font-size:11px;min-width:30px;text-align:right}
+.status-bar{background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:12px 18px;margin-top:10px}
+.status-label{font-size:11px;color:#555}
+.status-value{font-size:12px;color:#666;margin-top:4px}
+.config-area{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:6px;padding:10px 14px;font-family:Consolas,monospace;font-size:11px;color:#555;margin-top:8px;max-height:120px;overflow:auto;white-space:pre}
+.browse-btn{padding:6px 12px;background:#e8734a;color:#fff;border:none;border-radius:6px;font-size:11px;cursor:pointer}
+.small-btn{padding:6px 14px;border-radius:6px;font-size:11px;cursor:pointer;border:1px solid #222;background:#1a1a1a;color:#666}
+.footer-links{display:flex;gap:16px;justify-content:center;margin-top:20px;font-size:11px;color:#333}
+.param-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.param-item{display:flex;align-items:center;gap:8px}
+.param-item label{min-width:120px;font-size:11px;color:#555}
+.param-item input,.param-item select{flex:1;min-width:0}
+.checkbox{display:flex;align-items:center;gap:8px;font-size:11px;color:#666;cursor:pointer}
+.checkbox input{accent-color:#e8734a}
+</style>
+</head>
+<body>
+<div class="tabs">
+  <div class="tab active">训练配置</div>
+  <div class="tab">训练日志</div>
+  <div class="tab">标签处理</div>
+</div>
+
+<!-- 1 模型 -->
+<div class="sec">
+  <div class="sec-hd open" onclick="toggle(this)">1 · 模型 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="sec-bd open">
+    <div class="row"><label>模型类型</label><select><option>SDXL</option><option>Flux</option><option>Wan 视频</option><option>Qwen-Image</option></select></div>
+    <div class="row"><label>具体模型</label><select><option>illustrious-XL</option><option>noobAI-XL</option><option>SDXL 1.0</option><option>Pony Diffusion V6</option></select></div>
+    <div class="row"><label>数据集格式</label><select><option>图图+标签</option></select></div>
+    <div class="row"><label>底模文件</label><input type="text" placeholder="（自动不用填，交给配置文件的预设字段）" style="flex:1"><button class="browse-btn">📁</button></div>
+  </div>
+</div>
+
+<!-- 2 数据集 -->
+<div class="sec">
+  <div class="sec-hd" onclick="toggle(this)">2 · 数据集 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="sec-bd">
+    <div class="row"><label>数据集路径</label><input type="text" placeholder="D:\datasets\my_character\" style="flex:1"><button class="browse-btn">📁</button></div>
+    <div class="row"><label>图片分辨率</label><select><option>1024 × 1024</option><option>768 × 768</option><option>512 × 512</option></select></div>
+    <div class="row"><label>重复次数</label><input type="number" value="10"></div>
+    <div class="row"><label>触发词</label><input type="text" placeholder="myfp_v1" style="min-width:200px"></div>
+    <div class="checkbox"><input type="checkbox" checked> 启用数据增强（翻转、颜色抖动）</div>
+    <div class="checkbox"><input type="checkbox" checked> 缓存 Latents（减少显存占用）</div>
+  </div>
+</div>
+
+<!-- 3 保存 -->
+<div class="sec">
+  <div class="sec-hd" onclick="toggle(this)">3 · 保存 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="sec-bd">
+    <div class="row"><label>输出目录</label><input type="text" placeholder="D:\output\my_lora\" style="flex:1"><button class="browse-btn">📁</button></div>
+    <div class="row"><label>LoRA 名称</label><input type="text" placeholder="my_lora" style="min-width:200px"></div>
+    <div class="row"><label>保存间隔（步）</label><input type="number" value="200"></div>
+    <div class="row"><label>最大保存数</label><input type="number" value="5"></div>
+    <div class="checkbox"><input type="checkbox" checked> 保存为 safetensors 格式</div>
+  </div>
+</div>
+
+<!-- 4 训练参数 -->
+<div class="sec">
+  <div class="sec-hd" onclick="toggle(this)">4 · 训练参数 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="sec-bd">
+    <div class="param-grid">
+      <div class="param-item"><label>训练步数</label><input type="number" value="2000"></div>
+      <div class="param-item"><label>Batch Size</label><input type="number" value="1"></div>
+      <div class="param-item"><label>梯度累积步数</label><input type="number" value="1"></div>
+      <div class="param-item"><label>Epoch</label><input type="number" value="10"></div>
+      <div class="param-item"><label>混合精度</label><select><option>bf16</option><option>fp16</option><option>no</option></select></div>
+      <div class="param-item"><label>种子</label><input type="number" value="42"></div>
+    </div>
+    <div class="checkbox" style="margin-top:10px"><input type="checkbox" checked> Gradient Checkpointing（省显存）</div>
+    <div class="checkbox"><input type="checkbox"> xformers 加速</div>
+  </div>
+</div>
+
+<!-- 5 学习率 -->
+<div class="sec">
+  <div class="sec-hd" onclick="toggle(this)">5 · 学习率 & 优化器 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="sec-bd">
+    <div class="param-grid">
+      <div class="param-item"><label>学习率</label><input type="text" value="1e-4"></div>
+      <div class="param-item"><label>Text Encoder LR</label><input type="text" value="5e-5"></div>
+      <div class="param-item"><label>优化器</label><select><option>AdamW8bit</option><option>AdamW</option><option>Lion</option><option>Prodigy</option></select></div>
+      <div class="param-item"><label>调度器</label><select><option>cosine</option><option>constant</option><option>linear</option><option>cosine_with_restarts</option></select></div>
+      <div class="param-item"><label>预热步数</label><input type="number" value="0"></div>
+      <div class="param-item"><label>Weight Decay</label><input type="text" value="0.01"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6 网络结构 -->
+<div class="sec">
+  <div class="sec-hd" onclick="toggle(this)">6 · 网络结构 (LoRA) <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="sec-bd">
+    <div class="param-grid">
+      <div class="param-item"><label>Network Dim (Rank)</label><input type="number" value="32"></div>
+      <div class="param-item"><label>Network Alpha</label><input type="number" value="16"></div>
+      <div class="param-item"><label>网络类型</label><select><option>lora</option><option>loha</option><option>lokr</option></select></div>
+      <div class="param-item"><label>Dropout</label><input type="text" value="0.0"></div>
+    </div>
+    <div class="hint">角色训练推荐 Rank 32，画风训练推荐 Rank 64</div>
+  </div>
+</div>
+
+<!-- 7 训练预览 -->
+<div class="sec">
+  <div class="sec-hd" onclick="toggle(this)">7 · 训练预览 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="sec-bd">
+    <div class="param-grid">
+      <div class="param-item"><label>预览间隔（步）</label><input type="number" value="200"></div>
+      <div class="param-item"><label>预览张数</label><input type="number" value="4"></div>
+      <div class="param-item"><label>预览 Prompt</label><input type="text" value="myfp_v1, 1girl, solo, upper body" style="min-width:250px"></div>
+      <div class="param-item"><label>预览 CFG</label><input type="text" value="7.0"></div>
+    </div>
+    <div class="checkbox" style="margin-top:8px"><input type="checkbox" checked> 启用训练中自动预览</div>
+  </div>
+</div>
+
+<!-- 8 高级 -->
+<div class="sec">
+  <div class="sec-hd" onclick="toggle(this)">8 · 高级（可选）<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="sec-bd">
+    <div class="checkbox"><input type="checkbox"> 使用 SDPA 注意力</div>
+    <div class="checkbox"><input type="checkbox"> 噪声偏移 (Noise Offset)</div>
+    <div class="checkbox"><input type="checkbox"> 自适应噪声调度</div>
+    <div class="checkbox"><input type="checkbox"> 最小 SNR Gamma</div>
+    <div class="param-grid" style="margin-top:8px">
+      <div class="param-item"><label>Clip Skip</label><input type="number" value="2"></div>
+      <div class="param-item"><label>Max Token Length</label><select><option>75</option><option>150</option><option>225</option></select></div>
+    </div>
+  </div>
+</div>
+
+<!-- 训练进度 -->
+<div class="sec" style="padding:14px 18px">
+  <div style="font-size:11px;color:#555;margin-bottom:8px">训练进度</div>
+  <div class="slider-row">
+    <span style="font-size:11px;color:#555">0</span>
+    <input type="range" min="0" max="2000" value="0" disabled>
+    <span class="slider-val">0 / 2000</span>
+  </div>
+</div>
+
+<div class="status-bar">
+  <div class="status-label">进度状态</div>
+  <div class="status-value">等待训练开始...</div>
+</div>
+
+<div class="btn-row">
+  <button class="btn btn-start">开始训练</button>
+  <button class="btn btn-stop">停止训练</button>
+</div>
+
+<!-- 恢复训练 -->
+<div class="sec" style="margin-top:12px;padding:14px 18px">
+  <div style="font-size:11px;color:#555;margin-bottom:8px">恢复训练 (仅恢复之前的 checkpoint 继续训练)</div>
+  <div class="row">
+    <select style="flex:1"><option>my_lora (从头/最新checkpoint) | D:\MLiang XL训练\output\my_lora\config.yaml</option></select>
+  </div>
+  <div class="row" style="gap:8px">
+    <button class="small-btn">刷新</button>
+    <button class="browse-btn">恢复训练</button>
+  </div>
+</div>
+
+<!-- 导入配置 -->
+<div class="sec" style="padding:14px 18px">
+  <div style="font-size:11px;color:#555;margin-bottom:8px">导入配置文件 (.yaml)</div>
+  <div class="row">
+    <input type="text" placeholder="粘贴 YAML 配置文件的绝对路径，或点击 📁 浏览选择" style="flex:1" readonly>
+    <button class="browse-btn">📁</button>
+    <button class="small-btn">📋 导入</button>
+  </div>
+</div>
+
+<div class="sec" style="padding:14px 18px">
+  <div style="font-size:11px;color:#555;margin-bottom:8px">配置文件预览</div>
+  <div class="config-area">config:
+  name: "my_lora"
+  process:
+    - type: "train"
+      training_folder: "D:\\datasets\\my_character"
+      output:
+        dtype: float16
+        save_dtype: float16
+      network:
+        type: "lora"
+        linear: 32
+        linear_alpha: 16
+      train:
+        batch_size: 1
+        steps: 2000
+        lr: 1e-4
+        optimizer: "adamw8bit"
+        lr_scheduler: "cosine"</div>
+</div>
+
+<div class="status-bar">
+  <div class="status-label">训练状态</div>
+  <div class="status-value">—</div>
+</div>
+
+<div class="footer-links">
+  <span>通过 API 接口 ✅</span>
+  <span>· 使用 Gradio 前端 🟢</span>
+  <span>· 设置 ⚙</span>
+</div>
+
+<script>
+function toggle(hd){
+  hd.classList.toggle('open');
+  const bd=hd.nextElementSibling;
+  bd.classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,2842 @@
+{
+  "yaye": [
+    {
+      "file": "images/originals/yaye/yaye_1.jpg",
+      "focusX": 50,
+      "focusY": 25,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/yaye/yaye_2.jpg",
+      "focusX": 50,
+      "focusY": 24.4,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/yaye/yaye_3.jpg",
+      "focusX": 50,
+      "focusY": 20.9,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/yaye/yaye_4.jpg",
+      "focusX": 50,
+      "focusY": 21.9,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/yaye/yaye_5.jpg",
+      "focusX": 50,
+      "focusY": 22.8,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/yaye/yaye_6.jpg",
+      "focusX": 50,
+      "focusY": 27.4,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/yaye/yaye_10.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "lol": [
+    {
+      "file": "images/originals/lol/lol_1.jpg",
+      "focusX": 50,
+      "focusY": 45.3,
+      "width": 1536,
+      "height": 2048
+    },
+    {
+      "file": "images/originals/lol/lol_2.jpg",
+      "focusX": 50,
+      "focusY": 34,
+      "width": 1536,
+      "height": 2048
+    },
+    {
+      "file": "images/originals/lol/lol_3.jpg",
+      "focusX": 50,
+      "focusY": 39.8,
+      "width": 1536,
+      "height": 2048
+    },
+    {
+      "file": "images/originals/lol/lol_4.jpg",
+      "focusX": 50,
+      "focusY": 45.5,
+      "width": 1536,
+      "height": 2048
+    },
+    {
+      "file": "images/originals/lol/lol_5.jpg",
+      "focusX": 50,
+      "focusY": 26.6,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/lol/lol_6.jpg",
+      "focusX": 50,
+      "focusY": 41.6,
+      "width": 1536,
+      "height": 2048
+    },
+    {
+      "file": "images/originals/lol/lol_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/lol/lol_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/lol/lol_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/lol/lol_10.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/lol/lol_11.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/lol/lol_12.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "raid": [
+    {
+      "file": "images/originals/raid/raid_1.jpg",
+      "focusX": 50,
+      "focusY": 29.7,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/raid/raid_2.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/raid/raid_3.jpg",
+      "focusX": 50,
+      "focusY": 53.4,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/raid/raid_4.jpg",
+      "focusX": 50,
+      "focusY": 31.3,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/raid/raid_5.jpg",
+      "focusX": 50,
+      "focusY": 20.9,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/raid/raid_6.jpg",
+      "focusX": 50,
+      "focusY": 23.1,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/raid/raid_7.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/raid/raid_8.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    }
+  ],
+  "realistic": [
+    {
+      "file": "images/originals/realistic/realistic_1.jpg",
+      "focusX": 50,
+      "focusY": 39.1,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/realistic/realistic_2.jpg",
+      "focusX": 50,
+      "focusY": 40.6,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/realistic/realistic_3.jpg",
+      "focusX": 50,
+      "focusY": 37.1,
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "file": "images/originals/realistic/realistic_4.jpg",
+      "focusX": 50,
+      "focusY": 20.9,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/realistic/realistic_5.jpg",
+      "focusX": 76.4,
+      "focusY": 6.8,
+      "width": 2048,
+      "height": 3072
+    },
+    {
+      "file": "images/originals/realistic/realistic_6.jpg",
+      "focusX": 37.5,
+      "focusY": 4.9,
+      "width": 2048,
+      "height": 3072
+    }
+  ],
+  "可爱": [
+    {
+      "file": "images/originals/可爱/可爱_1.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/可爱/可爱_2.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/可爱/可爱_3.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/可爱/可爱_4.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/可爱/可爱_5.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/可爱/可爱_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可爱/可爱_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可爱/可爱_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "yuanzi": [
+    {
+      "file": "images/originals/yuanzi/yuanzi_1.jpg",
+      "focusX": 50,
+      "focusY": 44.9,
+      "width": 1792,
+      "height": 2368
+    },
+    {
+      "file": "images/originals/yuanzi/yuanzi_2.jpg",
+      "focusX": 50,
+      "focusY": 41.2,
+      "width": 1792,
+      "height": 2368
+    },
+    {
+      "file": "images/originals/yuanzi/yuanzi_3.jpg",
+      "focusX": 50,
+      "focusY": 39.3,
+      "width": 1792,
+      "height": 2368
+    },
+    {
+      "file": "images/originals/yuanzi/yuanzi_4.jpg",
+      "focusX": 50,
+      "focusY": 41.6,
+      "width": 1792,
+      "height": 2368
+    },
+    {
+      "file": "images/originals/yuanzi/yuanzi_5.jpg",
+      "focusX": 50,
+      "focusY": 37.6,
+      "width": 1792,
+      "height": 2368
+    },
+    {
+      "file": "images/originals/yuanzi/yuanzi_6.jpg",
+      "focusX": 50,
+      "focusY": 38.6,
+      "width": 1792,
+      "height": 2368
+    }
+  ],
+  "onmyoji": [
+    {
+      "file": "images/originals/onmyoji/onmyoji_1.jpg",
+      "focusX": 50,
+      "focusY": 29.7,
+      "width": 1600,
+      "height": 2400
+    },
+    {
+      "file": "images/originals/onmyoji/onmyoji_2.jpg",
+      "focusX": 50,
+      "focusY": 25.7,
+      "width": 1600,
+      "height": 2400
+    },
+    {
+      "file": "images/originals/onmyoji/onmyoji_3.jpg",
+      "focusX": 50,
+      "focusY": 23.5,
+      "width": 1600,
+      "height": 2400
+    },
+    {
+      "file": "images/originals/onmyoji/onmyoji_5.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/onmyoji/onmyoji_6.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/onmyoji/onmyoji_7.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "file": "images/originals/onmyoji/onmyoji_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/onmyoji/onmyoji_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "ink": [
+    {
+      "file": "images/originals/ink/ink_1.jpg",
+      "focusX": 50,
+      "focusY": 30,
+      "width": 1536,
+      "height": 2048
+    },
+    {
+      "file": "images/originals/ink/ink_2.jpg",
+      "focusX": 50,
+      "focusY": 27.8,
+      "width": 1536,
+      "height": 2048
+    },
+    {
+      "file": "images/originals/ink/ink_3.jpg",
+      "focusX": 50,
+      "focusY": 26.7,
+      "width": 1536,
+      "height": 2048
+    },
+    {
+      "file": "images/originals/ink/ink_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/ink/ink_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/ink/ink_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/ink/ink_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/ink/ink_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/ink/ink_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "设计": [],
+  "效果对比": [
+    {
+      "file": "images/originals/效果对比/效果对比_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_10.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_11.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_12.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_13.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_14.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_15.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_16.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_17.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_18.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/效果对比/效果对比_19.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "英雄联盟": [
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_10.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_11.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_12.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/英雄联盟/英雄联盟_13.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "可设计": [
+    {
+      "file": "images/originals/可设计/可设计_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可设计/可设计_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可设计/可设计_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可设计/可设计_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可设计/可设计_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可设计/可设计_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可设计/可设计_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/可设计/可设计_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "三国": [
+    {
+      "file": "images/originals/三国/三国_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/三国/三国_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/三国/三国_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/三国/三国_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/三国/三国_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/三国/三国_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/三国/三国_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/三国/三国_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "欧卡": [
+    {
+      "file": "images/originals/欧卡/欧卡_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/欧卡/欧卡_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/欧卡/欧卡_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/欧卡/欧卡_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/欧卡/欧卡_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "万智": [
+    {
+      "file": "images/originals/万智/万智_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/万智/万智_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/万智/万智_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/万智/万智_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/万智/万智_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/万智/万智_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/万智/万智_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/万智/万智_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/万智/万智_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "建筑": [
+    {
+      "file": "images/originals/建筑/建筑_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/建筑/建筑_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/建筑/建筑_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/建筑/建筑_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/建筑/建筑_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/建筑/建筑_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/建筑/建筑_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/建筑/建筑_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/建筑/建筑_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "功能": [
+    {
+      "file": "images/originals/功能/功能_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/功能/功能_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/功能/功能_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/功能/功能_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/功能/功能_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/功能/功能_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/功能/功能_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/功能/功能_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "国风": [
+    {
+      "file": "images/originals/国风/国风_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_10.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_11.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_12.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_13.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_14.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_15.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_16.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/国风/国风_17.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "西方": [
+    {
+      "file": "images/originals/西方/西方_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/西方/西方_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/西方/西方_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/西方/西方_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/西方/西方_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/西方/西方_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/西方/西方_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/西方/西方_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "图库": [
+    {
+      "file": "images/originals/图库/图库_1.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_2.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_3.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_4.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_5.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_6.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_7.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_8.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_9.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_10.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_11.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_12.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_13.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_14.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_15.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_16.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_17.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_18.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_19.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_20.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_21.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_22.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_23.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_24.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_25.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_26.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_27.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_28.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_29.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_30.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_31.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_32.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_33.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_34.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_35.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_36.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_37.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_38.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_39.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_40.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_41.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_42.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_43.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_44.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_45.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_46.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_47.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_48.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_49.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_50.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_51.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_52.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_53.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_54.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_55.jpg",
+      "focusX": 45.4,
+      "focusY": 0
+    },
+    {
+      "file": "images/originals/图库/图库_56.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_57.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_58.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_59.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_60.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_61.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_62.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_63.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_64.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_65.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_66.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_67.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_68.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_69.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_70.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_71.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_72.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_73.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_74.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_75.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_76.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_77.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_78.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_79.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_80.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_81.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_82.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_83.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_84.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_85.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_86.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_87.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_88.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_89.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_90.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_91.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_92.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_93.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_94.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_95.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_96.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_97.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_98.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_99.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_100.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_101.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_102.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_103.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_104.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_105.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_106.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_107.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_108.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_109.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_110.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_111.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_112.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_113.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_114.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_115.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_116.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_117.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_118.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_119.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_120.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_121.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_122.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_123.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_124.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_125.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_126.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_127.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_128.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_129.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_130.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_131.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_132.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_133.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_134.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_135.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_136.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_137.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_138.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_139.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_140.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_141.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_142.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_143.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_144.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_145.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_146.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_147.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_148.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_149.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_150.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_151.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_152.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_153.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_154.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_155.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_156.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_157.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_158.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_159.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_160.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_161.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_162.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_163.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_164.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_165.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_166.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_167.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_168.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_169.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_170.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_171.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_172.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_173.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_174.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_175.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_176.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_177.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_178.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_179.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_180.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_181.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_182.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_183.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_184.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_185.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_186.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_187.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_188.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_189.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_190.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_191.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_192.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_193.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_194.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_195.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_196.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_197.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_198.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_199.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_200.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_201.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_202.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_203.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_204.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_205.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_206.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_207.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_208.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_209.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_210.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_211.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_212.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_213.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_214.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_215.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_216.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_217.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_218.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_219.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_220.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_221.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_222.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_223.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_224.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_225.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_226.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_227.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_228.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_229.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_230.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_231.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_232.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_233.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_234.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_235.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_236.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_237.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_238.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_239.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_240.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_241.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_242.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_243.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_244.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_245.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_246.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_247.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_248.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_249.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_250.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_251.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_252.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_253.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_254.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_255.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_256.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_257.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_258.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_259.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_260.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_261.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_262.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_263.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_264.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_265.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_266.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_267.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_268.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_269.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_270.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_271.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_272.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_273.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_274.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_275.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_276.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_277.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_278.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_279.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_280.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_281.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_282.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_283.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_284.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_285.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_286.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_287.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_288.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_289.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_290.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_291.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_292.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_293.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_294.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_295.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_296.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_297.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_298.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_299.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_300.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_301.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_302.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_303.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_304.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_305.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_306.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_307.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_308.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_309.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_310.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_311.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_312.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_313.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_314.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_315.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_316.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_317.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_318.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_319.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_320.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_321.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_322.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_323.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_324.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_325.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_326.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_327.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_328.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_329.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_330.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_331.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_332.jpg",
+      "focusX": 50,
+      "focusY": 30
+    },
+    {
+      "file": "images/originals/图库/图库_333.jpg",
+      "focusX": 50,
+      "focusY": 30
+    }
+  ],
+  "__meta": {
+    "yaye": {
+      "title": "牙爷风格模型",
+      "desc": "基于牙爷独特美术风格的 3D 角色模型",
+      "tags": [
+        "角色设计",
+        "牙爷风格",
+        "AI 辅助"
+      ],
+      "category": "stylized"
+    },
+    "lol": {
+      "title": "英雄联盟 V3 怪兽模型",
+      "desc": "参考英雄联盟美术风格打造的怪兽角色",
+      "tags": [
+        "怪兽设计",
+        "英雄联盟",
+        "V3"
+      ],
+      "category": "stylized"
+    },
+    "raid": {
+      "title": "RAID 风格模型",
+      "desc": "RAID: Shadow Legends 风格暗黑奇幻角色",
+      "tags": [
+        "暗黑奇幻",
+        "RAID",
+        "AI 辅助"
+      ],
+      "category": "realistic"
+    },
+    "realistic": {
+      "title": "西方写实模型",
+      "desc": "追求真实质感的西方写实风格角色",
+      "tags": [
+        "写实风格",
+        "PBR 材质",
+        "角色建模"
+      ],
+      "category": "realistic"
+    },
+    "yuanzi": {
+      "title": "园子画风模型",
+      "desc": "独特的园子画风角色模型",
+      "tags": [
+        "园子画风",
+        "风格化",
+        "角色设计"
+      ],
+      "category": "eastern"
+    },
+    "onmyoji": {
+      "title": "阴阳师模型",
+      "desc": "和风美学的阴阳师风格角色",
+      "tags": [
+        "阴阳师",
+        "和风",
+        "东方奇幻"
+      ],
+      "category": "eastern"
+    },
+    "ink": {
+      "title": "水墨国风模型",
+      "desc": "水墨画灵感的国风角色模型",
+      "tags": [
+        "水墨风",
+        "国风",
+        "传统美学"
+      ],
+      "category": "eastern"
+    },
+    "效果对比": {
+      "title": "效果对比",
+      "desc": "LoRA 训练效果对比展示",
+      "tags": [
+        "效果对比",
+        "LoRA",
+        "训练成果"
+      ],
+      "category": "comparison"
+    },
+    "可爱": {
+      "title": "金铲铲",
+      "desc": "",
+      "tags": [],
+      "category": "stylized"
+    },
+    "英雄联盟": {
+      "title": "英雄联盟风格",
+      "desc": "可以实现一定的联盟角色",
+      "tags": [
+        "风格"
+      ],
+      "category": "stylized"
+    },
+    "可设计": {
+      "title": "微设计模型",
+      "desc": "可以有一定的设计",
+      "tags": [
+        "设计"
+      ],
+      "category": "stylized"
+    },
+    "三国": {
+      "title": "三国杀",
+      "desc": "兽甲",
+      "tags": [
+        "国风"
+      ],
+      "category": "stylized"
+    },
+    "欧卡": {
+      "title": "欧卡",
+      "desc": "卡通，部落冲突",
+      "tags": [
+        "卡通"
+      ],
+      "category": "stylized"
+    },
+    "万智": {
+      "title": "万智牌",
+      "desc": "西方",
+      "tags": [
+        "厚涂"
+      ],
+      "category": "stylized"
+    },
+    "建筑": {
+      "title": "国风水墨淡彩建筑",
+      "desc": "国风淡彩",
+      "tags": [
+        "建筑"
+      ],
+      "category": "stylized"
+    },
+    "功能": {
+      "title": "笔触模型",
+      "desc": "一些比较好看和颜色的笔触",
+      "tags": [
+        "笔触"
+      ],
+      "category": "stylized"
+    },
+    "国风": {
+      "title": "国风偏王者风格模型",
+      "desc": "有王者的数据集",
+      "tags": [
+        "国风"
+      ],
+      "category": "stylized"
+    },
+    "西方": {
+      "title": "西方神话",
+      "desc": "神话模型",
+      "tags": [
+        "西方"
+      ],
+      "category": "stylized"
+    },
+    "图库": {
+      "title": "图库",
+      "desc": "库",
+      "tags": [
+        "1"
+      ],
+      "category": "stylized"
+    },
+    "__groups": [
+      {
+        "id": "models",
+        "title": "模型目录",
+        "emoji": "🎨",
+        "keys": [
+          "yaye",
+          "lol",
+          "raid",
+          "realistic",
+          "可爱",
+          "yuanzi",
+          "onmyoji",
+          "ink",
+          "英雄联盟",
+          "可设计",
+          "三国",
+          "万智",
+          "建筑",
+          "功能",
+          "国风",
+          "西方",
+          "欧卡"
+        ]
+      },
+      {
+        "id": "comparison",
+        "title": "效果对比目录",
+        "emoji": "🔬",
+        "keys": [
+          "效果对比"
+        ]
+      },
+      {
+        "id": "aigallery",
+        "title": "个人AI图库",
+        "keys": [
+          "图库"
+        ]
+      }
+    ]
+  }
+}

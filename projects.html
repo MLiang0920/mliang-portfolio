@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品 | 丁觉昇 3D 作品集</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* Carousel overrides */
+.carousel{position:relative;overflow:hidden;margin-top:20px}
+.carousel-track{display:flex;gap:14px;transition:transform .55s cubic-bezier(.16,1,.3,1);-ms-overflow-style:none;scrollbar-width:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-track .gallery-item{flex:0 0 calc(25% - 10.5px);aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.08);cursor:pointer;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s}
+.carousel-track .gallery-item:hover{border-color:rgba(255,255,255,.2);transform:scale(1.03);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.carousel-track .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.carousel-track .gallery-item:hover img{transform:scale(1.05)}
+/* Arrows */
+.c-arrow{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:50%;color:rgba(255,255,255,.7);cursor:pointer;z-index:5;opacity:0;transition:.3s}
+.carousel:hover .c-arrow{opacity:1}
+.c-arrow:hover{background:rgba(255,255,255,.12);color:#fff}
+.c-arrow.hide{display:none}
+.c-prev{left:8px}
+.c-next{right:8px}
+/* Dots */
+.c-dots{display:flex;justify-content:center;gap:8px;margin-top:18px}
+.c-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);cursor:pointer;transition:.4s cubic-bezier(.16,1,.3,1)}
+.c-dot.on{background:#fff;width:22px;border-radius:3px}
+/* Progress bar */
+.c-progress{width:100%;max-width:120px;height:1.5px;background:rgba(255,255,255,.06);border-radius:1px;margin:14px auto 0;position:relative;overflow:hidden}
+.c-progress-bar{height:100%;background:rgba(255,255,255,.5);border-radius:1px;transition:width .55s cubic-bezier(.16,1,.3,1),left .55s cubic-bezier(.16,1,.3,1);position:absolute;left:0;top:0}
+/* Vibe Coding cards — 横向滑动 */
+.vibe-grid{
+  display:flex;gap:20px;
+  overflow-x:auto;overflow-y:hidden;
+  padding-bottom:12px;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  cursor:grab;user-select:none;
+  margin-top:8px;
+}
+.vibe-grid::-webkit-scrollbar{display:none}
+.vibe-grid.dragging{cursor:grabbing;scroll-snap-type:none}
+
+/* Vibe 轨道容器 */
+.vibe-track-wrap{position:relative}
+.vibe-track-wrap .v-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+  width:42px;height:42px;border-radius:50%;
+  background:rgba(255,255,255,.06);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.7);font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.3s;opacity:0;
+}
+.vibe-track-wrap:hover .v-arrow{opacity:1}
+.vibe-track-wrap .v-arrow:hover{background:rgba(255,255,255,.12);color:#fff}
+.vibe-track-wrap .v-arrow.vl{left:-10px}
+.vibe-track-wrap .v-arrow.vr{right:-10px}
+
+/* Vibe 进度条 */
+.vibe-progress{width:120px;height:2px;background:rgba(255,255,255,.06);border-radius:1px;margin:16px auto 0;overflow:hidden;position:relative}
+.vibe-progress-bar{height:100%;background:rgba(255,255,255,.5);border-radius:1px;position:absolute;left:0;top:0;transition:width .4s,left .4s}
+
+/* Vibe 目录栏 */
+.vibe-nav{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
+.vibe-nav-dot{
+  width:40px;height:40px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;cursor:pointer;transition:all .3s;position:relative;
+}
+.vibe-nav-dot:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.08);transform:scale(1.1)}
+.vibe-nav-dot.active{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.08)}
+.vibe-nav-dot .vn-tip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);
+  background:rgba(20,20,24,.95);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);
+  color:#fff;padding:5px 10px;border-radius:6px;font-size:.7rem;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:.25s;z-index:10;
+}
+.vibe-nav-dot:hover .vn-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+.vibe-nav-menu{
+  width:40px;height:40px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .3s;color:rgba(255,255,255,.5);
+}
+.vibe-nav-menu:hover{border-color:rgba(255,255,255,.3);color:#fff;background:rgba(255,255,255,.08)}
+
+/* Project navigation */
+.proj-nav{display:flex;justify-content:center;gap:8px;margin-bottom:32px;flex-wrap:wrap;align-items:center}
+.proj-nav-item{position:relative;width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1)}
+.proj-nav-item:hover{border-color:rgba(255,255,255,.4);transform:scale(1.15);box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.proj-nav-item img{width:100%;height:100%;object-fit:cover}
+.proj-nav-item .nav-tooltip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(4px);background:rgba(20,20,24,.95);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);color:#fff;padding:6px 12px;border-radius:8px;font-size:.75rem;white-space:nowrap;opacity:0;pointer-events:none;transition:all .25s cubic-bezier(.16,1,.3,1);z-index:10}
+.proj-nav-item:hover .nav-tooltip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* 目录面板按钮 */
+.nav-menu-btn{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;color:rgba(255,255,255,.5)}
+.nav-menu-btn:hover{border-color:rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.08)}
+
+/* 目录弹出面板 */
+.nav-panel{position:fixed;top:0;right:-320px;width:300px;height:100vh;background:rgba(14,14,18,.97);backdrop-filter:blur(20px);border-left:1px solid rgba(255,255,255,.08);z-index:9000;padding:24px;overflow-y:auto;transition:right .4s cubic-bezier(.16,1,.3,1)}
+.nav-panel.open{right:0}
+.nav-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.nav-panel-header h3{font-size:1rem;font-weight:600}
+.nav-panel-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:1.1rem}
+.nav-panel-list{display:flex;flex-direction:column;gap:4px}
+.nav-panel-group{margin-bottom:4px}
+.nav-panel-group-title{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 12px;font-size:.85rem;font-weight:600;
+  color:rgba(255,255,255,.6);letter-spacing:.5px;
+  border-radius:8px;cursor:pointer;transition:all .2s;
+  user-select:none;
+}
+.nav-panel-group-title:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.85)}
+.nav-panel-group-title .group-arrow{
+  width:16px;height:16px;flex-shrink:0;
+  transition:transform .3s cubic-bezier(.16,1,.3,1);
+  color:rgba(255,255,255,.35);
+}
+.nav-panel-group-title.expanded .group-arrow{transform:rotate(90deg)}
+.nav-panel-group-title .group-label{flex:1}
+.nav-panel-group-title .group-count{
+  font-size:.7rem;font-weight:400;
+  color:rgba(255,255,255,.25);padding:2px 6px;
+  background:rgba(255,255,255,.04);border-radius:4px;
+}
+.nav-panel-group-items{
+  display:flex;flex-direction:column;gap:2px;padding-left:4px;
+  max-height:0;overflow:hidden;
+  transition:max-height .35s cubic-bezier(.16,1,.3,1),opacity .3s;
+  opacity:0;
+}
+.nav-panel-group-items.open{max-height:800px;opacity:1}
+.nav-panel-link{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit}
+.nav-panel-link:hover{background:rgba(255,255,255,.06)}
+.nav-panel-link img{width:36px;height:36px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.nav-panel-link span{font-size:.88rem;color:rgba(255,255,255,.7)}
+.nav-panel-link:hover span{color:#fff}
+.nav-panel-empty{padding:12px 16px;font-size:.8rem;color:rgba(255,255,255,.25);font-style:italic}
+.nav-panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8999;opacity:0;pointer-events:none;transition:opacity .3s}
+.nav-panel-overlay.open{opacity:1;pointer-events:all}
+
+/* 回到顶部按钮 */
+.back-top{position:fixed;bottom:28px;right:28px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:100;opacity:0;transform:translateY(12px);transition:all .3s;color:rgba(255,255,255,.6)}
+.back-top.show{opacity:1;transform:translateY(0)}
+.back-top:hover{background:rgba(255,255,255,.15);color:#fff;transform:translateY(-2px)}
+.vibe-card{display:flex;flex-direction:column;flex:0 0 calc(25% - 15px);scroll-snap-align:start;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px;text-decoration:none;color:inherit;transition:all .3s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
+@media(max-width:960px){.vibe-card{flex:0 0 calc(50% - 10px)}}
+@media(max-width:560px){.vibe-card{flex:0 0 85%}}
+.vibe-card p{flex:1;font-size:.9rem;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:14px}
+.vibe-card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+
+/* Hover 磨砂遮罩 + 双按钮 */
+.vibe-card .card-overlay{
+  position:absolute;inset:0;
+  background:rgba(10,10,14,.7);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  opacity:0;transition:opacity .35s cubic-bezier(.16,1,.3,1);
+  border-radius:16px;z-index:2;
+}
+.vibe-card:hover .card-overlay{opacity:1}
+.vibe-card .card-overlay .ov-btn{
+  width:180px;text-align:center;
+  padding:14px 0;border-radius:14px;font-size:.9rem;font-weight:600;
+  text-decoration:none;cursor:pointer;
+  transform:translateY(12px);opacity:0;
+  transition:all .35s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+}
+.vibe-card:hover .card-overlay .ov-btn{transform:translateY(0);opacity:1}
+.vibe-card:hover .card-overlay .ov-btn:nth-child(2){transition-delay:.06s}
+.ov-btn.primary{
+  background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);
+  border:1px solid rgba(255,255,255,.15);
+}
+.ov-btn.primary:hover{
+  background:rgba(255,255,255,.95);color:#0a0a0b;
+  box-shadow:0 6px 24px rgba(255,255,255,.25);
+}
+.ov-btn.secondary{
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);
+  border:1px solid rgba(255,255,255,.12);
+}
+.ov-btn.secondary:hover{
+  background:rgba(255,255,255,.9);color:#0a0a0b;
+  box-shadow:0 6px 24px rgba(255,255,255,.25);
+}
+
+.vibe-icon{font-size:2rem;margin-bottom:14px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4))}
+.vibe-card h3{font-size:1.15rem;font-weight:600;margin-bottom:8px}
+.vibe-card .card-tags{display:flex;flex-wrap:wrap;gap:6px}
+.vibe-card .tag{font-size:.7rem;padding:3px 8px}
+/* Lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.3s}
+.lb.show{opacity:1;pointer-events:all}
+.lb-inner{display:flex;flex-direction:column;align-items:center;max-width:90vw;max-height:90vh}
+.lb-inner img{max-width:100%;max-height:calc(90vh - 40px);object-fit:contain;border-radius:4px;border:1.5px solid rgba(255,255,255,.6);-webkit-user-drag:none;user-select:none;pointer-events:none}
+.lb-copyright{margin-top:8px;font-size:.72rem;letter-spacing:1.5px;color:rgba(255,255,255,.35);font-weight:300;user-select:none;text-align:center}
+.lb-x{position:absolute;top:20px;right:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:#fff;font-size:1.4rem;cursor:pointer;z-index:10}
+/* Lightbox 水印 */
+.lb-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
+.lb-watermark::before{
+    content:'MLiang作品集';
+    font-size:3rem;font-weight:700;letter-spacing:4px;
+    color:rgba(255,255,255,.06);
+    transform:rotate(-25deg);
+    white-space:nowrap;user-select:none;
+}
+
+/* 全局水印覆盖层（gallery-item / wf-item） */
+.gallery-item::after,.wf-item::after{
+    content:'MLiang作品集';
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1rem;font-weight:600;letter-spacing:2px;
+    color:rgba(255,255,255,.05);
+    transform:rotate(-25deg);
+    pointer-events:none;user-select:none;z-index:2;
+    white-space:nowrap;
+}
+
+/* 禁止图片拖拽和选择 */
+.gallery-item img,.wf-item img,.lb img{
+    -webkit-user-drag:none;
+    -khtml-user-drag:none;
+    -moz-user-drag:none;
+    -o-user-drag:none;
+    user-drag:none;
+    user-select:none;
+    -webkit-user-select:none;
+}
+
+/* 瀑布流 */
+.waterfall{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1200px;margin:0 auto;padding:20px 0}
+.wf-item{border-radius:10px;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.06);aspect-ratio:2/3;transition:transform .3s,box-shadow .3s;position:relative}
+.wf-item:hover{transform:scale(1.02);box-shadow:0 8px 32px rgba(0,0,0,.5);border-color:rgba(255,255,255,.15)}
+.wf-item img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:1024px){.waterfall{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.waterfall{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.waterfall{grid-template-columns:repeat(2,1fr);gap:8px}}
+
+@media(max-width:768px){
+  .carousel-track .gallery-item{flex:0 0 calc(50% - 7px)}
+}
+</style>
+</head>
+<body>
+<!-- Nav -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo"><span class="logo-text">MLiang</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">首页</a></li>
+      <li><a href="projects.html" class="nav-link active">作品</a></li>
+      <li><a href="about.html" class="nav-link">关于</a></li>
+      <li><a href="contact.html" class="nav-link">联系</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="page-hero">
+  <div class="hero-bg"><div class="grid-pattern"></div><div class="glow glow-1"></div></div>
+  <div class="container">
+    <div class="page-hero-content">
+      <span class="section-tag fade-in">My Work</span>
+      <h1 class="page-title fade-in-up">作品展示</h1>
+      <p class="page-desc fade-in-up delay-1">模型训练作品 & Vibe Coding 项目开发</p>
+      <div class="filter-bar fade-in-up delay-2" style="margin-top:32px">
+        <button class="filter-btn active" onclick="showTab('models')">模型展示</button>
+        <button class="filter-btn" onclick="showTab('vibe')">Vibe Coding 项目</button>
+        <button class="filter-btn" onclick="showTab('aigallery')">个人AI图库</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section class="projects-section">
+  <div class="container">
+    <!-- 模型展示区 -->
+    <div id="tab-models">
+      <!-- 目录导航 -->
+      <div class="proj-nav" id="projNav"></div>
+      <div id="projects"></div>
+    </div>
+
+    <!-- Vibe Coding 区 -->
+    <div id="tab-vibe" style="display:none">
+
+      <!-- 项目目录导航 -->
+      <div class="vibe-nav" id="vibeNav">
+        <div class="vibe-nav-dot active" data-idx="0" onclick="vibeGoTo(0)">L<span class="vn-tip">LoRA 训练器</span></div>
+        <div class="vibe-nav-dot" data-idx="1" onclick="vibeGoTo(1)">R<span class="vn-tip">Universal Robot</span></div>
+        <div class="vibe-nav-dot" data-idx="2" onclick="vibeGoTo(2)">Y<span class="vn-tip">舆情播报</span></div>
+        <div class="vibe-nav-dot" data-idx="3" onclick="vibeGoTo(3)">E<span class="vn-tip">English Hub</span></div>
+        <div class="vibe-nav-menu" onclick="openVibeMenu()" title="全部项目">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </div>
+      </div>
+
+      <!-- 横向滑动轨道 -->
+      <div class="vibe-track-wrap">
+        <div class="v-arrow vl" id="vibePrev">‹</div>
+        <div class="v-arrow vr" id="vibeNext">›</div>
+      <div class="vibe-grid" id="vibeTrack">
+        <div class="vibe-card" data-reveal>
+          <div class="card-overlay">
+            <a href="demos/lora/index.html" target="_blank" class="ov-btn primary">立即体验 →</a>
+            <a href="vibe-coding/Lora 训练器作品集展示.html" target="_blank" class="ov-btn secondary">项目说明</a>
+          </div>
+          <div class="vibe-icon">L</div>
+          <h3>MLiang LoRA 训练器</h3>
+          <p>基于 ai-toolkit 深度定制的本地 AI 图像模型训练一键整合包。专为 RTX 50 系列设计，14.5GB 整合包，5000+ 行代码，3 周从零到产品。支持 14 种模型、WD14 打标器集成、跨机 venv 移植方案。</p>
+          <div class="card-tags"><span class="tag">Python</span><span class="tag">PyTorch 2.11</span><span class="tag">CUDA 12.8</span><span class="tag">FastAPI</span><span class="tag">Gradio</span></div>
+        </div>
+        <div class="vibe-card" data-reveal>
+          <div class="card-overlay">
+            <a href="demos/robot.html" target="_blank" class="ov-btn primary">立即体验 →</a>
+            <a href="vibe-coding/中转站作品集展示.html" target="_blank" class="ov-btn secondary">项目说明</a>
+          </div>
+          <div class="vibe-icon">R</div>
+          <h3>MLiang Universal Robot</h3>
+          <p>从 0 到 1 设计开发的多模型 AI 对话桌面应用。集成 13 家厂商、120+ 模型（Claude/GPT/Gemini/DeepSeek/Kimi…），提供 Auto 智能路由、30+ 内置技能、24+ 行业专家、多模态支持、自动化任务。Glass Morphism 深色极简设计。</p>
+          <div class="card-tags"><span class="tag">Electron</span><span class="tag">Node.js</span><span class="tag">SSE 流式</span><span class="tag">120+ 模型</span><span class="tag">Glass UI</span></div>
+        </div>
+        <div class="vibe-card" data-reveal>
+          <div class="card-overlay">
+            <a href="demos/yuqing.html" target="_blank" class="ov-btn primary">立即体验 →</a>
+            <a href="vibe-coding/对话复刻作品集.html" target="_blank" class="ov-btn secondary">项目说明</a>
+          </div>
+          <div class="vibe-icon">Y</div>
+          <h3>舆情播报机器人</h3>
+          <p>游戏美术舆情播报全链路产品：B站热点抓取 → 微博原画补全 → AI 摘要分析 → H5 详情页生成 → EdgeOne 部署 → 企业微信图文卡片推送。8 个阶段迭代，5 个核心脚本协同，稳定绕过缓存/鉴权问题。</p>
+          <div class="card-tags"><span class="tag">Python</span><span class="tag">AI 改写</span><span class="tag">EdgeOne</span><span class="tag">企业微信</span><span class="tag">自动化</span></div>
+        </div>
+        <div class="vibe-card" data-reveal>
+          <div class="card-overlay">
+            <a href="demos/english.html" target="_blank" class="ov-btn primary">立即体验 →</a>
+            <a href="vibe-coding/英语学习软件作品集.html" target="_blank" class="ov-btn secondary">项目说明</a>
+          </div>
+          <div class="vibe-icon">E</div>
+          <h3>English Hub 英语学习 APP</h3>
+          <p>一天从零到一做出的整合版英语学习 APP。借鉴 Anki/多邻国/每日英语听力/欧路词典/ChatGPT 五家精华。SM-2 间隔重复单词卡、听力精听、AI 陪练、默写小窗、查词生词本。纯前端零后端，4.78MB APK 已上线 Android。</p>
+          <div class="card-tags"><span class="tag">HTML5/JS</span><span class="tag">Capacitor</span><span class="tag">SM-2</span><span class="tag">TTS</span><span class="tag">PWA</span><span class="tag">Android</span></div>
+        </div>
+      </div>
+      <div class="vibe-progress"><div class="vibe-progress-bar" id="vibeProgressBar"></div></div>
+      </div><!-- /vibe-track-wrap -->
+    </div>
+
+    <!-- 个人AI图库区 -->
+    <div id="tab-aigallery" style="display:none">
+      <div id="aigallery-content"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lb" id="lb"><button class="lb-x" onclick="closeLb()">&times;</button><div class="lb-watermark"></div><div class="lb-inner"><img id="lbImg"><p class="lb-copyright">个人作品集展示，请勿商业使用</p></div></div>
+
+<!-- 模型目录面板 -->
+<div class="nav-panel-overlay" id="navOverlay" onclick="closeNavPanel()"></div>
+<div class="nav-panel" id="navPanel">
+  <div class="nav-panel-header">
+    <h3>作品目录</h3>
+    <button class="nav-panel-close" onclick="closeNavPanel()">&times;</button>
+  </div>
+  <div class="nav-panel-list" id="navPanelList"></div>
+</div>
+
+<!-- Vibe Coding 目录面板 -->
+<div class="nav-panel-overlay" id="vibeOverlay" onclick="closeVibePanel()"></div>
+<div class="nav-panel" id="vibePanel">
+  <div class="nav-panel-header">
+    <h3>Vibe Coding 项目</h3>
+    <button class="nav-panel-close" onclick="closeVibePanel()">&times;</button>
+  </div>
+  <div class="nav-panel-list">
+    <a class="nav-panel-link" onclick="vibeGoTo(0);closeVibePanel()">
+      <span style="font-size:1rem;flex-shrink:0;width:36px;text-align:center;font-weight:600;color:rgba(255,255,255,.5)">L</span>
+      <span>MLiang LoRA 训练器</span>
+    </a>
+    <a class="nav-panel-link" onclick="vibeGoTo(1);closeVibePanel()">
+      <span style="font-size:1rem;flex-shrink:0;width:36px;text-align:center;font-weight:600;color:rgba(255,255,255,.5)">R</span>
+      <span>MLiang Universal Robot</span>
+    </a>
+    <a class="nav-panel-link" onclick="vibeGoTo(2);closeVibePanel()">
+      <span style="font-size:1rem;flex-shrink:0;width:36px;text-align:center;font-weight:600;color:rgba(255,255,255,.5)">Y</span>
+      <span>舆情播报机器人</span>
+    </a>
+    <a class="nav-panel-link" onclick="vibeGoTo(3);closeVibePanel()">
+      <span style="font-size:1rem;flex-shrink:0;width:36px;text-align:center;font-weight:600;color:rgba(255,255,255,.5)">E</span>
+      <span>English Hub 英语学习 APP</span>
+    </a>
+  </div>
+</div>
+
+<!-- 回到顶部 -->
+<div class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand"><span class="logo-text">MLiang</span></div>
+      <div class="footer-links">
+        <a href="https://www.liblib.art/userpage/e203f1bf485e452eb2e7bd22bd8bcc16/publish" target="_blank" class="footer-social">Lib AI</a>
+        <a href="https://www.xiaohongshu.com/user/profile/5bb19990c751e0000164d054" target="_blank" class="footer-social">小红书</a>
+        <a href="mailto:2980125919@qq.com" class="footer-social">Email</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2025 丁觉昇. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script>
+// ===== 禁止右键保存和拖拽图片 =====
+document.addEventListener('contextmenu', e => {
+    if (e.target.tagName === 'IMG' || e.target.closest('.gallery-item') || e.target.closest('.wf-item') || e.target.closest('.lb')) {
+        e.preventDefault();
+    }
+});
+document.addEventListener('dragstart', e => {
+    if (e.target.tagName === 'IMG') e.preventDefault();
+});
+
+const DEFAULT_META = {
+    'yaye':{title:'牙爷风格模型',desc:'基于牙爷独特美术风格的 3D 角色模型',tags:['角色设计','牙爷风格','AI 辅助'],category:'stylized'},
+    'lol':{title:'英雄联盟 V3 怪兽模型',desc:'参考英雄联盟美术风格打造的怪兽角色',tags:['怪兽设计','英雄联盟','V3'],category:'stylized'},
+    'raid':{title:'RAID 风格模型',desc:'RAID: Shadow Legends 风格暗黑奇幻角色',tags:['暗黑奇幻','RAID','AI 辅助'],category:'realistic'},
+    'realistic':{title:'西方写实模型',desc:'追求真实质感的西方写实风格角色',tags:['写实风格','PBR 材质','角色建模'],category:'realistic'},
+    'yuanzi':{title:'园子画风模型',desc:'独特的园子画风角色模型',tags:['园子画风','风格化','角色设计'],category:'eastern'},
+    'onmyoji':{title:'阴阳师模型',desc:'和风美学的阴阳师风格角色',tags:['阴阳师','和风','东方奇幻'],category:'eastern'},
+    'ink':{title:'水墨国风模型',desc:'以水墨画为灵感的国风角色',tags:['水墨风','国风','传统美学'],category:'eastern'}
+};
+
+let config={}, meta={}, groups=[];
+
+async function init(){
+    try{
+        const r=await fetch('image-config.json?'+Date.now());
+        const d=await r.json();
+        if(d.__meta){
+            if(d.__meta.__groups){groups=d.__meta.__groups;delete d.__meta.__groups}
+            meta=d.__meta;delete d.__meta;
+        }
+        config=d;
+    }catch(e){}
+    // Merge default meta
+    Object.entries(DEFAULT_META).forEach(([k,v])=>{if(!meta[k])meta[k]=v});
+    // Default groups if not defined
+    if(!groups.length){
+        groups=[{id:'models',title:'模型目录',emoji:'🎨',keys:Object.keys(config).filter(k=>Array.isArray(config[k]))}];
+    }
+    render();
+    initNav();
+    initFilter();
+}
+
+function render(){
+    const box=document.getElementById('projects');
+    const nav=document.getElementById('projNav');
+    box.innerHTML='';
+    nav.innerHTML='';
+    
+    // Build navigation + panel with groups (只包含 models 分组)
+    let panelHtml = '';
+    let navItems = [];
+
+    // 只渲染 models 和 comparison 分组的面板导航，不包含 aigallery
+    const panelGroups = groups.filter(g => g.id !== 'aigallery');
+
+    panelGroups.forEach((grp,gi)=>{
+        const validKeys = grp.keys.filter(k=>Array.isArray(config[k])&&config[k].length>0);
+        const count = validKeys.length;
+        const arrowSvg = '<svg class="group-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>';
+        
+        panelHtml+=`<div class="nav-panel-group">
+            <div class="nav-panel-group-title" data-grp="${gi}" onclick="toggleGroup(this)">
+                ${arrowSvg}
+                <span class="group-label">${grp.title}</span>
+                <span class="group-count">${count}</span>
+            </div>
+            <div class="nav-panel-group-items" id="grpItems${gi}">`;
+        
+        if(count===0){
+            panelHtml+=`<div class="nav-panel-empty">暂无内容，敬请期待</div>`;
+        }
+        
+        validKeys.forEach(key=>{
+            const imgs=config[key];
+            const m=meta[key]||{title:key};
+            const thumb=imgs[0];
+            navItems.push({key,thumb,title:m.title});
+            panelHtml+=`<a class="nav-panel-link" onclick="goTo('${key}');closeNavPanel()">
+                <img src="${thumb.file}" style="object-position:${thumb.focusX}% ${thumb.focusY}%">
+                <span>${m.title}</span>
+            </a>`;
+        });
+        
+        panelHtml+=`</div></div>`;
+    });
+
+    // Circular nav thumbnails (最多显示5个)
+    const maxNav = 5;
+    navItems.slice(0, maxNav).forEach(item=>{
+        nav.innerHTML+=`<div class="proj-nav-item" onclick="goTo('${item.key}')">
+            <img src="${item.thumb.file}" style="object-position:${item.thumb.focusX}% ${item.thumb.focusY}%">
+            <span class="nav-tooltip">${item.title}</span>
+        </div>`;
+    });
+    
+    // 目录按钮
+    nav.innerHTML+=`<div class="nav-menu-btn" onclick="openNavPanel()" title="全部目录">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </div>`;
+    document.getElementById('navPanelList').innerHTML = panelHtml;
+
+    // Render sections - 只渲染 models 分组的轮播（不含 aigallery 和 comparison）
+    const modelsGrp = groups.find(g => g.id === 'models');
+    if (modelsGrp) {
+        modelsGrp.keys.forEach(key=>{
+            const imgs=config[key];
+            if(!Array.isArray(imgs)||!imgs.length)return;
+            const m=meta[key]||{title:key,desc:'',tags:[],category:'stylized'};
+            const canSlide=imgs.length>4;
+
+            const sec=document.createElement('div');
+            sec.className='project-showcase';
+            sec.id='sec-'+key;
+            sec.dataset.cat=m.category;
+            sec.setAttribute('data-reveal','');
+            sec.innerHTML=`
+                <div class="showcase-header">
+                    <h2 class="showcase-title">${m.title}</h2>
+                    <p class="showcase-desc">${m.desc || ''}</p>
+                    <div class="card-tags">${(m.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+                </div>
+                <div class="carousel" data-total="${imgs.length}">
+                    ${canSlide?'<div class="c-arrow c-prev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div>':''}
+                    <div class="carousel-track">
+                        ${imgs.map(img=>`<div class="gallery-item" data-src="${img.file}"><img src="${img.file}" style="object-position:${img.focusX}% ${img.focusY}%" loading="lazy"></div>`).join('')}
+                    </div>
+                    ${canSlide?'<div class="c-arrow c-next"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></div>':''}
+                    ${canSlide?'<div class="c-progress"><div class="c-progress-bar"></div></div>':''}
+                </div>
+            `;
+            box.appendChild(sec);
+        });
+    }
+    initCarousels();
+    initLightbox();
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');obs.unobserve(e.target)}}),{threshold:.05});
+    document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+}
+
+function initCarousels(){
+    document.querySelectorAll('.carousel').forEach(c=>{
+        if (c._inited) return; // 防止重复初始化
+        c._inited = true;
+        const track=c.querySelector('.carousel-track');
+        const total=parseInt(c.dataset.total);
+        const prev=c.querySelector('.c-prev');
+        const next=c.querySelector('.c-next');
+        const bar=c.querySelector('.c-progress-bar');
+        let pos=0;
+        const maxPos=Math.max(0,total-4);
+        
+        function updateBar(){
+            if(!bar||maxPos===0)return;
+            const ratio=4/total;
+            const progress=pos/maxPos;
+            bar.style.width=(ratio*100)+'%';
+            bar.style.left=(progress*(1-ratio)*100)+'%';
+        }
+        updateBar();
+
+        function slide(dir){
+            pos=Math.max(0,Math.min(maxPos,pos+dir));
+            track.style.transform=`translateX(calc(${-pos}*(25% + 3.5px)))`;
+            if(prev)prev.style.opacity=pos===0?'.2':'';
+            if(next)next.style.opacity=pos>=maxPos?'.2':'';
+            updateBar();
+        }
+        if(prev){prev.onclick=()=>slide(-1);prev.style.opacity='.2'}
+        if(next&&maxPos===0)next.style.opacity='.2';
+        if(next)next.onclick=()=>slide(1);
+
+        // 鼠标拖拽滑动
+        let isDrag=false,startX=0,dragPos=0,wasDragged=false;
+        track.style.cursor='grab';
+
+        track.addEventListener('mousedown',e=>{
+            isDrag=true;wasDragged=false;startX=e.clientX;dragPos=pos;
+            track.style.cursor='grabbing';
+            track.style.transition='none';
+            e.preventDefault();
+        });
+        
+        // 使用 track 本身的引用做闭包，避免 document 级重复绑定
+        const onMove = e => {
+            if(!isDrag)return;
+            if(Math.abs(e.clientX-startX)>5) wasDragged=true;
+            const dxR=e.clientX-startX;
+            const itemW=track.parentElement.offsetWidth/4;
+            const moved=dxR/itemW;
+            const tempPos=Math.max(0,Math.min(maxPos,dragPos-moved));
+            track.style.transform=`translateX(calc(${-tempPos}*(25% + 3.5px)))`;
+        };
+        const onUp = e => {
+            if(!isDrag)return;
+            isDrag=false;
+            track.style.cursor='grab';
+            track.style.transition='transform .55s cubic-bezier(.16,1,.3,1)';
+            const dx=e.clientX-startX;
+            const itemW=track.parentElement.offsetWidth/4;
+            const moved=Math.round(dx/itemW);
+            pos=Math.max(0,Math.min(maxPos,dragPos-moved));
+            track.style.transform=`translateX(calc(${-pos}*(25% + 3.5px)))`;
+            if(prev)prev.style.opacity=pos===0?'.2':'';
+            if(next)next.style.opacity=pos>=maxPos?'.2':'';
+            updateBar();
+            if(wasDragged) setTimeout(()=>{wasDragged=false},50);
+        };
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+    });
+}
+
+function initLightbox(){
+    // 使用事件委托，不重复绑定
+    const projBox = document.getElementById('projects');
+    if (projBox && !projBox._lbBound) {
+        projBox._lbBound = true;
+        projBox.addEventListener('click', e => {
+            const item = e.target.closest('.gallery-item');
+            if (!item) return;
+            const track = item.closest('.carousel-track');
+            if (track && track.style.cursor === 'grabbing') return;
+            if (item.dataset.src) {
+                document.getElementById('lbImg').src = item.dataset.src;
+                document.getElementById('lb').classList.add('show');
+            }
+        });
+    }
+}
+function closeLb(){document.getElementById('lb').classList.remove('show')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
+document.getElementById('lb').addEventListener('click',e=>{if(e.target===e.currentTarget)closeLb()});
+
+function initNav(){
+    const nb=document.getElementById('navbar');
+    window.addEventListener('scroll',()=>nb.classList.toggle('scrolled',scrollY>50),{passive:true});
+    const tog=document.getElementById('navToggle'),nl=document.querySelector('.nav-links');
+    if(tog)tog.onclick=()=>{nl.classList.toggle('active');const s=tog.querySelectorAll('span'),a=nl.classList.contains('active');s[0].style.transform=a?'rotate(45deg) translate(5px,5px)':'';s[1].style.opacity=a?'0':'';s[2].style.transform=a?'rotate(-45deg) translate(7px,-6px)':''}
+}
+
+// Tab switch
+function showTab(tab){
+    const models=document.getElementById('tab-models');
+    const vibe=document.getElementById('tab-vibe');
+    const aigallery=document.getElementById('tab-aigallery');
+    const btns=document.querySelectorAll('.page-hero-content .filter-btn');
+    
+    models.style.display='none';
+    vibe.style.display='none';
+    aigallery.style.display='none';
+    btns.forEach(b=>b.classList.remove('active'));
+    
+    if(tab==='models'){
+        models.style.display='';
+        btns[0].classList.add('active');
+    }else if(tab==='vibe'){
+        vibe.style.display='';
+        btns[1].classList.add('active');
+        document.querySelectorAll('#tab-vibe [data-reveal]').forEach(el=>el.classList.add('revealed'));
+        initVibeTrack();
+    }else if(tab==='aigallery'){
+        aigallery.style.display='';
+        btns[2].classList.add('active');
+        renderAiGallery();
+    }
+}
+
+// ===== Vibe Coding 横向滑动 =====
+let vibeInited=false;
+function initVibeTrack(){
+    if(vibeInited)return;
+    vibeInited=true;
+    const trk=document.getElementById('vibeTrack');
+    const bar=document.getElementById('vibeProgressBar');
+    const prev=document.getElementById('vibePrev');
+    const next=document.getElementById('vibeNext');
+    if(!trk)return;
+
+    const cards=trk.querySelectorAll('.vibe-card');
+    const total=cards.length;
+
+    // 进度条
+    function updateProgress(){
+        const max=trk.scrollWidth-trk.clientWidth;
+        if(max<=0){bar.style.width='100%';bar.style.left='0';return}
+        const ratio=trk.clientWidth/trk.scrollWidth;
+        const progress=trk.scrollLeft/max;
+        bar.style.width=(ratio*100)+'%';
+        bar.style.left=(progress*(1-ratio)*100)+'%';
+    }
+    trk.addEventListener('scroll',updateProgress,{passive:true});
+    setTimeout(updateProgress,100);
+
+    // 箭头
+    prev.addEventListener('click',()=>trk.scrollBy({left:-360,behavior:'smooth'}));
+    next.addEventListener('click',()=>trk.scrollBy({left:360,behavior:'smooth'}));
+
+    // 鼠标拖拽
+    let isDown=false,startX=0,scrollL=0;
+    trk.addEventListener('mousedown',e=>{
+        isDown=true;trk.classList.add('dragging');
+        startX=e.pageX-trk.offsetLeft;scrollL=trk.scrollLeft;
+    });
+    const stop=()=>{isDown=false;trk.classList.remove('dragging')};
+    trk.addEventListener('mouseup',stop);
+    trk.addEventListener('mouseleave',stop);
+    trk.addEventListener('mousemove',e=>{
+        if(!isDown)return;e.preventDefault();
+        trk.scrollLeft=scrollL-(e.pageX-trk.offsetLeft-startX)*1.2;
+    });
+
+    // 滚轮横向
+    trk.addEventListener('wheel',e=>{
+        if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){
+            e.preventDefault();
+            trk.scrollLeft+=e.deltaY;
+        }
+    },{passive:false});
+
+    // 目录导航高亮
+    trk.addEventListener('scroll',()=>{
+        const scrollPos=trk.scrollLeft;
+        const cardW=360;
+        const idx=Math.round(scrollPos/cardW);
+        document.querySelectorAll('.vibe-nav-dot').forEach((d,i)=>{
+            d.classList.toggle('active',i===idx);
+        });
+    },{passive:true});
+}
+
+function vibeGoTo(idx){
+    const trk=document.getElementById('vibeTrack');
+    if(!trk)return;
+    const cards=trk.querySelectorAll('.vibe-card');
+    if(cards[idx]){
+        cards[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'start'});
+    }
+}
+
+function openVibeMenu(){
+    document.getElementById('vibePanel').classList.add('open');
+    document.getElementById('vibeOverlay').classList.add('open');
+}
+function closeVibePanel(){
+    document.getElementById('vibePanel').classList.remove('open');
+    document.getElementById('vibeOverlay').classList.remove('open');
+}
+
+function initFilter(){
+    // No sub-filters needed
+}
+
+// ===== 个人AI图库 =====
+function renderAiGallery(){
+    const box=document.getElementById('aigallery-content');
+    if(box.innerHTML) return;
+    
+    const grp = groups.find(g => g.id === 'aigallery');
+    if(!grp || !grp.keys.length){
+        box.innerHTML='<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,.4)"><p style="font-size:1.2rem;margin-bottom:8px">暂无内容</p><p style="font-size:.85rem">在后台管理的「个人AI图库」分组中添加图片</p></div>';
+        return;
+    }
+    
+    // 收集所有图片
+    let allImgs = [];
+    grp.keys.forEach(key => {
+        const imgs = config[key];
+        if (Array.isArray(imgs)) {
+            imgs.forEach(img => allImgs.push(img));
+        }
+    });
+    
+    if (!allImgs.length) {
+        box.innerHTML='<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,.4)"><p style="font-size:1.2rem;margin-bottom:8px">暂无图片</p><p style="font-size:.85rem">在后台管理的「个人AI图库」分组中上传图片</p></div>';
+        return;
+    }
+    
+    // 网格布局
+    box.innerHTML = `<div class="waterfall" id="waterfall"></div>`;
+    const wf = document.getElementById('waterfall');
+    
+    allImgs.forEach((img, i) => {
+        const item = document.createElement('div');
+        item.className = 'wf-item';
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(20px)';
+        item.style.transition = 'opacity .4s ease, transform .4s ease';
+        item.innerHTML = `<img src="${img.file}" loading="lazy" style="object-position:${img.focusX}% ${img.focusY}%">`;
+        item.onclick = () => {
+            document.getElementById('lbImg').src = img.file;
+            document.getElementById('lb').classList.add('show');
+        };
+        wf.appendChild(item);
+    });
+    
+    // 滚动到可视区时淡入
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0)';
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    wf.querySelectorAll('.wf-item').forEach(el => obs.observe(el));
+}
+
+init();
+
+// Navigation helpers
+function goTo(key){
+    const el=document.getElementById('sec-'+key);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function openNavPanel(){
+    document.getElementById('navPanel').classList.add('open');
+    document.getElementById('navOverlay').classList.add('open');
+}
+function closeNavPanel(){
+    document.getElementById('navPanel').classList.remove('open');
+    document.getElementById('navOverlay').classList.remove('open');
+}
+
+// 折叠/展开分组
+function toggleGroup(el){
+    const gi=el.dataset.grp;
+    const items=document.getElementById('grpItems'+gi);
+    const isOpen=items.classList.contains('open');
+    if(isOpen){
+        items.classList.remove('open');
+        el.classList.remove('expanded');
+    }else{
+        items.classList.add('open');
+        el.classList.add('expanded');
+    }
+}
+
+// Back to top
+window.addEventListener('scroll',()=>{
+    document.getElementById('backTop').classList.toggle('show',scrollY>400);
+},{passive:true});
+</script>
+</body>
+</html>

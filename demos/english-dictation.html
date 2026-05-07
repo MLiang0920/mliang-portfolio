@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>默写 · Dictation</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0f1115">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<style>
+:root{
+  --bg:#0f1115;--bg-2:#161a22;--bg-3:#1d222c;--line:#2a3140;
+  --text:#e6e9ef;--text-2:#9aa3b2;
+  --accent:#7c9cff;--accent-2:#5bd6a3;
+  --warn:#ffb454;--danger:#ff6b6b;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{
+  font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+  background:linear-gradient(180deg,#0f1115 0%,#161c2e 100%);
+  color:var(--text);
+  display:flex;flex-direction:column;
+  user-select:none;
+}
+
+/* 顶栏（可拖动） */
+.hdr{
+  height:34px;padding:0 10px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--line);background:rgba(22,26,34,.85);
+  flex-shrink:0;
+}
+.hdr .title{
+  font-size:12px;font-weight:600;color:var(--accent);
+  display:flex;align-items:center;gap:6px;
+}
+.hdr .title small{color:var(--text-2);font-weight:normal}
+.hdr .ops{display:flex;gap:4px}
+.hdr .ops button{
+  background:transparent;border:none;color:var(--text-2);
+  cursor:pointer;font-size:13px;padding:3px 7px;border-radius:3px;
+}
+.hdr .ops button:hover{background:var(--bg-3);color:var(--text)}
+
+/* 等级选择 */
+.levels{
+  display:flex;gap:4px;padding:8px 10px;
+  border-bottom:1px solid var(--line);background:var(--bg-2);
+  flex-shrink:0;
+}
+.levels button{
+  flex:1;background:var(--bg-3);color:var(--text-2);
+  border:1px solid var(--line);padding:6px 4px;border-radius:5px;
+  cursor:pointer;font-size:11px;font-family:inherit;transition:.15s;
+}
+.levels button:hover{color:var(--text)}
+.levels button.active.easy{background:rgba(91,214,163,.15);border-color:var(--accent-2);color:var(--accent-2)}
+.levels button.active.mid{background:rgba(255,180,84,.15);border-color:var(--warn);color:var(--warn)}
+.levels button.active.hard{background:rgba(255,107,107,.15);border-color:var(--danger);color:var(--danger)}
+
+/* 主体 */
+.body{
+  flex:1;overflow:auto;padding:14px 12px;
+  display:flex;flex-direction:column;gap:10px;
+}
+
+.q-zh{
+  font-size:18px;font-weight:500;color:var(--accent-2);
+  text-align:center;line-height:1.4;
+  min-height:36px;
+}
+.q-type{
+  font-size:10px;color:var(--text-2);
+  text-align:center;letter-spacing:2px;text-transform:uppercase;
+}
+.q-card{
+  background:var(--bg-2);border:1px solid var(--line);
+  border-radius:10px;padding:18px 14px;
+  text-align:center;position:relative;
+}
+.q-en{
+  font-size:26px;font-weight:600;letter-spacing:1px;
+  color:var(--text);margin:6px 0;word-break:break-word;
+}
+.q-en.masked{
+  letter-spacing:4px;color:var(--text-2);
+  font-family:"Consolas",monospace;
+}
+.q-en.hidden{display:none}
+.q-phon{color:var(--text-2);font-size:11px;font-family:"Lucida Sans Unicode",serif}
+.q-play{
+  display:inline-block;margin-top:8px;
+  background:var(--accent);color:#0f1115;
+  border:none;padding:8px 20px;border-radius:6px;
+  cursor:pointer;font-size:13px;font-weight:500;
+  transition:.15s;user-select:none;
+}
+.q-play:hover{filter:brightness(1.1)}
+
+.input-area{
+  display:flex;flex-direction:column;gap:6px;
+  user-select:auto;
+}
+#inputBox{
+  width:100%;padding:10px 12px;font-size:16px;
+  background:var(--bg-2);border:1.5px solid var(--line);
+  border-radius:8px;color:var(--text);
+  font-family:inherit;outline:none;
+  transition:.15s;
+}
+#inputBox:focus{border-color:var(--accent)}
+#inputBox.correct{border-color:var(--accent-2);background:rgba(91,214,163,.08)}
+#inputBox.wrong{border-color:var(--danger);background:rgba(255,107,107,.08);animation:shake .3s}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  75%{transform:translateX(4px)}
+}
+
+.feedback{
+  font-size:12px;text-align:center;min-height:16px;
+  color:var(--text-2);
+}
+.feedback.ok{color:var(--accent-2)}
+.feedback.err{color:var(--danger)}
+.feedback .hint{color:var(--warn);margin-left:4px}
+
+/* 底栏 */
+.footer{
+  flex-shrink:0;padding:8px 10px;
+  border-top:1px solid var(--line);background:rgba(22,26,34,.7);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11px;color:var(--text-2);
+}
+.footer .stats span b{color:var(--accent);font-weight:600;margin:0 2px}
+.footer .stats .ok-num{color:var(--accent-2)}
+.footer .stats .err-num{color:var(--danger)}
+.footer button{
+  background:var(--bg-3);color:var(--text);
+  border:1px solid var(--line);padding:4px 10px;
+  border-radius:4px;cursor:pointer;font-size:11px;font-family:inherit;
+}
+.footer button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* 词库选择 */
+.deck-row{
+  padding:6px 10px;background:var(--bg-2);border-bottom:1px solid var(--line);
+  display:flex;gap:6px;align-items:center;flex-shrink:0;
+}
+.deck-row label{font-size:11px;color:var(--text-2)}
+.deck-row select{
+  flex:1;background:var(--bg-3);color:var(--text);
+  border:1px solid var(--line);border-radius:4px;
+  padding:3px 6px;font-size:11px;font-family:inherit;outline:none;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+
+/* 紧凑模式（小窗） */
+body.mini .q-en{font-size:22px}
+body.mini .q-zh{font-size:15px}
+
+/* 手机响应式 —— 占满整屏 */
+@media (max-width: 600px){
+  html,body{overflow:auto}
+  .hdr{height:44px;padding:0 14px}
+  .hdr .title{font-size:14px}
+  .hdr .ops button{font-size:18px;padding:6px 10px}
+  .levels{padding:10px}
+  .levels button{padding:10px 6px;font-size:13px;min-height:44px}
+  .levels button small{font-size:10px}
+  .body{padding:18px 14px;gap:14px}
+  .q-zh{font-size:22px;min-height:42px}
+  .q-card{padding:22px 16px}
+  .q-en{font-size:30px}
+  .q-play{padding:12px 28px;font-size:15px;min-height:44px}
+  #inputBox{font-size:17px !important;padding:14px 14px;min-height:48px}
+  .feedback{font-size:13px}
+  .footer{padding:10px 14px;font-size:12px}
+  .footer button{padding:7px 14px;min-height:36px}
+  .deck-row{padding:8px 14px}
+  .deck-row select{font-size:13px;padding:6px 8px;min-height:34px}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="title">✍️ 默写<small id="lvText">· 简单</small></div>
+  <div class="ops">
+    <button onclick="toggleAlwaysOnTop()" title="最小化窗口">➖</button>
+    <button onclick="window.close()" title="关闭">✕</button>
+  </div>
+</div>
+
+<div class="deck-row">
+  <label>词库</label>
+  <select id="deckSel" onchange="switchDeck()">
+    <option value="starter">零基础入门</option>
+    <option value="cet4">大学英语四级</option>
+    <option value="cet6">大学英语六级</option>
+    <option value="daily">日常口语</option>
+    <option value="myfav">我的生词本</option>
+  </select>
+</div>
+
+<div class="levels">
+  <button class="active easy" data-lv="easy" onclick="setLevel('easy')">🟢 简单<br><small>照着输入</small></button>
+  <button data-lv="mid" onclick="setLevel('mid')">🟡 中等<br><small>看中文默写</small></button>
+  <button data-lv="hard" onclick="setLevel('hard')">🔴 困难<br><small>听音默写</small></button>
+</div>
+
+<div class="body">
+  <div class="q-type" id="qType">看单词输入</div>
+  <div class="q-zh" id="qZh">—</div>
+
+  <div class="q-card">
+    <div class="q-en" id="qEn">hello</div>
+    <div class="q-phon" id="qPhon"></div>
+    <button class="q-play" onclick="playWord()">🔊 朗读</button>
+  </div>
+
+  <div class="input-area">
+    <input id="inputBox" autocomplete="off" autocapitalize="off" spellcheck="false"
+      placeholder="在这里输入英文…" oninput="onInput()" onkeydown="onKey(event)">
+    <div class="feedback" id="feedback">输入完成按 Enter 提交；Tab 换下一题；Ctrl+Space 再听一遍</div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="stats">
+    <span>已答 <b id="total">0</b></span>
+    <span>对 <b class="ok-num" id="okNum">0</b></span>
+    <span>错 <b class="err-num" id="errNum">0</b></span>
+    <span>正确率 <b id="rate">—</b></span>
+  </div>
+  <div>
+    <button onclick="skipWord()">跳过 →</button>
+    <button onclick="resetStats()">重置</button>
+  </div>
+</div>
+
+<script>
+/* ========== 内置词库（自包含，可单独运行） ========== */
+const DECKS = {
+  starter: [
+    ["hello","/həˈloʊ/","你好"],["thank","/θæŋk/","感谢"],["please","/pliːz/","请"],
+    ["sorry","/ˈsɒri/","抱歉"],["yes","/jes/","是的"],["no","/noʊ/","不"],
+    ["good","/ɡʊd/","好的"],["bad","/bæd/","坏的"],["big","/bɪɡ/","大的"],
+    ["small","/smɔːl/","小的"],["eat","/iːt/","吃"],["drink","/drɪŋk/","喝"],
+    ["sleep","/sliːp/","睡觉"],["work","/wɜːrk/","工作"],["study","/ˈstʌdi/","学习"],
+    ["read","/riːd/","阅读"],["write","/raɪt/","写"],["listen","/ˈlɪsn/","听"],
+    ["speak","/spiːk/","说"],["watch","/wɒtʃ/","观看"],["love","/lʌv/","爱"],
+    ["like","/laɪk/","喜欢"],["want","/wɒnt/","想要"],["need","/niːd/","需要"],
+    ["know","/noʊ/","知道"],["think","/θɪŋk/","认为"],["come","/kʌm/","来"],
+    ["go","/ɡoʊ/","去"],["see","/siː/","看见"],["give","/ɡɪv/","给"],
+    ["take","/teɪk/","拿"],["make","/meɪk/","制作"],["get","/ɡet/","得到"],
+    ["find","/faɪnd/","找到"],["help","/help/","帮助"],["learn","/lɜːrn/","学习"],
+    ["play","/pleɪ/","玩"],["run","/rʌn/","跑"],["walk","/wɔːk/","走"],
+    ["open","/ˈoʊpən/","打开"],["close","/kloʊz/","关上"],["start","/stɑːrt/","开始"],
+    ["stop","/stɒp/","停止"],["wait","/weɪt/","等"],["buy","/baɪ/","购买"],
+    ["sell","/sel/","卖"],["live","/lɪv/","居住"],["happy","/ˈhæpi/","开心的"],
+    ["sad","/sæd/","难过的"],["tired","/ˈtaɪərd/","疲倦的"],["busy","/ˈbɪzi/","忙碌的"],
+    ["free","/friː/","空闲的"],["new","/njuː/","新的"],["old","/oʊld/","旧的"],
+    ["young","/jʌŋ/","年轻的"],["easy","/ˈiːzi/","容易的"],["hard","/hɑːrd/","困难的"],
+    ["fast","/fæst/","快的"],["slow","/sloʊ/","慢的"],["hot","/hɒt/","热的"],
+    ["cold","/koʊld/","冷的"],["nice","/naɪs/","好的"],["right","/raɪt/","对的"],
+    ["left","/left/","左的"],["today","/təˈdeɪ/","今天"],["tomorrow","/təˈmɒroʊ/","明天"],
+    ["yesterday","/ˈjestərdeɪ/","昨天"],["morning","/ˈmɔːrnɪŋ/","早晨"],["night","/naɪt/","夜晚"],
+    ["week","/wiːk/","星期"],["month","/mʌnθ/","月"],["year","/jɪr/","年"],
+    ["time","/taɪm/","时间"],["home","/hoʊm/","家"],["school","/skuːl/","学校"],
+    ["family","/ˈfæməli/","家庭"],["friend","/frend/","朋友"],["food","/fuːd/","食物"],
+    ["water","/ˈwɔːtər/","水"],["money","/ˈmʌni/","钱"],["car","/kɑːr/","汽车"],
+    ["book","/bʊk/","书"],["phone","/foʊn/","电话"],["city","/ˈsɪti/","城市"],
+    ["country","/ˈkʌntri/","国家"],["people","/ˈpiːpl/","人们"],["child","/tʃaɪld/","小孩"],
+    ["man","/mæn/","男人"],["woman","/ˈwʊmən/","女人"],["life","/laɪf/","生活"],
+    ["world","/wɜːrld/","世界"]
+  ],
+  cet4: [
+    ["abandon","/əˈbændən/","放弃"],["absorb","/əbˈzɔːrb/","吸收"],["accept","/əkˈsept/","接受"],
+    ["access","/ˈækses/","访问"],["accident","/ˈæksɪdənt/","事故"],["accurate","/ˈækjərət/","精确的"],
+    ["achieve","/əˈtʃiːv/","达到"],["acquire","/əˈkwaɪər/","获得"],["adapt","/əˈdæpt/","适应"],
+    ["adjust","/əˈdʒʌst/","调整"],["admire","/ədˈmaɪər/","钦佩"],["admit","/ədˈmɪt/","承认"],
+    ["adopt","/əˈdɒpt/","采纳"],["advance","/ədˈvæns/","前进"],["advantage","/ədˈvæntɪdʒ/","优势"],
+    ["advise","/ədˈvaɪz/","建议"],["affect","/əˈfekt/","影响"],["afford","/əˈfɔːrd/","负担得起"],
+    ["agency","/ˈeɪdʒənsi/","机构"],["agree","/əˈɡriː/","同意"],["alarm","/əˈlɑːrm/","警报"],
+    ["allow","/əˈlaʊ/","允许"],["amount","/əˈmaʊnt/","数量"],["analyze","/ˈænəlaɪz/","分析"],
+    ["ancient","/ˈeɪnʃənt/","古代的"],["announce","/əˈnaʊns/","宣布"],["annual","/ˈænjuəl/","年度的"],
+    ["anxious","/ˈæŋkʃəs/","焦虑的"],["apologize","/əˈpɒlədʒaɪz/","道歉"],["appear","/əˈpɪər/","出现"],
+    ["apply","/əˈplaɪ/","申请"],["appreciate","/əˈpriːʃieɪt/","感激"],["approach","/əˈproʊtʃ/","方法"],
+    ["approve","/əˈpruːv/","批准"],["argue","/ˈɑːrɡjuː/","争论"],["arrange","/əˈreɪndʒ/","安排"],
+    ["arrive","/əˈraɪv/","到达"],["assist","/əˈsɪst/","协助"],["attempt","/əˈtempt/","尝试"],
+    ["attend","/əˈtend/","出席"],["attract","/əˈtrækt/","吸引"],["avoid","/əˈvɔɪd/","避免"],
+    ["balance","/ˈbæləns/","平衡"],["benefit","/ˈbenɪfɪt/","好处"],["brief","/briːf/","简短的"],
+    ["calm","/kɑːm/","平静的"],["capable","/ˈkeɪpəbl/","有能力的"],["capture","/ˈkæptʃər/","捕获"],
+    ["career","/kəˈrɪər/","职业"],["certain","/ˈsɜːrtn/","确定的"]
+  ],
+  cet6: [
+    ["abolish","/əˈbɒlɪʃ/","废除"],["abundant","/əˈbʌndənt/","丰富的"],["accelerate","/əkˈseləreɪt/","加速"],
+    ["accumulate","/əˈkjuːmjəleɪt/","积累"],["adhere","/ədˈhɪər/","坚持"],["advocate","/ˈædvəkeɪt/","提倡"],
+    ["allege","/əˈledʒ/","断言"],["alleviate","/əˈliːvieɪt/","减轻"],["allocate","/ˈæləkeɪt/","分配"],
+    ["ambiguous","/æmˈbɪɡjuəs/","模糊的"],["amend","/əˈmend/","修改"],["anonymous","/əˈnɒnɪməs/","匿名的"],
+    ["arbitrary","/ˈɑːrbɪtreri/","任意的"],["ascertain","/ˌæsərˈteɪn/","查明"],["assert","/əˈsɜːrt/","断言"],
+    ["assess","/əˈses/","评估"],["assume","/əˈsuːm/","假设"],["attain","/əˈteɪn/","达到"],
+    ["attribute","/əˈtrɪbjuːt/","归因于"],["authentic","/ɔːˈθentɪk/","真实的"],["benevolent","/bəˈnevələnt/","仁慈的"],
+    ["boost","/buːst/","提高"],["cater","/ˈkeɪtər/","提供服务"],["cease","/siːs/","停止"],
+    ["circulate","/ˈsɜːrkjəleɪt/","流通"],["coincide","/ˌkoʊɪnˈsaɪd/","一致"],["commence","/kəˈmens/","开始"],
+    ["comply","/kəmˈplaɪ/","遵守"],["comprehend","/ˌkɒmprɪˈhend/","理解"],["compromise","/ˈkɒmprəmaɪz/","妥协"],
+    ["conceive","/kənˈsiːv/","构想"],["condemn","/kənˈdem/","谴责"],["confine","/kənˈfaɪn/","限制"],
+    ["conform","/kənˈfɔːrm/","遵守"],["consent","/kənˈsent/","同意"],["considerable","/kənˈsɪdərəbl/","相当大的"],
+    ["consistent","/kənˈsɪstənt/","一致的"],["contemporary","/kənˈtempəreri/","当代的"],["contradict","/ˌkɒntrəˈdɪkt/","反驳"],
+    ["convey","/kənˈveɪ/","传达"],["coordinate","/koʊˈɔːrdɪneɪt/","协调"],["correspond","/ˌkɒrɪˈspɒnd/","符合"],
+    ["criticize","/ˈkrɪtɪsaɪz/","批评"],["deduce","/dɪˈdjuːs/","推断"],["defer","/dɪˈfɜːr/","推迟"],
+    ["denote","/dɪˈnoʊt/","表示"],["derive","/dɪˈraɪv/","源于"],["designate","/ˈdezɪɡneɪt/","指定"],
+    ["deteriorate","/dɪˈtɪəriəreɪt/","恶化"],["devise","/dɪˈvaɪz/","设计"]
+  ],
+  daily: [
+    ["awesome","/ˈɔːsəm/","棒极了"],["cool","/kuːl/","酷的"],["chill","/tʃɪl/","放松"],
+    ["grab","/ɡræb/","随便吃点"],["anyway","/ˈeniweɪ/","不管怎样"],["actually","/ˈæktʃuəli/","实际上"],
+    ["basically","/ˈbeɪsɪkli/","基本上"],["totally","/ˈtoʊtəli/","完全地"],["seriously","/ˈsɪriəsli/","认真地"],
+    ["honestly","/ˈɒnɪstli/","说实话"],["probably","/ˈprɒbəbli/","大概"],["maybe","/ˈmeɪbi/","也许"],
+    ["somehow","/ˈsʌmhaʊ/","以某种方式"],["whatever","/wɒtˈevər/","随便"],["definitely","/ˈdefɪnətli/","绝对"],
+    ["absolutely","/ˈæbsəluːtli/","绝对地"],["exactly","/ɪɡˈzæktli/","确切地"],["pretty","/ˈprɪti/","相当"],
+    ["quite","/kwaɪt/","相当"],["rather","/ˈrɑːðər/","宁愿"],["cheers","/tʃɪrz/","干杯"],
+    ["sure","/ʃʊər/","当然"],["fine","/faɪn/","好的"],["okay","/ˌoʊˈkeɪ/","好的"],
+    ["alright","/ɔːlˈraɪt/","好的"],["perfect","/ˈpɜːrfɪkt/","完美的"],["amazing","/əˈmeɪzɪŋ/","惊人的"],
+    ["great","/ɡreɪt/","很棒"],["excellent","/ˈeksələnt/","优秀的"],["wonderful","/ˈwʌndərfl/","美妙的"],
+    ["terrible","/ˈterəbl/","糟糕的"],["horrible","/ˈhɒrəbl/","可怕的"],["weird","/wɪrd/","奇怪的"],
+    ["strange","/streɪndʒ/","奇怪的"],["funny","/ˈfʌni/","好笑的"],["boring","/ˈbɔːrɪŋ/","无聊的"],
+    ["exciting","/ɪkˈsaɪtɪŋ/","刺激的"],["interesting","/ˈɪntrəstɪŋ/","有趣的"],["important","/ɪmˈpɔːrtənt/","重要的"],
+    ["delicious","/dɪˈlɪʃəs/","美味的"],["later","/ˈleɪtər/","稍后"],["earlier","/ˈɜːrliər/","早些"],
+    ["finally","/ˈfaɪnəli/","最终"],["suddenly","/ˈsʌdənli/","突然"],["usually","/ˈjuːʒuəli/","通常"],
+    ["sometimes","/ˈsʌmtaɪmz/","有时"],["often","/ˈɒfn/","经常"],["rarely","/ˈrerli/","很少"],
+    ["almost","/ˈɔːlmoʊst/","几乎"],["nearly","/ˈnɪrli/","几乎"]
+  ]
+};
+
+/* ========== 从主软件读取生词本 ========== */
+function loadFavFromMain(){
+  try{
+    const main = JSON.parse(localStorage.getItem("englishHubData_v1"));
+    if(main && main.fav && main.fav.length){
+      return main.fav.map(f=>[f.word, f.phonetic||"", (f.meaning||"").split(/[；;。,]/)[0].replace(/\[[^\]]+\]/g,"").trim()||"(无释义)"]);
+    }
+  }catch(e){}
+  return [];
+}
+
+/* ========== 状态 ========== */
+const STORE = "dictationStats_v1";
+let stats = load();
+let currentDeck = "starter";
+let currentLevel = "easy";
+let currentWord = null;
+let waitingNext = false;
+
+function load(){
+  try{ return JSON.parse(localStorage.getItem(STORE)) || {ok:0, err:0, errors:{}}; }
+  catch(e){ return {ok:0, err:0, errors:{}}; }
+}
+function save(){ localStorage.setItem(STORE, JSON.stringify(stats)); }
+
+function getDeckWords(){
+  if(currentDeck === "myfav"){
+    const fav = loadFavFromMain();
+    if(fav.length === 0){
+      return [["(空)","","先到主软件查词并加入生词本"]];
+    }
+    return fav;
+  }
+  return DECKS[currentDeck] || DECKS.starter;
+}
+
+/* ========== 等级切换 ========== */
+function setLevel(lv){
+  currentLevel = lv;
+  document.querySelectorAll(".levels button").forEach(b=>{
+    b.classList.remove("active","easy","mid","hard");
+    if(b.dataset.lv === lv){
+      b.classList.add("active", lv);
+    }
+  });
+  const txt = {easy:"· 简单", mid:"· 中等", hard:"· 困难"};
+  document.getElementById("lvText").textContent = txt[lv];
+  const type = {
+    easy:"看单词 → 照着输入",
+    mid:"看中文 → 默写英文",
+    hard:"听发音 → 盲写英文"
+  };
+  document.getElementById("qType").textContent = type[lv];
+  nextWord();
+}
+
+function switchDeck(){
+  currentDeck = document.getElementById("deckSel").value;
+  nextWord();
+}
+
+/* ========== 出题 ========== */
+function nextWord(){
+  const words = getDeckWords();
+  // 优先抽错过的词（70% 概率）
+  const errWords = Object.keys(stats.errors).filter(w=>stats.errors[w]>0);
+  let pool = words;
+  if(errWords.length > 0 && Math.random() < 0.4){
+    const errSet = new Set(errWords);
+    const hit = words.filter(w=>errSet.has(w[0]));
+    if(hit.length) pool = hit;
+  }
+  // 不重复上一题
+  let w;
+  do{
+    w = pool[Math.floor(Math.random()*pool.length)];
+  }while(pool.length > 1 && currentWord && w[0] === currentWord[0]);
+  currentWord = w;
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const [word, phon, zh] = currentWord;
+  document.getElementById("qZh").textContent = zh;
+  document.getElementById("qPhon").textContent = phon || "";
+  const qEn = document.getElementById("qEn");
+  qEn.classList.remove("hidden","masked");
+
+  if(currentLevel === "easy"){
+    // 完整显示单词
+    qEn.textContent = word;
+  }else if(currentLevel === "mid"){
+    // 显示首字母 + 下划线占位
+    qEn.textContent = word[0] + "_".repeat(Math.max(0, word.length-1));
+    qEn.classList.add("masked");
+  }else{
+    // 困难：完全不显示
+    qEn.classList.add("hidden");
+  }
+
+  const input = document.getElementById("inputBox");
+  input.value = "";
+  input.classList.remove("correct","wrong");
+  input.disabled = false;
+  input.focus();
+  document.getElementById("feedback").textContent = "输入完成按 Enter 提交；Tab 跳过；Ctrl+Space 再听";
+  document.getElementById("feedback").className = "feedback";
+  waitingNext = false;
+
+  // 困难/中等模式自动朗读
+  if(currentLevel === "hard"){
+    setTimeout(playWord, 200);
+  }else if(currentLevel === "mid"){
+    setTimeout(playWord, 150);
+  }
+}
+
+/* ========== 输入处理 ========== */
+function onInput(){
+  if(waitingNext) return;
+  const input = document.getElementById("inputBox");
+  input.classList.remove("correct","wrong");
+  // 简单模式：实时对照反馈
+  if(currentLevel === "easy"){
+    const target = currentWord[0].toLowerCase();
+    const val = input.value.toLowerCase();
+    if(val === target){
+      submitAnswer();
+    }else if(target.startsWith(val)){
+      // 输入中，颜色暗示
+    }else{
+      // 输错了
+    }
+  }
+}
+
+function onKey(e){
+  if(e.key === "Enter"){
+    e.preventDefault();
+    if(waitingNext){ nextWord(); }
+    else{ submitAnswer(); }
+  }else if(e.key === "Tab"){
+    e.preventDefault();
+    skipWord();
+  }else if(e.code === "Space" && e.ctrlKey){
+    e.preventDefault();
+    playWord();
+  }
+}
+
+function submitAnswer(){
+  const input = document.getElementById("inputBox");
+  const val = input.value.trim().toLowerCase();
+  if(!val) return;
+  const target = currentWord[0].toLowerCase();
+  const fb = document.getElementById("feedback");
+
+  if(val === target){
+    input.classList.add("correct");
+    stats.ok++;
+    // 从错题池移除
+    if(stats.errors[currentWord[0]]) stats.errors[currentWord[0]]--;
+    save();
+    fb.className = "feedback ok";
+    fb.textContent = "✓ 正确！按 Enter 下一题";
+    // 显示完整单词（中等/困难揭晓答案）
+    const qEn = document.getElementById("qEn");
+    qEn.classList.remove("hidden","masked");
+    qEn.textContent = currentWord[0];
+    waitingNext = true;
+    updateStats();
+    // 简单模式自动下一题
+    if(currentLevel === "easy"){
+      setTimeout(nextWord, 500);
+    }
+  }else{
+    input.classList.add("wrong");
+    stats.err++;
+    stats.errors[currentWord[0]] = (stats.errors[currentWord[0]]||0)+1;
+    save();
+    fb.className = "feedback err";
+    fb.innerHTML = `✗ 正确答案：<b style="color:var(--accent-2)">${currentWord[0]}</b> <span class="hint">按 Enter 继续</span>`;
+    // 揭示答案
+    const qEn = document.getElementById("qEn");
+    qEn.classList.remove("hidden","masked");
+    qEn.textContent = currentWord[0];
+    waitingNext = true;
+    updateStats();
+    playWord();
+  }
+}
+
+function skipWord(){
+  nextWord();
+}
+
+/* ========== TTS (智能适配APK/浏览器) ========== */
+const IS_NATIVE = (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())
+               || (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.TextToSpeech);
+const NativeTTS = (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.TextToSpeech) || null;
+
+let voices = [];
+
+/* 读取主程序保存的 TTS 参数 */
+function getTtsCfg(){
+  try{
+    const s = JSON.parse(localStorage.getItem("englishHubData_v1"));
+    return s && s.config ? s.config : {};
+  }catch(e){ return {}; }
+}
+
+function loadVoices(){
+  if(IS_NATIVE && NativeTTS){
+    NativeTTS.getSupportedVoices().then(r=>{ voices = r.voices||[]; }).catch(()=>{});
+    return;
+  }
+  if(typeof speechSynthesis !== "undefined") voices = speechSynthesis.getVoices();
+}
+if(typeof speechSynthesis !== "undefined" && !IS_NATIVE){
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+setTimeout(loadVoices, 100);
+setTimeout(loadVoices, 800);
+
+function playWord(){
+  if(!currentWord) return;
+  const word = currentWord[0];
+  const cfg = getTtsCfg();
+  const rate  = parseFloat(cfg.ttsRate  != null ? cfg.ttsRate  : 0.9);
+  const pitch = parseFloat(cfg.ttsPitch != null ? cfg.ttsPitch : 1.0);
+  const volume = parseFloat(cfg.ttsVolume != null ? cfg.ttsVolume : 1.0);
+  const voiceName = cfg.voice || "";
+
+  // APK走原生
+  if(IS_NATIVE && NativeTTS){
+    NativeTTS.stop().catch(()=>{});
+    NativeTTS.speak({
+      text: word, lang: "en-US", rate, pitch, volume, category: "ambient"
+    }).catch(e=>console.warn("TTS err:", e));
+    return;
+  }
+  // 浏览器走Web Speech
+  if(typeof speechSynthesis === "undefined") return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = "en-US";
+  u.rate = rate;
+  u.pitch = pitch;
+  u.volume = volume;
+  if(voiceName){
+    const v = voices.find(x=>x.name===voiceName);
+    if(v) u.voice = v;
+  }else{
+    const best = voices.filter(x=>x.lang&&x.lang.startsWith("en"))
+                  .find(x=>(x.name||"").match(/aria|zira|david|mark|en-us/i))
+               || voices.find(x=>x.lang&&x.lang.startsWith("en"));
+    if(best) u.voice = best;
+  }
+  speechSynthesis.speak(u);
+}
+
+/* ========== 统计 ========== */
+function updateStats(){
+  const total = stats.ok + stats.err;
+  document.getElementById("total").textContent = total;
+  document.getElementById("okNum").textContent = stats.ok;
+  document.getElementById("errNum").textContent = stats.err;
+  document.getElementById("rate").textContent =
+    total ? ((stats.ok/total)*100).toFixed(0) + "%" : "—";
+}
+function resetStats(){
+  if(!confirm("重置统计数据？")) return;
+  stats = {ok:0, err:0, errors:{}};
+  save(); updateStats();
+}
+
+/* ========== 窗口最小化（隐藏到系统托盘模拟） ========== */
+function toggleAlwaysOnTop(){
+  // 浏览器无法真正置顶，提示用户使用独立窗口模式
+  if(window.opener || window.menubar.visible === false){
+    window.resizeTo(320, 500);
+  }else{
+    alert("💡 提示：\n关闭此页后，双击【默写小窗.bat】以独立小窗模式打开，可置顶桌面。");
+  }
+}
+
+/* ========== 启动 ========== */
+setLevel("easy");
+updateStats();
+// 自动聚焦输入框
+document.getElementById("inputBox").focus();
+// 防止页面被误关
+window.addEventListener("keydown", e=>{
+  if(e.key === "F5") e.preventDefault();
+});
+
+// 注册 Service Worker（PWA离线支持）
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

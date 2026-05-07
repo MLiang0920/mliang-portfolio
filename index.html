@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>丁觉昇 | 3D 角色模型作品集</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-text">MLiang</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">首页</a></li>
+                <li><a href="projects.html" class="nav-link">作品</a></li>
+                <li><a href="about.html" class="nav-link">关于</a></li>
+                <li><a href="contact.html" class="nav-link">联系</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="菜单">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="grid-pattern"></div>
+            <div class="glow glow-1"></div>
+            <div class="glow glow-2"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge fade-in">
+                <span class="badge-dot"></span>
+                <span>Available for work</span>
+            </div>
+            <h1 class="hero-title fade-in-up">
+                <span class="hero-greeting">Hi, I'm</span>
+                <span class="hero-name">丁觉昇</span>
+            </h1>
+            <p class="hero-subtitle fade-in-up delay-1">
+                3D Character Artist · AI-Driven Model Creation
+            </p>
+            <p class="hero-description fade-in-up delay-2">
+                专注于游戏角色 3D 模型制作，擅长多种美术风格——从写实到水墨国风，<br>
+                结合 AI 技术探索角色设计的无限可能。
+            </p>
+            <div class="hero-cta fade-in-up delay-3">
+                <a href="projects.html" class="btn btn-primary">
+                    <span>查看作品</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="contact.html" class="btn btn-ghost">联系我</a>
+            </div>
+            <div class="hero-stats fade-in-up delay-4">
+                <div class="stat-item">
+                    <span class="stat-number">7+</span>
+                    <span class="stat-label">项目风格</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">36+</span>
+                    <span class="stat-label">模型作品</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">AI</span>
+                    <span class="stat-label">辅助创作</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator fade-in delay-5">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>向下滚动</span>
+        </div>
+    </section>
+
+    <!-- 精选项目预览 -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Featured Work</span>
+                <h2 class="section-title">精选模型作品</h2>
+                <p class="section-desc">AI 驱动的 3D 角色模型，涵盖多种游戏美术风格</p>
+            </div>
+            <div class="featured-grid" id="featured-grid">
+                <!-- 动态加载 -->
+            </div>
+            <script>
+            // Load featured projects with focus config
+            (async () => {
+                let config = {};
+                try {
+                    const res = await fetch('image-config.json?' + Date.now());
+                    config = await res.json();
+                } catch(e) {}
+
+                const featured = [
+                    { key: 'yaye', title: '牙爷风格模型', desc: '基于牙爷美术风格的 3D 角色模型创作，融合独特的艺术表达与精细的角色建模。', tags: ['角色设计', '牙爷风格', 'AI'] },
+                    { key: 'lol', title: '英雄联盟 V3 怪兽', desc: '参考英雄联盟美术风格，打造的 V3 版本怪兽角色 3D 模型效果展示。', tags: ['怪兽设计', '英雄联盟', 'AI'] },
+                    { key: 'raid', title: 'RAID 风格模型', desc: 'RAID: Shadow Legends 风格的角色模型，展现暗黑奇幻的视觉表现力。', tags: ['暗黑风格', 'RAID', 'AI'] }
+                ];
+
+                const grid = document.getElementById('featured-grid');
+                featured.forEach(proj => {
+                    const imgData = config[proj.key] && config[proj.key][0];
+                    const src = imgData ? imgData.file : `images/thumbs/${proj.key}.jpg`;
+                    const posX = imgData ? imgData.focusX : 50;
+                    const posY = imgData ? imgData.focusY : 30;
+
+                    grid.innerHTML += `
+                        <article class="project-card featured-card" data-reveal>
+                            <div class="card-image">
+                                <img src="${src}" alt="${proj.title}" loading="lazy" style="object-position: ${posX}% ${posY}%">
+                                <div class="card-overlay">
+                                    <a href="projects.html#${proj.key}" class="card-link">查看详情</a>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-tags">
+                                    ${proj.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                                </div>
+                                <h3 class="card-title">${proj.title}</h3>
+                                <p class="card-desc">${proj.desc}</p>
+                            </div>
+                        </article>
+                    `;
+                });
+
+                // Re-init scroll reveal for dynamically added elements
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('revealed');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.05 });
+                grid.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+            })();
+            </script>
+            <div class="section-cta">
+                <a href="projects.html" class="btn btn-outline">
+                    查看全部作品
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vibe Coding 项目 -->
+    <section class="tech-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Vibe Coding</span>
+                <h2 class="section-title">项目开发展示</h2>
+                <p class="section-desc">独立开发的 AI 工具与自动化平台</p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-category" data-reveal>
+                    <h3 class="tech-category-title">AI 模型训练</h3>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <span class="tech-name">LoRA 模型训练器</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">IL & Kelin 模型训练</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">语音模型训练</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">视频万象模型</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category" data-reveal>
+                    <h3 class="tech-category-title">工具开发</h3>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <span class="tech-name">ComfyUI 工作流 & 节点</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">即梦集成器</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">API 接口对接平台</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Agent 智能体搭建</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tech-category" data-reveal>
+                    <h3 class="tech-category-title">技术栈</h3>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <span class="tech-name">Python / PyTorch / CUDA</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Stable Diffusion / ComfyUI</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">HTML / CSS / JavaScript</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Node.js / 腾讯 Light AI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-text">MLiang</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://www.liblib.art/userpage/e203f1bf485e452eb2e7bd22bd8bcc16/publish" target="_blank" class="footer-social">Lib AI</a>
+                    <a href="https://www.xiaohongshu.com/user/profile/5bb19990c751e0000164d054" target="_blank" class="footer-social">小红书</a>
+                    <a href="mailto:2980125919@qq.com" class="footer-social">Email</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 丁觉昇. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

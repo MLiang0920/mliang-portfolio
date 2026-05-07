@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>English Hub · 英语学习中心</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0b0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="brand">English <span>Hub</span></div>
+  <div class="nav" id="nav">
+    <div class="nav-item active" data-page="home"><span class="nav-icon">🏠</span>首页</div>
+    <div class="nav-item" data-page="flashcard"><span class="nav-icon">🎴</span>单词卡</div>
+    <div class="nav-item" data-page="listen"><span class="nav-icon">🎧</span>听力精听</div>
+    <div class="nav-item" data-page="podcast"><span class="nav-icon">🎙️</span>播客电台</div>
+    <div class="nav-item" data-page="chat"><span class="nav-icon">💬</span>AI 陪练</div>
+    <div class="nav-item" data-page="dict"><span class="nav-icon">📖</span>查词 · 生词本</div>
+    <div class="nav-item" data-page="decks"><span class="nav-icon">📦</span>词包市场</div>
+    <div class="nav-item" onclick="openDictation();event.stopPropagation()"><span class="nav-icon">✍️</span>默写小窗 ↗</div>
+    <div class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span>设置</div>
+  </div>
+  <div class="streak">
+    <b id="streakDays">0</b>
+    连续学习天数
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="title" id="pageTitle">首页</div>
+    <div class="actions">
+      <button class="btn" onclick="exportData()">📤 导出</button>
+      <button class="btn" onclick="document.getElementById('importFile').click()">📥 导入</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ========== 首页 ========== -->
+    <div class="page active" id="page-home">
+      <div class="grid grid-3">
+        <div class="stat"><div class="label">已学词汇</div><div class="value" id="statLearned">0</div></div>
+        <div class="stat"><div class="label">今日待复习</div><div class="value orange" id="statDue">0</div></div>
+        <div class="stat"><div class="label">生词本</div><div class="value green" id="statFav">0</div></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3>今日推荐</h3>
+        <p class="muted lh">
+          推荐学习路径：<b class="accent">单词卡 → 播客 → AI 陪练</b>。每天 25 分钟，4 周能明显感觉到听力提升。
+        </p>
+        <div class="row">
+          <button class="btn primary" onclick="switchPage('flashcard')">🎴 开始今日单词</button>
+          <button class="btn" onclick="switchPage('podcast')">🎙️ 听一集播客</button>
+          <button class="btn" onclick="switchPage('chat')">💬 和 AI 聊几句</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>功能一览</h3>
+        <ul class="tip-list">
+          <li><b>单词卡</b>：8 个内置词包共 <b class="accent">近 2000 词</b>（入门 / 口语 / 四级 / 六级 / 雅思 / 托福 / 新闻 / 商务），采用 SM-2 间隔重复算法（Anki 同源）。</li>
+          <li><b>听力精听 & 播客电台</b>：内置 7 篇场景听力 + 6 集英语播客（成长思维、睡眠、气候、专注、善良、理财），逐段朗读+翻译显隐。</li>
+          <li><b>广播级朗读</b>：默认语速 1.0（标准播音语速），优先选 <b class="accent">神经/自然语音</b>（Aria / Jenny / Google US）。</li>
+          <li><b>AI 陪练</b>：支持 OpenAI / DeepSeek / 通义千问 / 智谱 GLM，自由聊天、角色扮演、作文批改、语法讲解。</li>
+          <li><b>查词</b>：内置 2000+ 词 + 在线 DictionaryAPI + 备用词典三重兜底；一键加入生词本。</li>
+          <li><b>词包市场</b>：支持导入自定义 JSON 词包（格式兼容 Anki 导出、ECDICT 等）。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ========== 单词卡 ========== -->
+    <div class="page" id="page-flashcard">
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div class="row">
+            <label>词库</label>
+            <select id="deckSelect" onchange="switchDeck()">
+              <option value="starter">零基础入门</option>
+              <option value="daily">日常口语必备</option>
+              <option value="cet4">大学英语四级</option>
+              <option value="cet6">大学英语六级</option>
+              <option value="ielts">雅思高频</option>
+              <option value="toefl">托福高频</option>
+              <option value="news">BBC/CNN 新闻</option>
+              <option value="business">商务英语</option>
+            </select>
+            <label style="margin-left:14px">每日新词</label>
+            <select id="newPerDay">
+              <option value="5">5</option><option value="10" selected>10</option>
+              <option value="15">15</option><option value="20">20</option>
+            </select>
+          </div>
+          <span class="tag" id="fcProgress">准备中…</span>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="fc-progress" id="fcCountBar">—</div>
+        <div class="fc-word" id="fcWord">点击开始学习</div>
+        <div class="fc-phonetic" id="fcPhonetic"></div>
+        <div class="fc-pos" id="fcPos"></div>
+        <div id="fcBack" class="hidden">
+          <div class="fc-meaning" id="fcMeaning"></div>
+          <div class="fc-example" id="fcExample"></div>
+        </div>
+        <div class="fc-actions" id="fcFrontActions">
+          <button class="fc-btn" onclick="speakWord()">🔊 朗读</button>
+          <button class="fc-btn good" onclick="showBack()">显示释义</button>
+        </div>
+        <div class="fc-actions hidden" id="fcBackActions">
+          <button class="fc-btn again" onclick="rateCard(0)">不认识<br><small>&lt;1min</small></button>
+          <button class="fc-btn hard" onclick="rateCard(3)">模糊<br><small>~10min</small></button>
+          <button class="fc-btn good" onclick="rateCard(4)">认识<br><small>~1d</small></button>
+          <button class="fc-btn easy" onclick="rateCard(5)">简单<br><small>~4d</small></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 听力 ========== -->
+    <div class="page" id="page-listen">
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div class="row">
+            <label>材料</label>
+            <select id="listenSelect" onchange="loadListen()"></select>
+            <button class="btn primary" onclick="playAll()">▶ 全文播放</button>
+            <button class="btn" onclick="stopSpeech()">⏹ 停止</button>
+            <span class="muted small" style="margin-left:8px">语速/音调请在"设置"页调整</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 id="listenTitle">—</h3>
+        <div id="listenBody"></div>
+      </div>
+
+      <div class="card">
+        <h3>跟读练习</h3>
+        <p class="muted small">
+          点任意句子开始播放 → 听完按"录音"跟读 → 和原文自动对比评分（需 Edge / Chrome）
+        </p>
+        <div class="row">
+          <button class="btn primary" id="recordBtn" onclick="toggleRecord()">🎤 开始录音</button>
+          <span id="recordStatus" class="muted small">未开始</span>
+        </div>
+        <div id="recordResult" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <!-- ========== 播客 ========== -->
+    <div class="page" id="page-podcast">
+      <div class="card" style="padding:16px 20px">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <h2 style="margin:0">🎙️ 英语播客电台</h2>
+            <div class="muted small" style="margin-top:4px">6 集精选英文播客，逐段朗读 · 带中文翻译 · 进度自动记忆</div>
+          </div>
+          <button class="btn" onclick="stopSpeech()">⏹ 停止播放</button>
+        </div>
+      </div>
+      <div class="pod-layout">
+        <div class="pod-list" id="podList"></div>
+        <div class="card" id="podDetail" style="padding:22px">
+          <div class="muted">← 左侧选一集开始</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== AI 陪练 ========== -->
+    <div class="page" id="page-chat">
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div class="row">
+            <label>模式</label>
+            <select id="chatMode" onchange="resetChat()">
+              <option value="free">自由聊天（练口语）</option>
+              <option value="roleplay">场景角色扮演</option>
+              <option value="essay">作文批改</option>
+              <option value="grammar">语法讲解</option>
+            </select>
+            <label style="margin-left:14px">难度</label>
+            <select id="chatLevel">
+              <option value="A1">A1 入门</option>
+              <option value="A2" selected>A2 初级</option>
+              <option value="B1">B1 中级</option>
+              <option value="B2">B2 中高</option>
+            </select>
+          </div>
+          <button class="btn danger" onclick="resetChat()">清空对话</button>
+        </div>
+      </div>
+
+      <div class="chat-box">
+        <div class="chat-msgs" id="chatMsgs"></div>
+        <div class="chat-input">
+          <textarea id="chatInput" placeholder="输入中文或英文都可以… （Ctrl+Enter 发送）"
+            onkeydown="if(event.ctrlKey && event.key==='Enter') sendChat()"></textarea>
+          <button class="btn primary" onclick="sendChat()">发送</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 查词 & 生词本 ========== -->
+    <div class="page" id="page-dict">
+      <div class="card">
+        <h3>查词</h3>
+        <div class="row">
+          <input id="dictInput" placeholder="输入英文单词… (支持在线查词)" style="flex:1;min-width:300px"
+            onkeydown="if(event.key==='Enter') lookupWord()">
+          <button class="btn primary" onclick="lookupWord()">🔍 查询</button>
+        </div>
+        <div id="dictResult" class="muted small" style="margin-top:14px">
+          先查内置词库（2000+ 词），再联网查 dictionaryapi.dev 和备用词典。
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>生词本 <span class="tag" style="margin-left:6px"><span id="favCount">0</span> 词</span></h3>
+        <table>
+          <thead><tr><th>单词</th><th>音标</th><th>释义</th><th>添加时间</th><th>操作</th></tr></thead>
+          <tbody id="favTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== 词包市场 ========== -->
+    <div class="page" id="page-decks">
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <h2 style="margin:0">📦 词包市场</h2>
+            <div class="muted small" style="margin-top:4px">
+              加载内置词包 · 导入自定义词包 · 支持 <code>[[word, 音标, 词性, 释义, 例句]]</code> JSON 格式
+            </div>
+          </div>
+          <div class="row">
+            <input type="file" id="deckImportFile" accept=".json" style="display:none" onchange="importCustomDeck(event)">
+            <button class="btn primary" onclick="document.getElementById('deckImportFile').click()">📥 导入 JSON 词包</button>
+          </div>
+        </div>
+      </div>
+      <div id="deckMarketList"></div>
+      <div class="card">
+        <h3>词包格式说明</h3>
+        <p class="muted small lh">支持两种格式，你也可以直接把 Anki 或扇贝导出的单词转一下：</p>
+        <pre style="background:var(--bg-3);padding:14px;border-radius:8px;font-size:12px;overflow:auto;color:var(--text-2);line-height:1.7">// 格式 1：简单数组
+[
+  ["hello", "/həˈloʊ/", "int.", "你好", "Hello, world!"],
+  ["book",  "/bʊk/",    "n.",   "书",    "A good book."]
+]
+
+// 格式 2：带元数据
+{
+  "id": "my-vocab",
+  "name": "我的自定义词包",
+  "words": [
+    ["hello", "/həˈloʊ/", "int.", "你好", "Hello!"]
+  ]
+}</pre>
+      </div>
+    </div>
+
+    <!-- ========== 设置 ========== -->
+    <div class="page" id="page-settings">
+      <div class="card">
+        <h3>AI 接口配置</h3>
+        <p class="muted small">
+          支持所有 OpenAI 兼容接口。国内推荐：<br>
+          • <b>DeepSeek</b>：endpoint <code>https://api.deepseek.com/v1/chat/completions</code>，模型 <code>deepseek-chat</code><br>
+          • <b>通义千问</b>：endpoint <code>https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions</code>，模型 <code>qwen-turbo</code><br>
+          • <b>智谱 GLM</b>：endpoint <code>https://open.bigmodel.cn/api/paas/v4/chat/completions</code>，模型 <code>glm-4-flash</code>
+        </p>
+        <div class="form-grid">
+          <div>
+            <label>API Endpoint</label>
+            <input id="cfgEndpoint" placeholder="https://api.deepseek.com/v1/chat/completions">
+          </div>
+          <div>
+            <label>API Key</label>
+            <input id="cfgKey" type="password" placeholder="sk-...">
+          </div>
+          <div>
+            <label>Model</label>
+            <input id="cfgModel" placeholder="deepseek-chat">
+          </div>
+          <div class="row">
+            <button class="btn primary" onclick="saveConfig()">保存</button>
+            <button class="btn" onclick="testConfig()">测试连接</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🎙️ 语音选择 (TTS)</h3>
+        <p class="muted small" style="margin-bottom:10px">
+          推荐选择带 ⭐ 的<b class="accent">神经/自然语音</b>（Microsoft Aria Online / Google US English）——
+          发音最接近真人播音员。首次打开可能需要等系统加载。
+        </p>
+        <div class="row">
+          <select id="voiceSelect" style="min-width:360px"></select>
+          <button class="btn" onclick="testVoice()">🔊 试听</button>
+          <button class="btn primary" onclick="saveVoice()">保存</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>朗读参数（全局）</h3>
+        <p class="muted small" style="margin-bottom:16px">
+          默认 <b class="accent">1.0 / 1.0 / 1.0</b> = 广播标准语速。觉得偏快偏慢可以调整。
+        </p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px">
+          <div>
+            <label style="font-size:12px;color:var(--text-2)">语速 Rate</label>
+            <input type="range" id="ttsRate" min="0.5" max="1.6" step="0.05" value="1.0"
+              oninput="document.getElementById('ttsRateVal').textContent=this.value" style="width:100%">
+            <div style="text-align:center;font-size:13px;color:var(--accent);font-weight:600" id="ttsRateVal">1.0</div>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--text-2)">音调 Pitch</label>
+            <input type="range" id="ttsPitch" min="0.5" max="1.6" step="0.05" value="1.0"
+              oninput="document.getElementById('ttsPitchVal').textContent=this.value" style="width:100%">
+            <div style="text-align:center;font-size:13px;color:var(--accent);font-weight:600" id="ttsPitchVal">1.0</div>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--text-2)">音量 Volume</label>
+            <input type="range" id="ttsVolume" min="0.1" max="1.0" step="0.05" value="1.0"
+              oninput="document.getElementById('ttsVolumeVal').textContent=this.value" style="width:100%">
+            <div style="text-align:center;font-size:13px;color:var(--accent);font-weight:600" id="ttsVolumeVal">1.0</div>
+          </div>
+        </div>
+        <div style="margin-top:16px" class="row">
+          <button class="btn" onclick="testTtsParams()">🔊 试听效果</button>
+          <button class="btn primary" onclick="saveTtsParams()">保存</button>
+          <button class="btn" onclick="resetTtsParams()">↺ 重置为广播标准</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>数据管理</h3>
+        <div class="row">
+          <button class="btn" onclick="exportData()">📤 导出所有数据</button>
+          <button class="btn" onclick="document.getElementById('importFile').click()">📥 导入数据</button>
+          <button class="btn danger" onclick="resetAll()">重置所有数据</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>关于</h3>
+        <p class="muted small lh">
+          English Hub v2.0 · 整合 Anki 间隔重复、每日英语听力精听、多邻国打卡、欧路查词生词本、ChatGPT AI 陪练、
+          英语播客电台。全部数据本地存储，零云端依赖（AI 对话除外）。<br>
+          <b class="accent">v2.0 更新</b>：词库扩容 10×（近 2000 词）· 广播级 TTS · 英语播客 · 词包市场 · UI 全新重做
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(err => console.log("SW fail:", err));
+    });
+  }
+</script>
+</body>
+</html>

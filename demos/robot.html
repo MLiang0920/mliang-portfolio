@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MLiang Universal Robot - Demo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f0f;color:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;user-select:none;overflow:hidden;height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+
+.app{display:flex;flex-direction:column;height:100vh}
+
+/* Titlebar */
+.titlebar{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.titlebar-left{display:flex;align-items:center;gap:8px}
+.titlebar-left img{width:20px;height:20px;border-radius:4px}
+.titlebar-left span{font-size:12px;color:#9ca3af;font-weight:500}
+.titlebar-btns{display:flex;gap:4px}
+.titlebar-btn{width:32px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:none;background:transparent;color:#9ca3af;cursor:pointer;transition:.15s}
+.titlebar-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.titlebar-btn.close:hover{background:rgba(239,68,68,.8)}
+
+/* Layout */
+.body{display:flex;flex:1;overflow:hidden}
+
+/* Sidebar */
+.sidebar{width:256px;background:#0a0a0a;border-right:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-header{padding:12px;display:flex;align-items:center;gap:8px}
+.sidebar-header img{width:24px;height:24px;border-radius:4px}
+.sidebar-header span{font-size:12px;font-weight:500;color:#d1d5db;flex:1}
+.sidebar-collapse{padding:6px;border-radius:4px;background:transparent;border:none;color:#6b7280;cursor:pointer}
+.sidebar-collapse:hover{background:rgba(255,255,255,.1);color:#fff}
+.sidebar-nav{padding:8px;display:flex;flex-direction:column;gap:2px}
+.nav-btn{width:100%;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;background:transparent;color:#9ca3af;font-size:13px;cursor:pointer;transition:.15s;text-align:left}
+.nav-btn:hover{background:rgba(255,255,255,.05);color:#e5e7eb}
+.nav-btn.active{background:rgba(255,255,255,.1);color:#fff}
+.nav-btn.glass{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.nav-btn.glass:hover{background:rgba(255,255,255,.06)}
+.nav-icon{width:16px;height:16px;flex-shrink:0}
+.sidebar-section{padding:8px 12px 4px;font-size:10px;color:#4b5563;text-transform:uppercase;letter-spacing:1px;font-weight:500}
+.sidebar-tasks{flex:1;overflow-y:auto;padding:0 8px 8px}
+.task-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;color:#9ca3af;font-size:12px;cursor:pointer;transition:.15s}
+.task-item:hover{background:rgba(255,255,255,.05);color:#e5e7eb}
+.sidebar-footer{padding:8px;border-top:1px solid rgba(255,255,255,.05)}
+
+/* Main */
+.main{flex:1;overflow-y:auto;background:#0f0f0f}
+.launcher{max-width:960px;margin:0 auto;padding:32px 24px;display:flex;flex-direction:column;justify-content:center;min-height:100%}
+
+/* Card */
+.launch-card{border-radius:2rem;border:1px solid rgba(255,255,255,.1);background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.025));padding:32px;box-shadow:0 25px 50px rgba(0,0,0,.25)}
+.launch-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.35em}
+.launch-title{font-size:2rem;font-weight:600;color:#fff;margin-top:12px}
+.launch-desc{font-size:13px;color:#9ca3af;margin-top:12px;line-height:1.7;max-width:600px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:9999px;font-size:11px}
+.badge.ok{background:rgba(16,185,129,.15);color:#6ee7b7}
+.badge.warn{background:rgba(234,179,8,.15);color:#fde047}
+.badge-dot{width:6px;height:6px;border-radius:50%}
+.badge.ok .badge-dot{background:#6ee7b7}
+.badge.warn .badge-dot{background:#fde047}
+
+.action-panel{margin-top:24px;border-radius:1.5rem;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.25);padding:20px}
+.action-row{display:flex;gap:16px;align-items:flex-end}
+.action-label{font-size:11px;color:#6b7280;margin-bottom:8px}
+.action-select{width:100%;padding:12px 16px;border-radius:1rem;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.4);color:#e5e7eb;font-size:13px;outline:none}
+.action-btn{padding:16px 32px;border-radius:1rem;background:#fff;color:#000;font-size:15px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;transition:.15s}
+.action-btn:hover{transform:scale(1.01)}
+
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.info-cell{background:rgba(0,0,0,.25);border-radius:1rem;padding:12px}
+.info-cell-label{font-size:11px;color:#6b7280}
+.info-cell-value{font-size:12px;color:#e5e7eb;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.quick-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.quick-btn{padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#d1d5db;font-size:12px;cursor:pointer;transition:.15s}
+.quick-btn:hover{background:rgba(255,255,255,.1)}
+
+/* Log section */
+.log-section{margin-top:24px;border-radius:2rem;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3);padding:20px}
+.log-header h2{font-size:15px;font-weight:500;color:#fff}
+.log-header p{font-size:11px;color:#6b7280;margin-top:4px}
+.log-pre{height:320px;overflow:auto;margin-top:12px;padding:16px;border-radius:1rem;background:rgba(0,0,0,.5);font-family:Consolas,monospace;font-size:11px;line-height:1.6;color:#d1d5db;white-space:pre-wrap}
+
+/* View switching */
+.view{display:none}
+.view.active{display:block}
+
+/* Chat view */
+.chat-view{display:none;flex-direction:column;height:100%}
+.chat-view.active{display:flex}
+.chat-header{padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between}
+.chat-messages{flex:1;overflow-y:auto;padding:24px}
+.chat-empty{display:flex;align-items:center;justify-content:center;height:100%;color:#4b5563;font-size:14px}
+.chat-input-area{padding:16px 24px;border-top:1px solid rgba(255,255,255,.05);display:flex;gap:12px}
+.chat-input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#e5e7eb;font-size:13px;outline:none;resize:none}
+.chat-send{padding:12px 20px;border-radius:12px;background:#3b82f6;color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Titlebar -->
+  <div class="titlebar">
+    <div class="titlebar-left">
+      <div style="width:20px;height:20px;border-radius:4px;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:10px;color:#6366f1">🤖</div>
+      <span>MLiang Universal Robot</span>
+    </div>
+    <div class="titlebar-btns">
+      <button class="titlebar-btn"><svg width="10" height="1"><rect width="10" height="1" fill="currentColor"/></svg></button>
+      <button class="titlebar-btn"><svg width="9" height="9" fill="none"><rect x=".5" y=".5" width="8" height="8" stroke="currentColor"/></svg></button>
+      <button class="titlebar-btn close"><svg width="10" height="10"><line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" stroke-width="1.2"/><line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" stroke-width="1.2"/></svg></button>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:24px;height:24px;border-radius:4px;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:12px">🤖</div>
+        <span>MLiang UR</span>
+        <button class="sidebar-collapse"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg></button>
+      </div>
+      <div class="sidebar-nav">
+        <button class="nav-btn glass" onclick="switchView('chat')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg> + 新建对话</button>
+        <button class="nav-btn active" id="nav-launcher" onclick="switchView('launcher')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 4h6M4 20h6" stroke-linecap="round"/></svg> 一键启动</button>
+        <button class="nav-btn" onclick="switchView('skills')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L9 8.5 2 9.5l5 5-1 7 6-3.5 6 3.5-1-7 5-5-7-1z" stroke-linejoin="round"/></svg> 技能</button>
+        <button class="nav-btn" onclick="switchView('experts')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> 专家</button>
+        <button class="nav-btn" onclick="switchView('auto')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg> 自动化</button>
+      </div>
+      <div class="sidebar-section">任务</div>
+      <div class="sidebar-tasks">
+        <div class="task-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l3 3 5-5" stroke="currentColor" stroke-width="1.5"/></svg> 暂无对话记录</div>
+      </div>
+      <div class="sidebar-footer">
+        <button class="nav-btn"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15 1.65 1.65 0 003 14H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9 1.65 1.65 0 004.27 7.18l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.6V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> 设置</button>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+      <!-- Launcher View -->
+      <div class="launcher view active" id="view-launcher">
+        <div class="launch-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
+            <div>
+              <div class="launch-label">MLiang AI Launcher</div>
+              <h1 class="launch-title">一键启动本地后端</h1>
+              <p class="launch-desc">点一次就自动完成：检查 Python → 没有就下载/安装 → 创建或修复 venv → 安装依赖 → 启动后端 → 自动打开网页。</p>
+            </div>
+            <div class="badges">
+              <span class="badge ok"><span class="badge-dot"></span> Python 3.10.11</span>
+              <span class="badge ok"><span class="badge-dot"></span> venv 已就绪</span>
+              <span class="badge ok"><span class="badge-dot"></span> 后端运行中</span>
+            </div>
+          </div>
+
+          <div class="action-panel">
+            <div class="action-row">
+              <div style="flex:1">
+                <div class="action-label">启动目标</div>
+                <select class="action-select">
+                  <option>本地演示后端</option>
+                  <option>ComfyUI 后端</option>
+                  <option>Gradio 后端</option>
+                </select>
+              </div>
+              <button class="action-btn">一键启动</button>
+            </div>
+            <div class="info-grid">
+              <div class="info-cell">
+                <div class="info-cell-label">网页地址</div>
+                <div class="info-cell-value">http://127.0.0.1:7860</div>
+              </div>
+              <div class="info-cell">
+                <div class="info-cell-label">环境目录</div>
+                <div class="info-cell-value">C:\Users\29801\Desktop\MLiang-AI-Launcher-...</div>
+              </div>
+              <div class="info-cell">
+                <div class="info-cell-label">Python 来源</div>
+                <div class="info-cell-value">venv/default</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-btns">
+            <button class="quick-btn">停止当前后端</button>
+            <button class="quick-btn">打开启动器目录</button>
+            <button class="quick-btn">打开日志目录</button>
+            <button class="quick-btn">刷新日志</button>
+          </div>
+        </div>
+
+        <div class="log-section">
+          <div class="log-header">
+            <h2>启动日志</h2>
+            <p>自动下载、修复环境、安装依赖、启动服务的过程都会显示在这里。</p>
+          </div>
+          <pre class="log-pre">[2026-05-06 11:54:48.758] ========== 一键启动：本地演示后端 ==========
+[2026-05-06 11:54:48.759] 1/5 检查 Python 环境
+[2026-05-06 11:54:49.036] 2/5 创建/修复虚拟环境
+[2026-05-06 11:54:49.103] > py.exe -3 -m venv C:\Users\29801\Desktop\MLiang-AI-Launcher-oneclick-configfix\envs\default
+[2026-05-06 11:54:52.916] 进程退出，code=0
+[2026-05-06 11:54:52.917] 3/5 检查/安装后端依赖
+[2026-05-06 11:54:52.918] 4/5 启动后端服务
+[2026-05-06 11:54:53.021] > python -m uvicorn main:app --host 0.0.0.0 --port 7860
+[2026-05-06 11:54:55.142] INFO: Started server process [12345]
+[2026-05-06 11:54:55.143] INFO: Waiting for application startup.
+[2026-05-06 11:54:55.201] INFO: Application startup complete.
+[2026-05-06 11:54:55.202] INFO: Uvicorn running on http://0.0.0.0:7860
+[2026-05-06 11:54:55.300] 5/5 自动打开浏览器
+[2026-05-06 11:54:55.350] ✅ 启动完成!</pre>
+        </div>
+      </div>
+
+      <!-- Chat View -->
+      <div class="chat-view" id="view-chat">
+        <div class="chat-header">
+          <span style="font-size:13px;color:#9ca3af">新对话</span>
+          <select style="padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#e5e7eb;font-size:12px">
+            <option>Auto · Smart</option>
+            <option>Claude Opus 4.7</option>
+            <option>GPT-4o</option>
+            <option>DeepSeek V4</option>
+            <option>Gemini 3.0 Pro</option>
+          </select>
+        </div>
+        <div class="chat-empty">选择模型，开始对话</div>
+        <div class="chat-input-area">
+          <textarea class="chat-input" rows="1" placeholder="输入消息... (Ctrl+Enter 发送)"></textarea>
+          <button class="chat-send">发送</button>
+        </div>
+      </div>
+
+      <!-- Skills View -->
+      <div class="view" id="view-skills" style="padding:32px">
+        <h2 style="font-size:20px;font-weight:600;margin-bottom:8px">⭐ 技能库</h2>
+        <p style="font-size:13px;color:#6b7280;margin-bottom:24px">30+ 内置技能，一键激活专属 System Prompt</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">💻</div><div style="font-size:13px;font-weight:500">代码审查</div><div style="font-size:11px;color:#6b7280;margin-top:4px">审查代码质量、性能和最佳实践</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">✍️</div><div style="font-size:13px;font-weight:500">文案策划</div><div style="font-size:11px;color:#6b7280;margin-top:4px">专业文案撰写与创意策划</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">🎓</div><div style="font-size:13px;font-weight:500">英语老师</div><div style="font-size:11px;color:#6b7280;margin-top:4px">纠正语法、优化表达、词汇扩展</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">📊</div><div style="font-size:13px;font-weight:500">数据分析</div><div style="font-size:11px;color:#6b7280;margin-top:4px">分析数据趋势、生成报告</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">🎯</div><div style="font-size:13px;font-weight:500">费曼讲师</div><div style="font-size:11px;color:#6b7280;margin-top:4px">用最简单的语言解释复杂概念</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">📝</div><div style="font-size:13px;font-weight:500">周报生成</div><div style="font-size:11px;color:#6b7280;margin-top:4px">自动整理工作内容、生成周报</div></div>
+        </div>
+      </div>
+
+      <!-- Experts View -->
+      <div class="view" id="view-experts" style="padding:32px">
+        <h2 style="font-size:20px;font-weight:600;margin-bottom:8px">👥 专家顾问</h2>
+        <p style="font-size:13px;color:#6b7280;margin-bottom:24px">24+ 行业专家，每位都有专属人设和推荐模型</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">🎨</div><div style="font-size:13px;font-weight:500">UI 设计师</div><div style="font-size:11px;color:#6b7280;margin-top:4px">界面设计、交互体验、设计系统</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">⚡</div><div style="font-size:13px;font-weight:500">全栈工程师</div><div style="font-size:11px;color:#6b7280;margin-top:4px">前后端开发、架构设计、部署</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">📈</div><div style="font-size:13px;font-weight:500">增长黑客</div><div style="font-size:11px;color:#6b7280;margin-top:4px">用户增长策略、数据驱动运营</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;cursor:pointer"><div style="font-size:20px;margin-bottom:8px">💼</div><div style="font-size:13px;font-weight:500">销售教练</div><div style="font-size:11px;color:#6b7280;margin-top:4px">话术训练、客户分析、成交技巧</div></div>
+        </div>
+      </div>
+
+      <!-- Auto View -->
+      <div class="view" id="view-auto" style="padding:32px">
+        <h2 style="font-size:20px;font-weight:600;margin-bottom:8px">⏱ 自动化任务</h2>
+        <p style="font-size:13px;color:#6b7280;margin-bottom:24px">12+ 模板，定时执行 AI 任务</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px"><div style="font-size:13px;font-weight:500;margin-bottom:4px">📰 每日 AI 新闻推送</div><div style="font-size:11px;color:#6b7280">每天早8点自动抓取 AI 领域最新动态</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px"><div style="font-size:13px;font-weight:500;margin-bottom:4px">📖 英语单词卡</div><div style="font-size:11px;color:#6b7280">每天推送10个新单词+例句</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px"><div style="font-size:13px;font-weight:500;margin-bottom:4px">📋 周报自动生成</div><div style="font-size:11px;color:#6b7280">周五下午自动整理本周工作</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px"><div style="font-size:13px;font-weight:500;margin-bottom:4px">🎯 面试题练习</div><div style="font-size:11px;color:#6b7280">每天一道算法/系统设计面试题</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchView(id) {
+  // Hide all views
+  document.querySelectorAll('.view,.chat-view').forEach(v => v.classList.remove('active'));
+  // Show target
+  const target = document.getElementById('view-' + id);
+  if (target) target.classList.add('active');
+  // Update nav
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const navBtn = document.getElementById('nav-' + id);
+  if (navBtn) navBtn.classList.add('active');
+}
+</script>
+</body>
+</html>
