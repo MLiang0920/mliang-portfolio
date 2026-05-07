@@ -44,8 +44,9 @@ img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
 
 /* Image grid - 2列 */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.grid-item{position:relative;aspect-ratio:2/3;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
-.grid-item img{width:100%;height:100%;object-fit:cover;display:block}
+.grid-item{position:relative;aspect-ratio:2/3;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:#1a1a1d}
+.grid-item img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
+.grid-item img:not([src]){opacity:0}
 .grid-item::after{content:'MLiang';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:rgba(255,255,255,.05);transform:rotate(-25deg);pointer-events:none}
 
 /* Vibe cards */
@@ -205,25 +206,31 @@ async function init(){
 
 function renderModels(){
   const box=document.getElementById('tab-models');
-  const modelsGrp=groups.find(g=>g.id==='models');
-  if(!modelsGrp)return;
+  // 渲染 models 和 comparison 分组
+  const renderGroups=groups.filter(g=>g.id!=='aigallery');
   
   let html='';
-  modelsGrp.keys.forEach(key=>{
-    const imgs=config[key];
-    if(!Array.isArray(imgs)||!imgs.length)return;
-    const m=meta[key]||{title:key,desc:'',tags:[]};
-    
-    html+=`<div class="section">
-      <div class="section-title">${m.title}</div>
-      <div class="section-desc">${m.desc||''}</div>
-      <div class="section-tags">${(m.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-      <div class="grid">
-        ${imgs.map(img=>`<div class="grid-item" onclick="openLb('${img.file}')"><img src="${img.file}" style="object-position:${img.focusX}% ${img.focusY}%" loading="lazy"></div>`).join('')}
-      </div>
-    </div>`;
+  renderGroups.forEach(grp=>{
+    grp.keys.forEach(key=>{
+      const imgs=config[key];
+      if(!Array.isArray(imgs)||!imgs.length)return;
+      const m=meta[key]||{title:key,desc:'',tags:[]};
+      
+      html+=`<div class="section">
+        <div class="section-title">${m.title}</div>
+        <div class="section-desc">${m.desc||''}</div>
+        <div class="section-tags">${(m.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="grid">
+          ${imgs.map(img=>{
+            const thumb=img.file.replace('images/originals/','images/mobile/');
+            return `<div class="grid-item" onclick="openLb('${img.file}')"><img data-src="${thumb}" style="object-position:${img.focusX}% ${img.focusY}%" loading="lazy"></div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    });
   });
   box.innerHTML=html;
+  lazyLoad();
 }
 
 function renderAiGallery(){
@@ -238,7 +245,26 @@ function renderAiGallery(){
     const imgs=config[key];
     if(Array.isArray(imgs))imgs.forEach(img=>allImgs.push(img));
   });
-  grid.innerHTML=allImgs.map(img=>`<div class="grid-item" onclick="openLb('${img.file}')"><img src="${img.file}" style="object-position:${img.focusX}% ${img.focusY}%" loading="lazy"></div>`).join('');
+  grid.innerHTML=allImgs.map(img=>{
+    const thumb=img.file.replace('images/originals/','images/mobile/');
+    return `<div class="grid-item" onclick="openLb('${img.file}')"><img data-src="${thumb}" style="object-position:${img.focusX}% ${img.focusY}%" loading="lazy"></div>`;
+  }).join('');
+}
+
+// 懒加载：只有进入视口的图片才真正加载
+function lazyLoad(){
+  const imgs=document.querySelectorAll('img[data-src]');
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const img=e.target;
+        img.src=img.dataset.src;
+        img.removeAttribute('data-src');
+        obs.unobserve(img);
+      }
+    });
+  },{rootMargin:'200px'});
+  imgs.forEach(img=>obs.observe(img));
 }
 
 // Tab switch
@@ -250,6 +276,8 @@ function switchTab(tab){
   document.getElementById('tab-models').classList.toggle('hidden',tab!=='models');
   document.getElementById('tab-vibe').classList.toggle('hidden',tab!=='vibe');
   document.getElementById('tab-aigallery').classList.toggle('hidden',tab!=='aigallery');
+  // 切换后重新触发懒加载
+  setTimeout(lazyLoad,50);
 }
 
 // Lightbox

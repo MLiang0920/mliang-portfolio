@@ -527,10 +527,10 @@ function render(){
     </div>`;
     document.getElementById('navPanelList').innerHTML = panelHtml;
 
-    // Render sections - 只渲染 models 分组的轮播（不含 aigallery 和 comparison）
-    const modelsGrp = groups.find(g => g.id === 'models');
-    if (modelsGrp) {
-        modelsGrp.keys.forEach(key=>{
+    // Render sections - 渲染 models 和 comparison 分组的轮播（不含 aigallery）
+    const renderGroups = groups.filter(g => g.id !== 'aigallery');
+    renderGroups.forEach(grp => {
+        grp.keys.forEach(key=>{
             const imgs=config[key];
             if(!Array.isArray(imgs)||!imgs.length)return;
             const m=meta[key]||{title:key,desc:'',tags:[],category:'stylized'};
@@ -558,7 +558,7 @@ function render(){
             `;
             box.appendChild(sec);
         });
-    }
+    });
     initCarousels();
     initLightbox();
     const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');obs.unobserve(e.target)}}),{threshold:.05});
