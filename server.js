@@ -68,7 +68,17 @@ function bufIdx(buf, search, start) {
     return -1;
 }
 
+// 崩溃保护：捕获未处理异常，不让进程退出
+process.on('uncaughtException', err => {
+    console.error('[FATAL] uncaughtException:', err.message);
+    console.error(err.stack);
+});
+process.on('unhandledRejection', err => {
+    console.error('[FATAL] unhandledRejection:', err);
+});
+
 const server = http.createServer(async (req, res) => {
+    try {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -135,7 +145,18 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
         res.end(data);
     });
+    } catch (e) {
+        console.error('[REQ ERROR]', req.method, req.url, '->', e.message);
+        try { jsonResponse(res, 500, { error: e.message }); } catch (_) {}
+    }
 });
+
+// 提高 server 容忍度（大文件上传不超时）
+server.timeout = 0;
+server.headersTimeout = 0;
+server.requestTimeout = 0;
+server.keepAliveTimeout = 60000;
+server.maxRequestsPerSocket = 0;
 
 server.listen(PORT, () => {
     console.log(`\n  Portfolio Server @ http://127.0.0.1:${PORT}`);
